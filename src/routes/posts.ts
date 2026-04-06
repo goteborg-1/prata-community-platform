@@ -1,5 +1,9 @@
-import { Controller } from "../types/express.js"
+import express from "express"
+import { getPosts } from "../controllers/postsController.js"
 
-export const getPosts: Controller = (req, res) => {
+const postsRouter = express.Router()
 
-}
+postsRouter.get("/", getPosts)
+//Här kommer post, patch och delete också
+
+export default postsRouter
