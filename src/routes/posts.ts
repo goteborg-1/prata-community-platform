@@ -1,9 +1,12 @@
 import express from "express"
-import { getPosts } from "../controllers/postsController.js"
+import { getPosts, getPostById, createPost, updatePost, deletePost } from "../controllers/postsController.js"
 
 const postsRouter = express.Router()
 
 postsRouter.get("/", getPosts)
-//Här kommer post, patch och delete också!
+postsRouter.get("/:id", getPostById)
+postsRouter.post("/", createPost)
+postsRouter.patch("/:id", updatePost)
+postsRouter.delete("/:id", deletePost)
 
 export default postsRouter
