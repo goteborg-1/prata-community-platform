@@ -1,3 +1,3 @@
 import { Request, Response } from "express"
 
-export type Controller = (req: Request, res: Response) => void
+export type Controller = (req: Request<{id: string}>, res: Response) => void
