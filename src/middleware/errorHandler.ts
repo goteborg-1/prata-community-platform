@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import type { HttpError } from "../types/express.js";
+import type { HttpError } from "../types/index.types.js";
 
 // catch all other crazy route attempts
 export function notFound(req: Request, res: Response): void {
