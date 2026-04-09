@@ -1,7 +1,7 @@
 import express from "express"
 import cors from "cors"
 import morgan from "morgan"
-import postsRouter from "./routes/posts.js"
+import postsRouter from "./routes/posts.routes.js"
 
 const app = express()
 

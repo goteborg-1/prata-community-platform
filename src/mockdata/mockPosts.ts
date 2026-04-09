@@ -1,4 +1,4 @@
-import { Post } from "../types/postTypes.js"
+import { Post } from "../types/posts.types.js"
 
 export const MOCK_POSTS: Post[] = [
   {

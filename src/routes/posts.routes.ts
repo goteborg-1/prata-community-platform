@@ -1,9 +1,9 @@
 import express from "express"
-import { getPosts, getPostById, createPost, updatePost, deletePost } from "../controllers/postsController.js"
+import { getAllPosts, getPostById, createPost, updatePost, deletePost } from "../controllers/posts.controller.js"
 
 const postsRouter = express.Router()
 
-postsRouter.get("/", getPosts)
+postsRouter.get("/", getAllPosts)
 postsRouter.get("/:id", getPostById)
 postsRouter.post("/", createPost)
 postsRouter.patch("/:id", updatePost)

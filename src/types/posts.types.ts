@@ -6,6 +6,7 @@ type Category =
   | "anxiety" 
   | "loneliness" 
   | "grief-and-loss"
+  | "depression"
   | "other";
 
 type Triggertag = 
@@ -21,7 +22,7 @@ type Triggertag =
 
 export interface Post {
   id: number,
-  author: string,
+  userId: string,
   isAnonymous: boolean,
   createdAt: string,
   title: string,
@@ -30,3 +31,11 @@ export interface Post {
   triggerTags: Triggertag[],
   likes: number
 }
+
+
+
+export type PostParams = {id: string}
+
+export type CreatePostBody = Omit<Post, "author" | "id" | "createdAt" | "likes">
+
+export type UpdatePostBody = Partial<Pick<Post, "title" | "description" | "categories" | "triggerTags">>
