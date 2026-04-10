@@ -63,17 +63,29 @@ export const createComment: Controller<CommentParams, CreateCommentBody, {}> = (
   })
 }
 
+// TODO: comments/:id/like endpoint in future to update likes seperatley "likes är en egen handling"
 export const updateComment: Controller<CommentParams, UpdateCommentBody, {}> = (req, res) => {
   
+  const postId = parseInt(req.params.postId)
   const commentId = parseInt(req.params.commentId)
   const newContent = req.body.content
 
-  // specific comment that shall be edited
-  const selectedComment = MOCK_COMMENTS.find(comment => comment.id === commentId)
+  if (isNaN(postId) || isNaN(commentId)) {
+    throw createError("Invalid ID format", 400, "INVALID_ID")
+  }
+
+  if (!newContent) {
+    throw createError("Missing content", 400, "MISSING_REQUIRED_FIELDS")
+  }
+
+  // specific comment that shall be edited. must also belong to the correct post
+  const selectedComment = MOCK_COMMENTS.find(
+    comment => comment.id === commentId && comment.postId === postId
+  )
 
   // early error throw
   if (!selectedComment) {
-    throw createError(`comment with id ${commentId} not found`, 404, "COMMENT_NOT_FOUND")
+    throw createError(`comment with id ${commentId} not found on post id ${postId}`, 404, "COMMENT_NOT_FOUND")
   }
 
   // replaces previous comment & sets edited = true (perhaps save old comment in the future?)
@@ -90,14 +102,21 @@ export const updateComment: Controller<CommentParams, UpdateCommentBody, {}> = (
 
 export const deleteComment: Controller<CommentParams> = (req, res) => {
 
+  const postId = parseInt(req.params.postId)
   const commentId = parseInt(req.params.commentId);
 
+  if (isNaN(postId) || isNaN(commentId)) {
+    throw createError("Invalid ID format", 400, "INVALID_ID")
+  }
+
   // finding index so that I can use splice method (remove from array) => will probbaly remake when using database anyways
-  const index = MOCK_COMMENTS.findIndex(comment => comment.id === commentId)
+  const index = MOCK_COMMENTS.findIndex(
+    comment => comment.id === commentId && comment.postId === postId
+  )
 
   // -1 because fidIndex returns -1 if not found
   if (index === -1) {
-    throw createError(`comment with id ${commentId} not found`, 404, "COMMENT_NOT_FOUND")
+    throw createError(`comment with id ${commentId} not found on post id ${postId}`, 404, "COMMENT_NOT_FOUND")
   }
 
   // DELETE at index
