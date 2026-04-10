@@ -36,6 +36,14 @@ export interface Post {
 
 export type PostParams = {id: string}
 
-export type CreatePostBody = Omit<Post, "author" | "id" | "createdAt" | "likes">
+export type getPostQuery = {
+  categories?: Category | Category[]
+  search?: string
+  sort?: "newest" | "popular"
+  page?: string
+  limit?: string
+}
+
+export type CreatePostBody = Omit<Post, "userId" | "id" | "createdAt" | "likes">
 
 export type UpdatePostBody = Partial<Pick<Post, "title" | "description" | "categories" | "triggerTags">>
