@@ -2,7 +2,7 @@ import { Controller } from "../types/index.types.js";
 import { MOCK_COMMENTS } from "../mockdata/mockComments.js";
 import { createError } from "../utils/createError.js";
 
-import type { Comment, CommentParams, CreateCommentBody } from "../types/comments.types.js";
+import type { Comment, CommentParams, CreateCommentBody, UpdateCommentBody } from "../types/comments.types.js";
 
 // ---- FOCUS ----
 // GET comments
@@ -20,7 +20,7 @@ export const getAllComments: Controller<CommentParams> = (req, res) => {
   // ** REPLACE WITH DATABASE LATER **
   const comments = MOCK_COMMENTS.filter(comment => comment.postId === postId) // find comments for that post
 
-  if (!comments) {
+  if (comments.length === 0) {
     throw createError(`No comments attached to post id ${postId} found`, 404, "COMMENTS_NOT_FOUND")
   }
 
@@ -63,10 +63,45 @@ export const createComment: Controller<CommentParams, CreateCommentBody, {}> = (
   })
 }
 
-export const updateComment: Controller = (req, res) => {
+export const updateComment: Controller<CommentParams, UpdateCommentBody, {}> = (req, res) => {
+  
+  const commentId = parseInt(req.params.commentId)
+  const newContent = req.body.content
+
+  // specific comment that shall be edited
+  const selectedComment = MOCK_COMMENTS.find(comment => comment.id === commentId)
+
+  // early error throw
+  if (!selectedComment) {
+    throw createError(`comment with id ${commentId} not found`, 404, "COMMENT_NOT_FOUND")
+  }
+
+  // replaces previous comment & sets edited = true (perhaps save old comment in the future?)
+  selectedComment.content = newContent;
+  selectedComment.isEdited = true;
+
+
+  res.status(200).json({
+    status: "success",
+    data: selectedComment
+  })
 
 }
 
-export const deleteComment: Controller = (req, res) => {
+export const deleteComment: Controller<CommentParams> = (req, res) => {
 
+  const commentId = parseInt(req.params.commentId);
+
+  // finding index so that I can use splice method (remove from array) => will probbaly remake when using database anyways
+  const index = MOCK_COMMENTS.findIndex(comment => comment.id === commentId)
+
+  // -1 because fidIndex returns -1 if not found
+  if (index === -1) {
+    throw createError(`comment with id ${commentId} not found`, 404, "COMMENT_NOT_FOUND")
+  }
+
+  // DELETE at index
+  MOCK_COMMENTS.splice(index, 1)
+
+  res.status(204).send()
 }

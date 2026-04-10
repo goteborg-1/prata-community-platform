@@ -20,3 +20,9 @@ export type CommentParams = { postId: string; commentId: string }
 
 // what the frontend sends when creating a comment (backend sets the rest)
 export type CreateCommentBody = Omit<Comment, "id" | "createdAt" | "likes" | "dislikes" | "isEdited">
+
+
+
+// ---- PATCH related types ----
+
+export type UpdateCommentBody = Pick<Comment, "content">
