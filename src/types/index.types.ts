@@ -7,6 +7,12 @@ export type Controller<P = {}, B = {}, Q = {}> = (
   next: NextFunction
 ) => void
 
+export type Middleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => void
+
 //Ta bort innan merge
 export interface HttpError extends Error {
   code?: string,
