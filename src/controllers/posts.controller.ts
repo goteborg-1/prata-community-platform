@@ -1,4 +1,5 @@
-import { Controller, HttpError } from "../types/index.types.js"
+import { Controller } from "../types/index.types.js"
+import { createError } from "../utils/createError.js"
 import { MOCK_POSTS } from "../mockdata/mockPosts.js"
 import type { CreatePostBody, Post, PostParams } from "../types/posts.types.js"
 
@@ -10,19 +11,13 @@ export const getPostById: Controller<PostParams> = (req, res) => {
   const id = parseInt(req.params.id)
 
   if(isNaN(id)) {
-    const err = new Error("Invalid ID format") as HttpError
-    err.status = 400
-    err.code = "INVALID_ID"
-    throw err
+    throw createError("Invalid ID format", 400, "INVALID_ID")
   }
 
   const post = MOCK_POSTS.find(p => p.id === id)
 
   if(!post) {
-    const err = new Error(`No posts with id ${id} found`) as HttpError
-    err.status = 404
-    err.code = "POST_NOT_FOUND"
-    throw err
+    throw createError(`No posts with id ${id} found`, 404, "POST_NOT_FOUND")
   }
 
   res.status(200).json({
@@ -35,10 +30,7 @@ export const createPost: Controller<{}, CreatePostBody> = (req, res) => {
   const {isAnonymous, title, description, categories, triggerTags} = req.body
 
   if(!title || !description || !categories) {
-    const err = new Error("Missing title, description or categories") as HttpError
-    err.status = 400
-    err.code = "MISSING_REQUIRED_FIELDS"
-    throw err
+    throw createError("Missing title, description or categories", 400, "MISSING_REQUIRED_FIELDS")
   }
 
   const newPost: Post = {
