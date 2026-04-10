@@ -1,7 +1,8 @@
 import express from "express"
 import { getAllComments, createComment, updateComment, deleteComment } from "../controllers/comments.controller.js"
 
-const commentRouter = express.Router();
+// mergeParams -> lets us merge route modules
+const commentRouter = express.Router({ mergeParams: true });
 
 
 // The initial path is set in app.ts
