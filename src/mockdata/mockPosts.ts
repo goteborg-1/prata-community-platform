@@ -3,7 +3,7 @@ import { Post } from "../types/posts.types.js"
 export const MOCK_POSTS: Post[] = [
   {
     id: 1,
-    author: "anonymous",
+    userId: "anonymous",
     isAnonymous: true,
     createdAt: "2026-04-07T22:13:00Z",
     title: "Har börjat få mörka tankar igen",
@@ -14,7 +14,7 @@ export const MOCK_POSTS: Post[] = [
   },
   {
     id: 2,
-    author: "throwaway_parent",
+    userId: "throwaway_parent",
     isAnonymous: true,
     createdAt: "2026-04-06T19:02:00Z",
     title: "Kämpar med att vara en bra förälder",
@@ -25,7 +25,7 @@ export const MOCK_POSTS: Post[] = [
   },
   {
     id: 3,
-    author: "lost_inside",
+    userId: "lost_inside",
     isAnonymous: true,
     createdAt: "2026-04-05T23:47:00Z",
     title: "Svårt att sluta med destruktiva vanor",
