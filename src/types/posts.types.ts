@@ -46,4 +46,4 @@ export type getPostQuery = {
 
 export type CreatePostBody = Omit<Post, "userId" | "id" | "createdAt" | "likes">
 
-export type UpdatePostBody = Partial<Pick<Post, "title" | "description" | "categories" | "triggerTags">>
+export type UpdatePostBody = Partial<Pick<Post,"title" | "description" | "categories" | "triggerTags">>

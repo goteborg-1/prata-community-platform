@@ -1,6 +1,6 @@
 import { Controller, HttpError } from "../types/index.types.js"
 import { MOCK_POSTS } from "../mockdata/mockPosts.js"
-import type { CreatePostBody, getPostQuery, Post, PostParams } from "../types/posts.types.js"
+import type { CreatePostBody, getPostQuery, Post, PostParams, UpdatePostBody } from "../types/posts.types.js"
 
 export const getAllPosts: Controller<{}, {}, getPostQuery> = (req, res) => {
   const { categories, search, sort, page, limit } = req.query
@@ -108,10 +108,48 @@ export const createPost: Controller<{}, CreatePostBody> = (req, res) => {
   })
 }
 
-export const updatePost: Controller = (req, res) => {
+export const updatePost: Controller<PostParams, UpdatePostBody> = (req, res) => {
+  const {title, description, categories, triggerTags} = req.body
+  const id = parseInt(req.params.id)
 
+  if(isNaN(id)) {
+    throw createError("Invalid ID format", 400, "INVALID_ID")
+  }
+
+  const postIndex = MOCK_POSTS.findIndex(p => p.id === id)
+
+  if(postIndex < 0) {
+    throw createError(`No posts with id ${id} found`, 404, "POST_NOT_FOUND")
+  }
+
+  const updatedPost: Post = {
+    ...MOCK_POSTS[postIndex],
+    ...req.body,
+    id
+  } as Post
+
+  MOCK_POSTS[postIndex] = updatedPost
+
+  res.json({
+    status: "success",
+    data: updatedPost
+  })
 }
 
-export const deletePost: Controller = (req, res) => {
+export const deletePost: Controller<PostParams> = (req, res) => {
+  const id = parseInt(req.params.id)
 
+  if(isNaN(id)) {
+    throw createError("Invalid ID format", 400, "INVALID_ID")
+  }
+
+  const postIndex = MOCK_POSTS.findIndex(p => p.id === id)
+
+  if(postIndex < 0) {
+    throw createError(`No posts with id ${id} found`, 404, "POST_NOT_FOUND")
+  }
+
+  MOCK_POSTS.splice(postIndex, 1)
+
+  res.status(204).send()
 }
