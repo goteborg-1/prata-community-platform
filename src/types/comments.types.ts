@@ -8,8 +8,8 @@ export interface Comment {
   isPsychologist: boolean, // UI highlights/marks comment
   content: string,
   createdAt: string,
-  isEdited: boolean, // UI shows "(edited)"
   likedBy: string[],
+  isEdited: boolean,
 }
 
 

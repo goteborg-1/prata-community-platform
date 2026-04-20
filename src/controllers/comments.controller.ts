@@ -49,9 +49,8 @@ export const createComment: Controller<CommentParams, CreateCommentBody, {}> = (
     isAnonymous,
     isPsychologist,
     createdAt: new Date().toISOString(),
-    isEdited: false, // perhaps have an if statement here to check if its an edit -> or perhaps thats in patch?
-    likes: 1,
-    dislikes: 0,
+    isEdited: false,
+    likedBy: [userId],
     content
   }
 

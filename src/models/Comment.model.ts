@@ -22,7 +22,7 @@ export const commentSchema = new mongoose.Schema<IComment>({
 
   isAnonymous: {
     type: Boolean,
-    required: true
+    default: false
   },
 
   likedBy: {
