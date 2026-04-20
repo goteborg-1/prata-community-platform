@@ -1,0 +1,40 @@
+import { Comment } from "../types/comments.types.js"
+
+export const MOCK_COMMENTS: Comment[] = [
+  {
+    id: 1,
+    postId: 1,
+    userId: "u12",
+    isAnonymous: true,
+    isPsychologist: false,
+    content: "Jag har varit i samma situation. Det som hjälpte mig var att ta en dag i taget och prata med någon jag litade på.",
+    createdAt: "2026-04-08T10:23:00Z",
+    isEdited: false,
+    likes: 12,
+    dislikes: 0,
+  },
+  {
+    id: 2,
+    postId: 1,
+    userId: "u88",
+    isAnonymous: false,
+    isPsychologist: true,
+    content: "Tack för att du delar detta. Det du beskriver kan vara tecken på depression. Jag rekommenderar att du kontaktar en vårdcentral — du behöver inte hantera detta ensam.",
+    createdAt: "2026-04-08T11:45:00Z",
+    isEdited: false,
+    likes: 34,
+    dislikes: 1,
+  },
+  {
+    id: 3,
+    postId: 2,
+    userId: "u34",
+    isAnonymous: true,
+    isPsychologist: false,
+    content: "Känner igen mig så mycket. Skulden efteråt är det värsta. Du är inte en dålig förälder för att du har svåra dagar.",
+    createdAt: "2026-04-08T14:02:00Z",
+    isEdited: true,
+    likes: 21,
+    dislikes: 0,
+  },
+]
