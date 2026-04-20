@@ -5,6 +5,10 @@ interface IPost extends Post, Document {}
 
 const PostSchema = new Schema<IPost>(
   {
+    customId: {
+      type: Number,
+      unique: true,
+    },
     userId: {
       type: String,
       required: [true, "userId is required"],
