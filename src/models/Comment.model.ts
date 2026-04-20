@@ -1,9 +1,12 @@
 import mongoose from "mongoose"
+import type { Comment } from "../types/comments.types.js"
 
-const commentSchema = new mongoose.Schema({
+interface IComment extends Comment, Document {}
+
+export const commentSchema = new mongoose.Schema<IComment>({
 
   postId: {
-    type: String,
+    type: Number,
     required: true
   },
 

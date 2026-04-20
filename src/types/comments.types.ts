@@ -9,8 +9,7 @@ export interface Comment {
   content: string,
   createdAt: string,
   isEdited: boolean, // UI shows "(edited)"
-  likes: number,
-  dislikes: number,
+  likedBy: string[],
 }
 
 
@@ -19,7 +18,7 @@ export type CommentParams = { postId: string; commentId: string }
 
 
 // what the frontend sends when creating a comment (backend sets the rest)
-export type CreateCommentBody = Omit<Comment, "id" | "createdAt" | "likes" | "dislikes" | "isEdited">
+export type CreateCommentBody = Omit<Comment, "id" | "createdAt" | "likedBy" | "isEdited">
 
 
 
