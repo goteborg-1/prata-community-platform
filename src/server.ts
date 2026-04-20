@@ -1,4 +1,5 @@
 import app from "./app.js";
+import connectToDatabase from "./config/database.js";
 const PORT = process.env.HTTP_PORT || 3000
 const MONGODB_URI = process.env.MONGODB_URI
 
@@ -7,6 +8,11 @@ if(!MONGODB_URI) {
   process.exit(1)
 }
 
-app.listen(PORT, () => {
-  console.log(`Server is listening to port ${PORT}`)
-})
+async function startServer() {
+  await connectToDatabase()
+  app.listen(PORT, () => {
+    console.log(`Server is listening to port ${PORT}`)
+  })
+}
+
+startServer()
