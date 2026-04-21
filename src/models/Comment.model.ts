@@ -6,7 +6,7 @@ interface IComment extends Comment, Document {}
 export const commentSchema = new mongoose.Schema<IComment>({
 
   postId: {
-    type: Number,
+    type: String,
     required: true
   },
 
@@ -41,3 +41,6 @@ export const commentSchema = new mongoose.Schema<IComment>({
   }
 
 }, { timestamps: true }) // auto adds timestamps
+
+
+export const CommentModel = mongoose.model<IComment>("Comment", commentSchema)
