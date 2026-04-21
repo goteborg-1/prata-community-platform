@@ -20,19 +20,18 @@ type Triggertag =
   | "domestic-violence"
   | "trauma"
 
+type UserId = string
+
 export interface Post {
-  id: number,
-  userId: string,
-  isAnonymous: boolean,
-  createdAt: string,
+  userId: UserId,
   title: string,
   description: string,
   categories: Category[],
   triggerTags: Triggertag[],
-  likes: number
+  likedBy: UserId[]
+  createdAt: Date,
+  updatedAt: Date
 }
-
-
 
 export type PostParams = {id: string}
 
@@ -44,6 +43,6 @@ export type getPostQuery = {
   limit?: string
 }
 
-export type CreatePostBody = Omit<Post, "userId" | "id" | "createdAt" | "likes">
+export type CreatePostBody = Omit<Post, "userId" | "id" | "likedBy">
 
 export type UpdatePostBody = Partial<Pick<Post,"title" | "description" | "categories" | "triggerTags">>
