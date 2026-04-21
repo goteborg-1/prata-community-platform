@@ -5,17 +5,9 @@ interface IPost extends Post, Document {}
 
 const PostSchema = new Schema<IPost>(
   {
-    customId: {
-      type: Number,
-      unique: true,
-    },
     userId: {
       type: String,
       required: [true, "userId is required"],
-    },
-    isAnonymous: {
-      type: Boolean,
-      default: false,
     },
     title: {
       type: String,
@@ -38,13 +30,13 @@ const PostSchema = new Schema<IPost>(
       enum: ["self-harm", "suicidal-thoughts", "substance-abuse", "gambling", "eating-disorders", "body-image", "abuse", "domestic-violence", "trauma"],
       default: [],
     },
-    likedBy: {
-      type: [String],
-      default: [],
-    },
+    likedBy: [{
+      type: String,
+      ref: "User"
+    }],
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 )
 

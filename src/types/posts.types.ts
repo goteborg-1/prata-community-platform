@@ -23,9 +23,7 @@ type Triggertag =
 type UserId = string
 
 export interface Post {
-  customId: number,
   userId: UserId,
-  isAnonymous: boolean,
   title: string,
   description: string,
   categories: Category[],
