@@ -1,5 +1,5 @@
 import express from "express"
-import { getProfile, updateProfile, deleteProfile, getMyPosts, getMyLikedPosts } from "../controllers/profile.routes.js"
+import { getProfile, updateProfile, deleteProfile, getMyPosts, getMyLikedPosts } from "../controllers/profile.controller.js"
 
 const profileRouter = express.Router()
 
