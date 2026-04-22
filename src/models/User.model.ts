@@ -8,7 +8,7 @@ const UserSchema = new Schema<IUser>(
     googleId: {
       type: String,
       unique: true,
-      sparse: true,
+      sparse: true, //Makes it possible that multiple users can have null
     },
     username: {
       type: String,
@@ -31,6 +31,11 @@ const UserSchema = new Schema<IUser>(
         return !this.googleId //Only required if not signed in with google
       },
       select: false
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin", "psychologist"],
+      default: "user"
     },
     createdPosts: {
       type: [String],
