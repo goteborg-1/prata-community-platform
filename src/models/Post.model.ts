@@ -9,6 +9,10 @@ const PostSchema = new Schema<IPost>(
       type: String,
       required: [true, "userId is required"],
     },
+    isAnonymous: {
+      type: Boolean,
+      default: false
+    },
     title: {
       type: String,
       required: [true, "Title is required"],
@@ -37,7 +41,21 @@ const PostSchema = new Schema<IPost>(
   },
   {
     timestamps: true,
+    toJSON: {
+      virtuals: true, //So we can add likeCount after likedBy is updated
+      transform: (doc, ret) => {
+        delete ret.likedBy //Remove likedby before sending to frontend
+        if(ret.isAnonymous) {
+          ret.userId = null
+        }
+        return ret
+      }
+    }
   }
 )
+
+PostSchema.virtual("likeCount").get(function() {
+  return this.likedBy ? this.likedBy.length : 0
+})
 
 export const PostModel: Model<IPost> = mongoose.model<IPost>("Post", PostSchema)
