@@ -1,6 +1,6 @@
 import { Controller } from "../types/index.types.js"
 import { createError } from "../utils/createError.js"
-import type { CreatePostBody, getPostQuery, Post, PostParams, UpdatePostBody } from "../types/posts.types.js"
+import type { CreatePostBody, getPostQuery, PostParams, UpdatePostBody } from "../types/posts.types.js"
 import { PostModel } from "../models/Post.model.js"
 
 export const getAllPosts: Controller<{}, {}, getPostQuery> = async (req, res) => {
@@ -71,7 +71,7 @@ export const getPostById: Controller<PostParams> = async (req, res) => {
 }
 
 export const createPost: Controller<{}, CreatePostBody> = async (req, res) => {
-  const {title, description, categories, triggerTags} = req.body
+  const {isAnonymous, title, description, categories, triggerTags} = req.body
 
   if(!title || !description || !categories) {
     throw createError("Missing title, description or categories", 400, "MISSING_REQUIRED_FIELDS")
@@ -81,6 +81,7 @@ export const createPost: Controller<{}, CreatePostBody> = async (req, res) => {
 
   const newPost = await PostModel.create({
     userId: currentUserId,
+    isAnonymous,
     title,
     description,
     categories,
@@ -127,7 +128,7 @@ export const toggleLike: Controller<PostParams> = async (req, res) => {
     throw createError("Could not find post", 404, "POST_NOT_FOUND")
   }
 
-  const hasLiked = post.likedBy.includes(userId)
+  const hasLiked = (post.likedBy || []).includes(userId)
 
   const updatedPost = await PostModel.findByIdAndUpdate(
     id,

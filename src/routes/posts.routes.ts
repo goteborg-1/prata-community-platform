@@ -9,7 +9,7 @@ postsRouter.get("/", getAllPosts)
 postsRouter.get("/:id", getPostById)
 postsRouter.post("/", checkAuth, createPost)
 postsRouter.patch("/:id", checkAuth, isPostOwner, updatePost)
-postsRouter.patch("/:id/like", toggleLike)
+postsRouter.patch("/:id/like", checkAuth, toggleLike)
 postsRouter.delete("/:id", checkAuth, isPostOwner, deletePost)
 
 export default postsRouter
