@@ -26,14 +26,14 @@ export const updateProfile: Controller<{}, updateProfileBody> = async (req, res)
     throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
   }
 
-  const {username, password} = req.body
-  const updateData: Partial<{username: string, password: string}> = {}
+  const {displayName, password} = req.body
+  const updateData: Partial<{displayName: string, password: string}> = {}
 
-  if(username) updateData.username = username
+  if(displayName) updateData.displayName = displayName
   if(password) updateData.password = await bcrypt.hash(password, 10)
 
   if(Object.keys(updateData).length === 0) {
-    throw createError("No fields to update - provide at least username or password", 400, "NO_UPDATE_FIELDS")
+    throw createError("No fields to update - provide at least displayName or password", 400, "NO_UPDATE_FIELDS")
   }
 
   const updatedUser = await UserModel.findByIdAndUpdate(

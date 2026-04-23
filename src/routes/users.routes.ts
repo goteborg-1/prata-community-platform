@@ -1,14 +1,14 @@
 import express from "express";
 import { checkAdmin } from "../middleware/checkAdmin.js";
 import { checkAuth } from "../middleware/checkAuth.js";
-import { createUser, loginUser, getUserByUsername, getAllUsers, deleteUserById } from "../controllers/users.controller.js";
+import { createUser, loginUser, getUserBydisplayName, getAllUsers, deleteUserById } from "../controllers/users.controller.js";
 
 const usersRouter = express.Router()
 
 //Public routes
 usersRouter.post("/register", createUser)
 usersRouter.post("/login", loginUser)
-usersRouter.get("/:username", getUserByUsername)
+usersRouter.get("/:displayName", getUserBydisplayName)
 
 //Admin routes
 usersRouter.get("/", checkAuth, checkAdmin, getAllUsers)

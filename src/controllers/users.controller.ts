@@ -8,7 +8,7 @@ export const loginUser: Controller = async (req, res) => {
 
 }
 
-export const getUserByUsername: Controller = async (req, res) => {
+export const getUserBydisplayName: Controller = async (req, res) => {
 
 }
 
