@@ -14,7 +14,7 @@ export const getProfile: Controller = async (req, res) => {
   }
 
   res.json({
-    success: true,
+    status: "success",
     data: user
   })
 }
@@ -50,7 +50,7 @@ export const updateProfile: Controller<{}, updateProfileBody> = async (req, res)
   }
 
   res.json({
-    success: true,
+    status: "success",
     data: updatedUser
   })
 }
@@ -86,7 +86,7 @@ export const getMyPosts: Controller = async (req, res) => {
   const posts = await PostModel.find({userId: id})
 
   res.json({
-    success: true,
+    status: "success",
     data: posts
   })
 }
@@ -102,7 +102,7 @@ export const getMyLikedPosts: Controller = async (req, res) => {
   const posts = await PostModel.find({likedBy: id})
 
   res.json({
-    success: true,
+    status: "success",
     data: posts
   })
 }

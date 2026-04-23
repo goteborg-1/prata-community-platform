@@ -1,5 +1,7 @@
 import { Types } from "mongoose"
 
+type Role = "user" | "admin" | "psychologist"
+
 export interface User {
   userId: string,
   googleId: string,
@@ -7,7 +9,7 @@ export interface User {
   displayName: string,
   email: string,
   password?: string,
-  role: "user" | "admin" | "psychologist",
+  role: Role,
   createdPosts: Types.ObjectId[],
   likedPosts: Types.ObjectId[],
   createdAt: Date,
@@ -15,3 +17,19 @@ export interface User {
 }
 
 export type updateProfileBody = Partial<Pick<User, "displayName" | "password">> 
+
+export type createUserBody = Pick<User, "handle" | "displayName" | "email" | "password">
+
+export type loginUserBody = Pick<User, "email" | "password">
+
+export type getUserParams = Pick<User, "handle">
+
+export type getUsersQuery = {
+  role?: Role
+  search?: string
+  sort?: "name" | "newest"
+  page?: string
+  limit?: string
+}
+
+export type deleteUserParams = {id: string}

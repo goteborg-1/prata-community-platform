@@ -1,8 +1,12 @@
-import { Controller } from "../types/index.types.js"
-import { UserModel } from "../models/User.model.js"
-import { OAuth2Client } from "google-auth-library"
-import { createError } from "../utils/createError.js"
 import jwt from "jsonwebtoken"
+import { OAuth2Client } from "google-auth-library"
+import { Controller } from "../types/index.types.js"
+import { createError } from "../utils/createError.js"
+import { comparePassword, hashPassword } from "../utils/password.js"
+import { UserModel } from "../models/User.model.js"
+import { PostModel } from "../models/Post.model.js"
+import { CommentModel } from "../models/Comment.model.js"
+import { createUserBody, deleteUserParams, getUserParams, getUsersQuery, loginUserBody } from "../types/users.types.js"
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
@@ -55,22 +59,138 @@ res.status(200).json({ token, user})
 
 }
 
-export const createUser: Controller = async (req, res) => {
+export const createUser: Controller<{}, createUserBody> = async (req, res) => {
+  const {email, handle, displayName, password} = req.body
 
+  if (!email || !handle || !password) {
+    throw createError("Email, handle and password are required", 400, "MISSING_FIELDS")
+  }
+
+  const hashedPassword = await hashPassword(password)
+
+  const newUser = await UserModel.create({
+    email,
+    handle,
+    displayName,
+    password: hashedPassword
+  })
+
+  res.status(201).json({
+    status: "success",
+    data: newUser
+  })
 }
 
-export const loginUser: Controller = async (req, res) => {
+export const loginUser: Controller<{}, loginUserBody> = async (req, res) => {
+  const {email, password} = req.body
+  
+  if(!email || !password) {
+    throw createError("Email and password are required", 400, "MISSING_FIELDS")
+  }
 
+  const user = await UserModel.findOne({email}).select("+password")
+
+  if(!user || !user.password) {
+    throw createError("Invalid credentials", 401, "INVALID_CREDENTIALS")
+  }
+
+  const isMatch = await comparePassword(password, user.password)
+  
+  if(!isMatch) {
+    throw createError("Invalid credentials", 401, "INVALID_CREDENTIALS")
+  }
+
+  const token = jwt.sign(
+    {userId: user.userId},
+    process.env.JWT_SECRET!,
+    {expiresIn: "7d"}
+  )
+
+  res.json({
+    status: "success",
+    data: {
+      token,
+      user
+    }
+  })
 }
 
-export const getUserBydisplayName: Controller = async (req, res) => {
+export const getUserByHandle: Controller<getUserParams> = async (req, res) => {
+  const handle = req.params.handle
 
+  const user = await UserModel.findOne({handle})
+
+  if(!user) {
+    throw createError("User not found", 404, "USER_NOT_FOUND")
+  }
+
+  res.json({
+    status: "success",
+    data: user
+  })
 }
 
-export const getAllUsers: Controller = async (req, res) => {
+export const getAllUsers: Controller<{}, {}, getUsersQuery> = async (req, res) => {
+  const { role, search, sort, page, limit } = req.query
 
+  const query: Record<string, unknown> = {}
+
+  //Filtering
+  if(role) query.role = role
+
+  //Search
+  if(search) {
+    query.$or = [
+      {displayName: {$regex: search, $options: "i"}},
+      {handle: {$regex: search, $options: "i"}}
+    ]
+  }
+
+  //Sort
+  let sortOptions: Record<string, 1 | -1> = {createdAt: -1} //Default, newest first
+  if(sort === "name") {
+    sortOptions = {displayName: 1}
+  }
+
+  const pageNum = Number(page) || 1
+  const limitNum = Number(limit) || 5
+  const skip = (pageNum - 1) * limitNum
+
+  const [users, total] = await Promise.all([
+    UserModel.find(query)
+      .sort(sortOptions)
+      .skip(skip)
+      .limit(limitNum),
+    UserModel.countDocuments(query)
+  ])
+
+  res.json({
+    status: "success",
+    data: users,
+    meta: {
+      page: pageNum,
+      limit: limitNum,
+      total,
+      totalPages: Math.ceil(total / limitNum)
+    }
+  })
 }
 
-export const deleteUserById: Controller = async (req, res) => {
+export const deleteUserById: Controller<deleteUserParams> = async (req, res) => {
+  const id = req.params.id
+  const user = await UserModel.findById(id)
 
+  if(!user) {
+    throw createError("User not found", 404, "USER_NOT_FOUND")
+  }
+
+  await PostModel.deleteMany({userId: id})
+  await CommentModel.deleteMany({userId: id})
+  await PostModel.updateMany(
+    {likedBy: id},
+    {$pull: {likedBy: id}}
+  )
+  await UserModel.findByIdAndDelete(id)
+  
+  res.status(204).send()
 }

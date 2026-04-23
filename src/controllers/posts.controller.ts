@@ -6,7 +6,7 @@ import type { CreatePostBody, getPostQuery, PostParams, UpdatePostBody } from ".
 export const getAllPosts: Controller<{}, {}, getPostQuery> = async (req, res) => {
   const { categories, search, sort, page, limit } = req.query
 
-  const query: any = {}
+  const query: Record<string, unknown> = {}
 
   //Filtering
   if(categories) {
@@ -25,7 +25,7 @@ export const getAllPosts: Controller<{}, {}, getPostQuery> = async (req, res) =>
   }
 
   //Sort
-  let sortOptions: any = {createdAt: -1} //Default, newest first
+  let sortOptions: Record<string, 1 | -1> = {createdAt: -1} //Default, newest first
   if(sort === "popular") {
     sortOptions = {likedBy: -1}
   }

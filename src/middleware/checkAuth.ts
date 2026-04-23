@@ -11,22 +11,17 @@ export const checkAuth: Middleware = async (req, res, next) => {
   }
 
   const token = authHeader.split(" ")[1]
-  
   if(!token) {
     throw createError("Malformed authorization header - expected 'Bearer <token>'", 401, "INVALID_TOKEN_FORMAT")
   }
 
-  const secret = process.env.JWT_SECRET
-  
-  if(!secret) {
-    throw createError("Server misconfiguration - JWT_SECRET is missing", 500, "SERVER_CONFIG_ERROR")
-  }
+  const secret = process.env.JWT_SECRET!
 
   //Decode token
   const decoded = jwt.verify(token, secret) as {userId: string}
 
   //Find user by id and exclude password
-  const user = await UserModel.findById(decoded.userId).select("-password")
+  const user = await UserModel.findById(decoded.userId)
 
   if(!user) {
     throw createError("User no longer exists - please login again", 401, "USER_NOT_FOUND_OR_DELETED")

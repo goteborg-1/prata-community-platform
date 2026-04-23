@@ -3,9 +3,15 @@ import connectToDatabase from "./config/database.js";
 
 const PORT = process.env.HTTP_PORT || 3000
 const MONGODB_URI = process.env.MONGODB_URI
+const JWT_SECRET = process.env.JWT_SECRET
 
 if(!MONGODB_URI) {
   console.error("MONGODB_URI is missing in .env")
+  process.exit(1)
+}
+
+if (!JWT_SECRET) {
+  console.error("JWT_SECRET is missing - shutting down")
   process.exit(1)
 }
 
