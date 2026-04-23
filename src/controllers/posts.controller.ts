@@ -1,7 +1,7 @@
 import { Controller } from "../types/index.types.js"
 import { createError } from "../utils/createError.js"
-import type { CreatePostBody, getPostQuery, PostParams, UpdatePostBody } from "../types/posts.types.js"
 import { PostModel } from "../models/Post.model.js"
+import type { CreatePostBody, getPostQuery, PostParams, UpdatePostBody } from "../types/posts.types.js"
 
 export const getAllPosts: Controller<{}, {}, getPostQuery> = async (req, res) => {
   const { categories, search, sort, page, limit } = req.query
