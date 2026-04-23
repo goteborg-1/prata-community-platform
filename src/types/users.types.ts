@@ -3,7 +3,8 @@ import { Types } from "mongoose"
 export interface User {
   userId: string,
   googleId: string,
-  username: string,
+  handle: string,
+  displayName: string,
   email: string,
   password?: string,
   role: "user" | "admin" | "psychologist",
@@ -13,4 +14,4 @@ export interface User {
   updatedAt: Date
 }
 
-export type updateProfileBody = Partial<Pick<User, "username" | "password">> 
+export type updateProfileBody = Partial<Pick<User, "displayName" | "password">> 
