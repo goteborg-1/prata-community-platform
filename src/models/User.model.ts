@@ -38,12 +38,14 @@ const UserSchema = new Schema<IUser>(
       default: "user"
     },
     createdPosts: {
-      type: [String],
-      ref: "Post"
+      type: [Schema.Types.ObjectId],
+      ref: "Post",
+      default: []
     },
     likedPosts: {
-      type: [String],
-      ref: "Post"
+      type: [Schema.Types.ObjectId],
+      ref: "Post",
+      default: []
     },
   },
   {
