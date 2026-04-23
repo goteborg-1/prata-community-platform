@@ -21,10 +21,10 @@ export const checkAuth: Middleware = async (req, res, next) => {
     throw createError("JWT_SECRET is missing", 500, "CONFIG_ERROR")
   }
 
-  //Decrypt token
+  //Decode token
   const decoded = jwt.verify(token, secret) as unknown as {id: string}
 
-  //Find user by id
+  //Find user by id and exclude password
   const user = await UserModel.findById(decoded.id).select("-password")
 
   if(!user) {
