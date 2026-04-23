@@ -1,19 +1,21 @@
-export const getProfile = () => {
+import { Controller } from "../types/index.types.js"
+
+export const getProfile: Controller = async (req, res) => {
 
 }
 
-export const updateProfile = () => {
+export const updateProfile: Controller = async (req, res) => {
 
 }
 
-export const deleteProfile = () => {
+export const deleteProfile: Controller = async (req, res) => {
 
 }
 
-export const getMyPosts = () => {
+export const getMyPosts: Controller = async (req, res) => {
 
 }
 
-export const getMyLikedPosts = () => {
+export const getMyLikedPosts: Controller = async (req, res) => {
 
 }
