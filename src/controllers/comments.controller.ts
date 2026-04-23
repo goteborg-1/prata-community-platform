@@ -83,3 +83,23 @@ export const deleteComment: Controller<CommentParams> = async (req, res) => {
 
   res.status(204).send()
 }
+
+
+// ----------- LIKES -----------
+
+export const toggleCommentLike: Controller<CommentParams, {}> = async (req, res) => {
+  const commentId = req.params.commentId
+  const userId = req.user._id.toString()
+
+  const comment = await CommentModel.findById(commentId)
+  if (!comment) throw createError(`Comment with id ${commentId} not found`, 404, "COMMENT_NOT_FOUND");
+
+  const alreadyLiked = comment.likedBy.includes(userId)
+
+  const updateComment = await CommentModel.findByIdAndUpdate(
+    commentId,
+    alreadyLiked ? { $pull: {likedBy: userId} } : { $addToSet: {likedBy: userId} }
+  )
+
+  res.status(200).json({updateComment})
+}
