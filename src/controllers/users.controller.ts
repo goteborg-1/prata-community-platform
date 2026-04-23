@@ -39,7 +39,7 @@ if (!user) {
     googleId,
     email: email!,
     handle: name?.replace(/\s+/g, "_") ?? email!.split("@")[0] as string, //TODO: make sure it still works even if handle is taken, and autogenerates handle until changed by user
-    username: name || null // om null, blir den handle
+    displayName: name || "" // om null, blir den handle
   })
 }
 
