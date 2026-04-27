@@ -65,13 +65,17 @@ const UserSchema = new Schema<IUser>(
   {
     timestamps: true,
     toJSON: {
+      virtuals: true,
       transform: (doc, ret) => {
-        ret.userId = ret._id.toString()
         delete ret.password
         return ret
       }
     }
   }
 )
+
+UserSchema.virtual("userId").get(function (this: IUser) {
+  return this._id.toHexString()
+})
 
 export const UserModel: Model<IUser> = mongoose.model<IUser>("User", UserSchema)

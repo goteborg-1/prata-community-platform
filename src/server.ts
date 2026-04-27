@@ -1,5 +1,8 @@
+import dotenv from "dotenv"
 import app from "./app.js";
 import connectToDatabase from "./config/database.js";
+
+dotenv.config()
 
 const PORT = process.env.HTTP_PORT || 3000
 const MONGODB_URI = process.env.MONGODB_URI

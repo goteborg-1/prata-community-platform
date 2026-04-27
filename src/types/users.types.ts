@@ -32,4 +32,6 @@ export type getUsersQuery = {
   limit?: string
 }
 
-export type deleteUserParams = {id: string}
+export type updateUserRoleParams = Pick<User, "role">
+
+export type userParams = {id: string}

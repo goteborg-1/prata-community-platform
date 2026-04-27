@@ -6,7 +6,7 @@ import { comparePassword, hashPassword } from "../utils/password.js"
 import { UserModel } from "../models/User.model.js"
 import { PostModel } from "../models/Post.model.js"
 import { CommentModel } from "../models/Comment.model.js"
-import { createUserBody, deleteUserParams, getUserParams, getUsersQuery, loginUserBody } from "../types/users.types.js"
+import { createUserBody, getUserParams, getUsersQuery, loginUserBody, updateUserRoleParams, userParams } from "../types/users.types.js"
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
@@ -49,7 +49,7 @@ if (!user) {
 
 // 4 -- make own JWT so front end can prove who they are later
 const token = jwt.sign(
-  { userId: user._id },
+  { userId: user.userId },
   process.env.JWT_SECRET as string,
   { expiresIn: "7d" }
 )
@@ -176,7 +176,40 @@ export const getAllUsers: Controller<{}, {}, getUsersQuery> = async (req, res) =
   })
 }
 
-export const deleteUserById: Controller<deleteUserParams> = async (req, res) => {
+export const updateUserRole: Controller<userParams, updateUserRoleParams> = async (req, res) => {
+  const id = req.params.id
+  const role = req.body.role.toLowerCase()
+
+  const allowedRoles = ["user", "admin", "psychologist"]
+  
+  if(!role) {
+    throw createError("No role provided", 400, "NO_UPDATE_FIELDS")
+  }
+
+  if(!allowedRoles.includes(role)) {
+    throw createError("Invalid role", 400, "INVALID_ROLE")
+  }
+
+  const updatedUser = await UserModel.findByIdAndUpdate(
+    id,
+    {role},
+    {
+      new: true,
+      runValidators: true
+    }
+  ).select("-password")
+
+  if(!updatedUser) {
+    throw createError("User no longer exists", 404, "USER_NOT_FOUND")
+  }
+
+  res.json({
+    status: "success",
+    data: updatedUser
+  })
+}
+
+export const deleteUserById: Controller<userParams> = async (req, res) => {
   const id = req.params.id
   const user = await UserModel.findById(id)
 

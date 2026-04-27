@@ -89,7 +89,7 @@ export const deleteComment: Controller<CommentParams> = async (req, res) => {
 
 export const toggleCommentLike: Controller<CommentParams, {}> = async (req, res) => {
   const commentId = req.params.commentId
-  const userId = req.user._id.toString()
+  const userId = req.user.userId.toString()
 
   const comment = await CommentModel.findById(commentId)
   if (!comment) throw createError(`Comment with id ${commentId} not found`, 404, "COMMENT_NOT_FOUND");
