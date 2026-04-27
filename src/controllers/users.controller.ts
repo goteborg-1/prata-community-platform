@@ -118,7 +118,7 @@ export const loginUser: Controller<{}, loginUserBody> = async (req, res) => {
 export const getUserByHandle: Controller<getUserParams> = async (req, res) => {
   const handle = req.params.handle
 
-  const user = await UserModel.findOne({handle})
+  const user = await UserModel.findOne({handle}).select(["-likedPosts", "-email"])
 
   if(!user) {
     throw createError("User not found", 404, "USER_NOT_FOUND")
