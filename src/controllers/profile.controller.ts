@@ -82,8 +82,8 @@ export const getMyPosts: Controller = async (req, res) => {
     throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
   }
   
-  const id = user.userId
-  const posts = await PostModel.find({userId: id})
+  const userId = req.user.userId
+  const posts = await PostModel.find({ userId })
 
   res.json({
     status: "success",
@@ -97,9 +97,9 @@ export const getMyLikedPosts: Controller = async (req, res) => {
   if(!user) {
     throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
   }
-  
-  const id = user.userId
-  const posts = await PostModel.find({likedBy: id})
+
+  const userId = req.user.userId
+  const posts = await PostModel.find({ likedBy: userId })
 
   res.json({
     status: "success",
