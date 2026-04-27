@@ -24,13 +24,19 @@ export const getAllComments: Controller<CommentParams> = async (req, res) => {
 }
 
 export const createComment: Controller<CommentParams, CreateCommentBody, {}> = async (req, res) => {
-  const { userId, isAnonymous, isPsychologist, content } = req.body;
+  const { isAnonymous, isPsychologist, content } = req.body;
   const postId = req.params.postId;
-
+  
   if (!content) {
     throw createError("Missing comment", 400, "MISSING_REQUIRED_FIELDS")
   }
 
+  const userId = req.user.userId
+
+  if(!userId) {
+    throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
+  }
+  
   const newComment = await CommentModel.create({
     postId,
     userId,
@@ -91,10 +97,10 @@ export const toggleCommentLike: Controller<CommentParams, {}> = async (req, res)
   const commentId = req.params.commentId
   const userId = req.user.userId.toString()
 
-  const comment = await CommentModel.findById(commentId)
+  const comment = await CommentModel.findById(commentId).select("likedBy")
   if (!comment) throw createError(`Comment with id ${commentId} not found`, 404, "COMMENT_NOT_FOUND");
 
-  const alreadyLiked = comment.likedBy.includes(userId)
+  const alreadyLiked = (comment.likedBy || []).includes(userId)
 
   const updateComment = await CommentModel.findByIdAndUpdate(
     commentId,

@@ -2,6 +2,7 @@ import { Controller } from "../types/index.types.js"
 import { createError } from "../utils/createError.js"
 import { PostModel } from "../models/Post.model.js"
 import type { CreatePostBody, getPostQuery, PostParams, UpdatePostBody } from "../types/posts.types.js"
+import { CommentModel } from "../models/Comment.model.js"
 
 export const getAllPosts: Controller<{}, {}, getPostQuery> = async (req, res) => {
   const { categories, search, sort, page, limit } = req.query
@@ -156,6 +157,7 @@ export const toggleLike: Controller<PostParams> = async (req, res) => {
 export const deletePost: Controller<PostParams> = async (req, res) => {
   const id = req.params.id
 
+  await CommentModel.deleteMany({postId: id})
   const deletedPost = await PostModel.findByIdAndDelete(id)
 
   if(!deletedPost) {
