@@ -37,7 +37,6 @@ const PostSchema = new Schema<IPost>(
     likedBy: [{
       type: String,
       ref: "User",
-      select: false
     }],
   },
   {

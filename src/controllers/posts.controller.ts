@@ -72,21 +72,25 @@ export const getPostById: Controller<PostParams> = async (req, res) => {
 
 export const createPost: Controller<{}, CreatePostBody> = async (req, res) => {
   const {isAnonymous, title, description, categories, triggerTags} = req.body
-
+  
   if(!title || !description || !categories) {
     throw createError("Missing title, description or categories", 400, "MISSING_REQUIRED_FIELDS")
   }
-
-  const currentUserId = "u53"
+  
+  const userId = req.user.userId
+  
+  if(!userId) {
+    throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
+  }
 
   const newPost = await PostModel.create({
-    userId: currentUserId,
+    userId: userId,
     isAnonymous,
     title,
     description,
     categories,
     triggerTags: triggerTags || [],
-    likedBy: [currentUserId] //Make the writer like post by default
+    likedBy: [userId] //Make the writer like post by default
   })
 
   res.status(201).json({
@@ -119,10 +123,14 @@ export const updatePost: Controller<PostParams, UpdatePostBody> = async (req, re
 }
 
 export const toggleLike: Controller<PostParams> = async (req, res) => {
-  const id = req.params.id
-  const userId = "u459" //Will be getting from database
+  const postId = req.params.id
+  const userId = req.user.userId
 
-  const post = await PostModel.findById(id)
+  if(!userId) {
+    throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
+  }
+
+  const post = await PostModel.findById(postId).select("likedBy")
 
   if(!post) {
     throw createError("Could not find post", 404, "POST_NOT_FOUND")
@@ -131,7 +139,7 @@ export const toggleLike: Controller<PostParams> = async (req, res) => {
   const hasLiked = (post.likedBy || []).includes(userId)
 
   const updatedPost = await PostModel.findByIdAndUpdate(
-    id,
+    postId,
     hasLiked
       ? {$pull: {likedBy: userId}} //Remove like if already liked
       : {$addToSet: {likedBy: userId}}, //Add if not already liked
