@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from "express"
+import { IUser } from "../models/User.model.js"
 
 //P - Params, B - Body, Q - Query
 export type Controller<P = {}, B = {}, Q = {}> = (
@@ -13,8 +14,16 @@ export type Middleware = (
   next: NextFunction
 ) => void
 
-//Ta bort innan merge
 export interface HttpError extends Error {
   code?: string,
   status?: number
+}
+
+//Add user to req globally
+declare global {
+  namespace Express {
+    interface Request {
+      user: IUser
+    }
+  }
 }

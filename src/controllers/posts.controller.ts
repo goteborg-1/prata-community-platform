@@ -1,50 +1,53 @@
 import { Controller } from "../types/index.types.js"
 import { createError } from "../utils/createError.js"
-import { MOCK_POSTS } from "../mockdata/mockPosts.js"
-import type { CreatePostBody, getPostQuery, Post, PostParams, UpdatePostBody } from "../types/posts.types.js"
+import { PostModel } from "../models/Post.model.js"
+import type { CreatePostBody, getPostQuery, PostParams, UpdatePostBody } from "../types/posts.types.js"
+import { CommentModel } from "../models/Comment.model.js"
 
-export const getAllPosts: Controller<{}, {}, getPostQuery> = (req, res) => {
+export const getAllPosts: Controller<{}, {}, getPostQuery> = async (req, res) => {
   const { categories, search, sort, page, limit } = req.query
 
-  let result = [...MOCK_POSTS]
+  const query: Record<string, unknown> = {}
 
   //Filtering
   if(categories) {
     const categoryArray = Array.isArray(categories) ? categories : [categories]
 
-    result = result.filter(p => p.categories.some(
-      c => categoryArray.includes(c)
-    ))
+    query.categories = {$in: categoryArray} //Match at least one category
   }
 
+  //Search
   if(search) {
-    const searchTerm = search.toLowerCase()
-    result = result.filter(p =>
-      p.title.toLowerCase().includes(searchTerm) ||
-      p.description.toLowerCase().includes(searchTerm)
-    )
+    //Search for both title and description
+    query.$or = [
+      {title: {$regex: search, $options: "i"}},
+      {description: {$regex: search, $options: "i"}}
+    ]
   }
 
   //Sort
+  let sortOptions: Record<string, 1 | -1> = {createdAt: -1} //Default, newest first
   if(sort === "popular") {
-    result.sort((a, b) => b.likes - a.likes)
-  } else {
-    result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    sortOptions = {likedBy: -1}
   }
 
-  //Pagination
-  const total = result.length
   const pageNum = Number(page) || 1
   const limitNum = Number(limit) || 5
-  const totalPages = Math.ceil(total / limitNum)
-  const startIndex = (pageNum - 1) * limitNum
-  const endIndex = startIndex + limitNum
+  const skip = (pageNum - 1) * limitNum
 
-  const pageData = result.slice(startIndex, endIndex)
+  const [posts, total] = await Promise.all([
+    PostModel.find(query)
+      .sort(sortOptions)
+      .skip(skip)
+      .limit(limitNum),
+    PostModel.countDocuments(query)
+  ])
+
+  const totalPages = Math.ceil(total / limitNum)
 
   res.json({
     status: "success",
-    data: pageData,
+    data: posts,
     meta: {
       page: pageNum,
       limit: limitNum,
@@ -54,14 +57,9 @@ export const getAllPosts: Controller<{}, {}, getPostQuery> = (req, res) => {
   })
 }
 
-export const getPostById: Controller<PostParams> = (req, res) => {
-  const id = parseInt(req.params.id)
-
-  if(isNaN(id)) {
-    throw createError("Invalid ID format", 400, "INVALID_ID")
-  }
-
-  const post = MOCK_POSTS.find(p => p.id === id)
+export const getPostById: Controller<PostParams> = async (req, res) => {
+  const id = req.params.id
+  const post = await PostModel.findById(id)
 
   if(!post) {
     throw createError(`No posts with id ${id} found`, 404, "POST_NOT_FOUND")
@@ -73,26 +71,28 @@ export const getPostById: Controller<PostParams> = (req, res) => {
   })
 }
 
-export const createPost: Controller<{}, CreatePostBody> = (req, res) => {
+export const createPost: Controller<{}, CreatePostBody> = async (req, res) => {
   const {isAnonymous, title, description, categories, triggerTags} = req.body
-
+  
   if(!title || !description || !categories) {
     throw createError("Missing title, description or categories", 400, "MISSING_REQUIRED_FIELDS")
   }
+  
+  const userId = req.user.userId
+  
+  if(!userId) {
+    throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
+  }
 
-  const newPost: Post = {
-    id: MOCK_POSTS.length + 1,
-    userId: "u53", //Will be getting from database
-    isAnonymous: isAnonymous ?? false,
-    createdAt: new Date().toISOString(),
-    title: title,
+  const newPost = await PostModel.create({
+    userId: userId,
+    isAnonymous,
+    title,
     description,
     categories,
     triggerTags: triggerTags || [],
-    likes: 0
-  }
-
-  MOCK_POSTS.push(newPost)
+    likedBy: [userId] //Make the writer like post by default
+  })
 
   res.status(201).json({
     status: "success",
@@ -100,27 +100,22 @@ export const createPost: Controller<{}, CreatePostBody> = (req, res) => {
   })
 }
 
-export const updatePost: Controller<PostParams, UpdatePostBody> = (req, res) => {
-  const {title, description, categories, triggerTags} = req.body
-  const id = parseInt(req.params.id)
+export const updatePost: Controller<PostParams, UpdatePostBody> = async (req, res) => {
+  const id = req.params.id
+  const updateData = req.body
 
-  if(isNaN(id)) {
-    throw createError("Invalid ID format", 400, "INVALID_ID")
+  const updatedPost = await PostModel.findByIdAndUpdate(
+    id,
+    updateData,
+    {
+      new: true,
+      runValidators: true
+    }
+  )
+
+  if(!updatedPost) {
+    throw createError("Could not find post to update", 404, "POST_NOT_FOUND")
   }
-
-  const postIndex = MOCK_POSTS.findIndex(p => p.id === id)
-
-  if(postIndex < 0) {
-    throw createError(`No posts with id ${id} found`, 404, "POST_NOT_FOUND")
-  }
-
-  const updatedPost: Post = {
-    ...MOCK_POSTS[postIndex],
-    ...req.body,
-    id
-  } as Post
-
-  MOCK_POSTS[postIndex] = updatedPost
 
   res.json({
     status: "success",
@@ -128,20 +123,46 @@ export const updatePost: Controller<PostParams, UpdatePostBody> = (req, res) => 
   })
 }
 
-export const deletePost: Controller<PostParams> = (req, res) => {
-  const id = parseInt(req.params.id)
+export const toggleLike: Controller<PostParams> = async (req, res) => {
+  const postId = req.params.id
+  const userId = req.user.userId
 
-  if(isNaN(id)) {
-    throw createError("Invalid ID format", 400, "INVALID_ID")
+  if(!userId) {
+    throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
   }
 
-  const postIndex = MOCK_POSTS.findIndex(p => p.id === id)
+  const post = await PostModel.findById(postId).select("likedBy")
 
-  if(postIndex < 0) {
-    throw createError(`No posts with id ${id} found`, 404, "POST_NOT_FOUND")
+  if(!post) {
+    throw createError("Could not find post", 404, "POST_NOT_FOUND")
   }
 
-  MOCK_POSTS.splice(postIndex, 1)
+  const hasLiked = (post.likedBy || []).includes(userId)
+
+  const updatedPost = await PostModel.findByIdAndUpdate(
+    postId,
+    hasLiked
+      ? {$pull: {likedBy: userId}} //Remove like if already liked
+      : {$addToSet: {likedBy: userId}}, //Add if not already liked
+    {new: true}
+  )
+
+  res.json({
+    status: "success",
+    data: updatedPost,
+    message: hasLiked ? "Like removed" : "Like added"
+  })
+}
+
+export const deletePost: Controller<PostParams> = async (req, res) => {
+  const id = req.params.id
+
+  await CommentModel.deleteMany({postId: id})
+  const deletedPost = await PostModel.findByIdAndDelete(id)
+
+  if(!deletedPost) {
+    throw createError("Could not find post to delete", 404, "POST_NOT_FOUND")
+  }
 
   res.status(204).send()
 }
