@@ -1,0 +1,41 @@
+.base {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  padding: var(--space-sm) var(--space-base);
+  border-radius: var(--radius-pill);
+  border: none;
+  box-shadow: var(--shadow-sm);
+  color: var(--color-text-on-colors);
+}
+
+.base:hover {
+  cursor: pointer;
+  filter: brightness(0.95);
+}
+
+.base:active {
+  transform: scale(0.98);
+  filter: brightness(0.9);
+}
+
+.small {
+  padding: var(--space-xs) var(--space-sm);
+}
+
+.x-small {
+  padding: 0;
+}
+
+.primary {
+  background-color: var(--color-primary-light);
+}
+
+.secondary {
+  background-color: var(--color-secondary-light);
+}
+
+.transparent {
+  background-color: transparent;
+  color: var(--color-text-main);
+  box-shadow: none;
+}
