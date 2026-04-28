@@ -1,11 +1,12 @@
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { ThemeContext } from "./useTheme"
 
 type Theme = "light" | "dark" | "system"
 
 export interface ThemeContextValue {
   theme: Theme,
-  setTheme: (theme: Theme) => void
+  setTheme: (theme: Theme) => void,
+  resolvedTheme: Omit<Theme, "system">
 }
 
 function getInitialTheme(): Theme {
@@ -19,36 +20,35 @@ function getInitialTheme(): Theme {
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>(getInitialTheme)
 
-  const updateDOM = useCallback((targetTheme: "light" | "dark") => {
-    document.documentElement.classList.toggle("dark", targetTheme === "dark")
-  }, [])
+  const [systemTheme, setSystemTheme] = useState<"light" | "dark">(() =>
+    window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+  )
 
+  const resolvedTheme = theme === "system" ? systemTheme : theme
+
+  // Update DOM
   useEffect(() => {
-    localStorage.setItem("theme", theme)
+    document.documentElement.classList.toggle("dark", resolvedTheme === "dark")
+  }, [resolvedTheme])
 
-    if (theme !== "system") {
-      updateDOM(theme)
-      return
-    }
-
-    updateDOM(window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
-  }, [theme, updateDOM])
-
+  // Listen to system changes
   useEffect(() => {
     const mq = window.matchMedia("(prefers-color-scheme: dark)")
 
     const handleChange = (e: MediaQueryListEvent) => {
-      if (theme === "system") {
-        updateDOM(e.matches ? "dark" : "light")
-      }
+      setSystemTheme(e.matches ? "dark" : "light")
     }
 
     mq.addEventListener("change", handleChange)
     return () => mq.removeEventListener("change", handleChange)
-  }, [theme, updateDOM])
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem("theme", theme)
+  }, [theme])
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme, resolvedTheme }}>
       {children}
     </ThemeContext.Provider>
   )
