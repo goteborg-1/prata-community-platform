@@ -1,42 +1,54 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { ThemeContext } from "./useTheme"
 
-type Theme = "light" | "dark"
+type Theme = "light" | "dark" | "system"
 
 export interface ThemeContextValue {
   theme: Theme,
-  toggleTheme: () => void
+  setTheme: (theme: Theme) => void
 }
 
 function getInitialTheme(): Theme {
-  const savedTheme = localStorage.getItem("theme")
-  if (savedTheme === "light" || savedTheme === "dark") return savedTheme
-
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
-  return prefersDark ? "dark" : "light"
+  const savedTheme = localStorage.getItem("theme") as Theme
+  if (savedTheme === "light" || savedTheme === "dark" || savedTheme === "system") {
+    return savedTheme
+  }
+  return "system"
 }
 
-export function ThemeProvider({children}: {children: React.ReactNode}) {
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>(getInitialTheme)
 
-  useEffect(() => {
-    const root = document.documentElement
+  const updateDOM = useCallback((targetTheme: "light" | "dark") => {
+    document.documentElement.classList.toggle("dark", targetTheme === "dark")
+  }, [])
 
-    if(theme === "dark") {
-      root.classList.add("dark")
-    } else {
-      root.classList.remove("dark")
+  useEffect(() => {
+    localStorage.setItem("theme", theme)
+
+    if (theme !== "system") {
+      updateDOM(theme)
+      return
     }
 
-    localStorage.setItem("theme", theme)
-  }, [theme])
+    updateDOM(window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+  }, [theme, updateDOM])
 
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark")
-  }
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-color-scheme: dark)")
 
-  return(
-    <ThemeContext.Provider value={{theme, toggleTheme}}>
+    const handleChange = (e: MediaQueryListEvent) => {
+      if (theme === "system") {
+        updateDOM(e.matches ? "dark" : "light")
+      }
+    }
+
+    mq.addEventListener("change", handleChange)
+    return () => mq.removeEventListener("change", handleChange)
+  }, [theme, updateDOM])
+
+  return (
+    <ThemeContext.Provider value={{ theme, setTheme }}>
       {children}
     </ThemeContext.Provider>
   )
