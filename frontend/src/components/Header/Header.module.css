@@ -29,3 +29,53 @@
   gap: var(--space-xs);
   align-items: center;
 }
+
+.navContainer {
+  position: sticky;
+  top: 60px;
+  height: calc(100dvh - 60px);
+  padding: var(--space-base);
+}
+
+.navWrapper {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-sm) 0;
+  gap: var(--space-xs);
+  border-bottom: 1px solid var(--border);
+}
+
+.navList {
+  list-style: none;
+}
+
+.navList a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.navList a.active {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.navList a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-primary);
+  transition: width 0.3s ease;
+}
+
+.navList a:hover::after {
+  width: 100%;
+}
+
+.navList a:hover {
+  color: var(--color-primary);
+}
