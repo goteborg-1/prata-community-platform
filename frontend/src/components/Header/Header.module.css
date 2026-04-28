@@ -1,0 +1,31 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 var(--space-base);
+  height: 60px;
+  position: sticky;
+  top: 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.logoWrapper {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: center;
+}
+
+.logo {
+  width: 32px;
+}
+
+.logoText {
+  font-size: var(--font-size-md);
+  font-weight: 600;
+}
+
+.buttonWrapper {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: center;
+}
