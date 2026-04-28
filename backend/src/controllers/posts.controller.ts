@@ -106,7 +106,7 @@ export const updatePost: Controller<PostParams, UpdatePostBody> = async (req, re
 
   const updatedPost = await PostModel.findByIdAndUpdate(
     id,
-    updateData,
+    {$set: updateData},
     {
       new: true,
       runValidators: true
