@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/server.js",
+    "start": "node dist/backend/src/server.js",
     "dev": "tsx watch src/server.ts",
     "typecheck": "tsc --noEmit",
     "seed:admin": "tsx scripts/seedAdmin.ts",

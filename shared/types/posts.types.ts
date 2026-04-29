@@ -1,4 +1,4 @@
-type Category =
+export type Category =
   | "relationships" 
   | "family" 
   | "parenting" 
@@ -9,7 +9,7 @@ type Category =
   | "depression"
   | "other";
 
-type Triggertag = 
+export type TriggerTag = 
   | "self-harm"
   | "suicidal-thoughts"
   | "substance-abuse"
@@ -28,17 +28,18 @@ export interface Post {
   title: string,
   description: string,
   categories: Category[],
-  triggerTags: Triggertag[],
+  triggerTags: TriggerTag[],
   likedBy?: UserId[]
   likeCount: number,
-  createdAt: Date,
-  updatedAt: Date
+  createdAt: Date | string,
+  updatedAt: Date | string
 }
 
 export type PostParams = {id: string}
 
 export type getPostQuery = {
   categories?: Category | Category[]
+  triggerTags?: TriggerTag | TriggerTag[]
   search?: string
   sort?: "newest" | "popular"
   page?: string

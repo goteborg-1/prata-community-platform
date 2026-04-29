@@ -1,11 +1,11 @@
 import { Controller } from "../types/index.types.js"
 import { createError } from "../utils/createError.js"
 import { PostModel } from "../models/Post.model.js"
-import type { CreatePostBody, getPostQuery, PostParams, UpdatePostBody } from "../types/posts.types.js"
+import type { CreatePostBody, getPostQuery, PostParams, UpdatePostBody } from "@shared"
 import { CommentModel } from "../models/Comment.model.js"
 
 export const getAllPosts: Controller<{}, {}, getPostQuery> = async (req, res) => {
-  const { categories, search, sort, page, limit } = req.query
+  const { categories, triggerTags, search, sort, page, limit } = req.query
 
   const query: Record<string, unknown> = {}
 
@@ -14,6 +14,11 @@ export const getAllPosts: Controller<{}, {}, getPostQuery> = async (req, res) =>
     const categoryArray = Array.isArray(categories) ? categories : [categories]
 
     query.categories = {$in: categoryArray} //Match at least one category
+  }
+
+  if(triggerTags) {
+    const triggerArray = Array.isArray(triggerTags) ? triggerTags : [triggerTags]
+    query.triggerTags = {$nin: triggerArray}
   }
 
   //Search

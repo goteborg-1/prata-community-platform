@@ -1,0 +1,6 @@
+.container {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-lg) var(--space-base);
+  scroll-margin-top: 60px;
+}

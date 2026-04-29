@@ -1,7 +1,7 @@
 :root {
   /* Color Palatte */
   --bg-main: #F7F4F0;
-  --bg-surface: #FFFFFF;
+  --bg-surface: #F9F7F4;
   --border: #E2DDD8;
   
   --color-primary: #F6BD60;
@@ -43,7 +43,7 @@
 /* Dark Mode */
 html.dark {
   --bg-main: #23201E;
-  --bg-surface: #2E2A27;
+  --bg-surface: #36312D;
   --border: #423D39;
 
   --color-primary: #F6BD60;

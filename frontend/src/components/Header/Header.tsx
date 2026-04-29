@@ -2,8 +2,6 @@ import { useEffect } from "react";
 import { useTheme } from "../../context/useTheme";
 import { IoClose, IoMenu } from "react-icons/io5";
 import Button from "../Button/Button"
-import logo from "../../assets/logo.svg"
-import logoDark from "../../assets/logo-dark.svg"
 import s from "./Header.module.css"
 import { useState } from "react";
 import { mainMenu, secondaryMenu } from "./menuItems";
@@ -33,7 +31,7 @@ export default function Header() {
       <header className={s.header}>
         <div className={s.logoWrapper}>
           <img 
-            src={resolvedTheme === "dark" ? logoDark : logo} 
+            src={resolvedTheme === "dark" ? "/logo-dark.svg" : "/logo.svg"} 
             className={s.logo} 
           />
           <p className={s.logoText}>Prata Ut</p>
