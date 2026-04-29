@@ -7,6 +7,7 @@ const config: Config = {
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1', // if jest sees import with .js, remove and search without file ending (since we mostly use .ts etc)
   },
+  testPathIgnorePatterns: ['/node_modules/', '/__tests__/helpers/'],
 }
 
 export default config

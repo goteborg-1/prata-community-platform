@@ -10,7 +10,7 @@
     "dev": "tsx watch src/server.ts",
     "typecheck": "tsc --noEmit",
     "seed:admin": "tsx scripts/seedAdmin.ts",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest"
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"
   },
   "repository": {
     "type": "git",
@@ -31,6 +31,7 @@
     "@types/morgan": "^1.9.10",
     "@types/node": "^25.5.0",
     "@types/supertest": "^7.2.0",
+    "cross-env": "^10.1.0",
     "jest": "^30.3.0",
     "mongodb-memory-server": "^11.0.1",
     "supertest": "^7.2.2",
