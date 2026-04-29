@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { useTheme } from "../../context/useTheme";
 import { IoClose, IoMenu } from "react-icons/io5";
 import Button from "../Button/Button"
-import logo from "../../assets/logo.png"
-import logoDark from "../../assets/logo-dark.png"
+import logo from "../../assets/logo.svg"
+import logoDark from "../../assets/logo-dark.svg"
 import s from "./Header.module.css"
 import { useState } from "react";
 import { mainMenu, secondaryMenu } from "./menuItems";
