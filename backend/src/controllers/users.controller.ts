@@ -6,7 +6,7 @@ import { comparePassword, hashPassword } from "../utils/password.js"
 import { UserModel } from "../models/User.model.js"
 import { PostModel } from "../models/Post.model.js"
 import { CommentModel } from "../models/Comment.model.js"
-import { createUserBody, getUserParams, getUsersQuery, loginUserBody, updateUserRoleParams, userParams } from "../types/users.types.js"
+import { createUserBody, getUserParams, getUsersQuery, loginUserBody, updateUserRoleParams, userParams } from "@shared"
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 

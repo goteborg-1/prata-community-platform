@@ -31,14 +31,15 @@ export interface Post {
   triggerTags: Triggertag[],
   likedBy?: UserId[]
   likeCount: number,
-  createdAt: Date,
-  updatedAt: Date
+  createdAt: Date | string,
+  updatedAt: Date | string
 }
 
 export type PostParams = {id: string}
 
 export type getPostQuery = {
   categories?: Category | Category[]
+  triggerTags?: Triggertag | Triggertag[]
   search?: string
   sort?: "newest" | "popular"
   page?: string

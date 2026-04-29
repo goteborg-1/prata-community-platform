@@ -1,5 +1,5 @@
 import mongoose, {Schema, Document, Model} from "mongoose";
-import type { Post } from "../types/posts.types.js";
+import type { Post } from "@shared";
 
 interface IPost extends Post, Document {}
 

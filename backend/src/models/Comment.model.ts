@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-import type { Comment } from "../types/comments.types.js"
+import type { Comment } from "@shared"
 
 interface IComment extends Comment, Document {}
 
