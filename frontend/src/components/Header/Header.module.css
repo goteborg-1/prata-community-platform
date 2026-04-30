@@ -33,6 +33,10 @@
   align-items: center;
 }
 
+.hide {
+  display: none;
+}
+
 .navContainer {
   position: sticky;
   top: 60px;
@@ -81,4 +85,10 @@
 
 .navList a:hover {
   color: var(--color-primary);
+}
+
+@media (min-width: 768px) {
+  .hide {
+    display: block;
+  }
 }
