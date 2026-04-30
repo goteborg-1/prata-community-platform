@@ -15,8 +15,8 @@ describe("GET /posts", () => {
   // ---- positive tests ----
   test("return array of posts", async () => {
     const res = await request(app).get("/api/v1/posts")
-    
-    
+
+
     expect(res.status).toBe(200)
     expect(res.body.data).toBeInstanceOf(Array)
   })
@@ -54,7 +54,7 @@ describe("POST /posts", () => {
         categories: ["family", "anxiety"]
       })
 
-    
+
     expect(res.status).toBe(201)
     expect(res.body.data).toHaveProperty("title", "Test title")
     expect(res.body.data).toHaveProperty("description", "test description")
@@ -93,4 +93,108 @@ describe("POST /posts", () => {
   })
 })
 
+describe("GET /posts/:id", () => {
+
+  // ---- create a post so it can be found ----
+  let token: string
+  let postId: string
+
+  beforeEach(async () => {
+    await request(app).post("/api/v1/users/register").send({
+      email: "test@test.com",
+      handle: "testuser",
+      password: "password123"
+    })
+
+    const login = await request(app).post("/api/v1/users/login").send({
+      email: "test@test.com",
+      password: "password123"
+    })
+
+    token = login.body.data.token
+
+
+
+    const res = await request(app)
+      .post("/api/v1/posts")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        title: "Test title specific",
+        description: "test description specific id",
+        categories: ["family", "anxiety"],
+        isAnonymous: true
+      })
+
+    postId = res.body.data._id
+
+  })
+  // ---- positive tests ----
+  test("return a specific post", async () => {
+    const res = await request(app).get(`/api/v1/posts/${postId}`)
+
+
+
+    expect(res.status).toBe(200)
+    expect(res.body.data).toHaveProperty("title", "Test title specific")
+    expect(res.body.data).toHaveProperty("description", "test description specific id")
+    expect(res.body.data).toHaveProperty("isAnonymous", true)
+  })
+
+  // ---- negative tests ----
+  test("return post that does not exist -> return 404", async () => {
+    const res = await request(app).get(`/api/v1/posts/000000000000000000000001`) // MongoDB ObjectID has to be 24 hex
+
+    expect(res.status).toBe(404)
+  })
+})
+
+describe("PATCH /posts/:id", () => {
+  // ---- create a post so it can be found ----
+  let token: string
+  let postId: string
+
+  beforeEach(async () => {
+    await request(app).post("/api/v1/users/register").send({
+      email: "test@test.com",
+      handle: "testuser",
+      password: "password123"
+    })
+
+    const login = await request(app).post("/api/v1/users/login").send({
+      email: "test@test.com",
+      password: "password123"
+    })
+
+    token = login.body.data.token
+
+
+
+    const res = await request(app)
+      .post("/api/v1/posts")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        title: "Test title specific",
+        description: "test description specific id",
+        categories: ["family", "anxiety"],
+        isAnonymous: true
+      })
+
+    postId = res.body.data._id
+
+  })
+
+  test("updating title and description of specific post", async () => {
+    const res = await request(app)
+      .patch(`/api/v1/posts/${postId}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        title: "Updated title",
+        description: "updated description"
+      })
+    
+    expect(res.status).toBe(200)
+    expect(res.body.data).toHaveProperty("title", "Updated title")                           
+    expect(res.body.data).toHaveProperty("description", "updated description")
+  })
+})
 
