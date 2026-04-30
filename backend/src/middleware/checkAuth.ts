@@ -18,10 +18,10 @@ export const checkAuth: Middleware = async (req, res, next) => {
   const secret = process.env.JWT_SECRET!
 
   //Decode token
-  const decoded = jwt.verify(token, secret) as {userId: string}
+  const decoded = jwt.verify(token, secret) as {id: string}
 
   //Find user by id and exclude password
-  const user = await UserModel.findById(decoded.userId)
+  const user = await UserModel.findById(decoded.id)
 
   if(!user) {
     throw createError("User no longer exists - please login again", 401, "USER_NOT_FOUND_OR_DELETED")

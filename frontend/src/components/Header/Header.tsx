@@ -38,7 +38,17 @@ export default function Header() {
         </div>
 
         <div className={s.buttonWrapper}>
+          <div className={s.hide}>
+            <Button
+              onClick={() => console.log("Klick")}
+              size="small"
+              variant="transparent"
+            >
+              Logga in
+            </Button>
+          </div>
           <Button
+            onClick={() => console.log("Klick")}
             size="small"
           >
             Skapa konto

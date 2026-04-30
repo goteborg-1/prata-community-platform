@@ -83,14 +83,14 @@ export const createPost: Controller<{}, CreatePostBody> = async (req, res) => {
     throw createError("Missing title, description or categories", 400, "MISSING_REQUIRED_FIELDS")
   }
   
-  const userId = req.user.userId
+  const userId = req.user.id
   
   if(!userId) {
     throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
   }
 
   const newPost = await PostModel.create({
-    userId: userId,
+    userId,
     isAnonymous,
     title,
     description,
@@ -129,14 +129,14 @@ export const updatePost: Controller<PostParams, UpdatePostBody> = async (req, re
 }
 
 export const toggleLike: Controller<PostParams> = async (req, res) => {
-  const postId = req.params.id
-  const userId = req.user.userId
+  const id = req.params.id
+  const userId = req.user.id
 
   if(!userId) {
     throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
   }
 
-  const post = await PostModel.findById(postId).select("likedBy")
+  const post = await PostModel.findById(id).select("likedBy")
 
   if(!post) {
     throw createError("Could not find post", 404, "POST_NOT_FOUND")
@@ -145,7 +145,7 @@ export const toggleLike: Controller<PostParams> = async (req, res) => {
   const hasLiked = (post.likedBy || []).includes(userId)
 
   const updatedPost = await PostModel.findByIdAndUpdate(
-    postId,
+    id,
     hasLiked
       ? {$pull: {likedBy: userId}} //Remove like if already liked
       : {$addToSet: {likedBy: userId}}, //Add if not already liked
@@ -162,7 +162,7 @@ export const toggleLike: Controller<PostParams> = async (req, res) => {
 export const deletePost: Controller<PostParams> = async (req, res) => {
   const id = req.params.id
 
-  await CommentModel.deleteMany({postId: id})
+  await CommentModel.deleteMany({id})
   const deletedPost = await PostModel.findByIdAndDelete(id)
 
   if(!deletedPost) {

@@ -3,7 +3,7 @@ import s from "./Button.module.css"
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode,
-  onClick?: () => void,
+  onClick: () => void,
   variant?: "primary" | "secondary" | "transparent"
   size?: "normal" | "small" | "x-small"
 }

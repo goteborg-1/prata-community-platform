@@ -49,7 +49,7 @@ export const googleLogin: Controller = async (req, res) => {
 
   // 4 -- make own JWT so front end can prove who they are later
   const token = jwt.sign(
-    { userId: user.userId },
+    { id: user.id },
     process.env.JWT_SECRET as string,
     { expiresIn: "7d" }
   )
@@ -100,7 +100,7 @@ export const loginUser: Controller<{}, loginUserBody> = async (req, res) => {
   }
 
   const token = jwt.sign(
-    {userId: user.userId},
+    {id: user.id},
     process.env.JWT_SECRET!,
     {expiresIn: "7d"}
   )
@@ -216,8 +216,8 @@ export const deleteUserById: Controller<userParams> = async (req, res) => {
     throw createError("User not found", 404, "USER_NOT_FOUND")
   }
 
-  await PostModel.deleteMany({userId: id})
-  await CommentModel.deleteMany({userId: id})
+  await PostModel.deleteMany({id})
+  await CommentModel.deleteMany({id})
   await PostModel.updateMany(
     {likedBy: id},
     {$pull: {likedBy: id}}

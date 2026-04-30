@@ -4,7 +4,7 @@ import { createError } from "../utils/createError.js"
 import { UserModel } from "../models/User.model.js"
 import { PostModel } from "../models/Post.model.js"
 import { CommentModel } from "../models/Comment.model.js"
-import { updateProfileBody } from "../types/users.types.js"
+import { updateProfileBody } from "@shared"
 
 export const getProfile: Controller = async (req, res) => {
   const user = req.user
@@ -37,7 +37,7 @@ export const updateProfile: Controller<{}, updateProfileBody> = async (req, res)
   }
 
   const updatedUser = await UserModel.findByIdAndUpdate(
-    user.userId,
+    user.id,
     updateData,
     {
       new: true,
@@ -62,7 +62,7 @@ export const deleteProfile: Controller = async (req, res) => {
     throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
   }
 
-  const id = user.userId
+  const id = user.id
 
   await PostModel.deleteMany({userId: id})
   await CommentModel.deleteMany({userId: id})
@@ -82,8 +82,8 @@ export const getMyPosts: Controller = async (req, res) => {
     throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
   }
   
-  const userId = req.user.userId
-  const posts = await PostModel.find({ userId })
+  const id = req.user.id
+  const posts = await PostModel.find({ id })
 
   res.json({
     status: "success",
@@ -98,8 +98,8 @@ export const getMyLikedPosts: Controller = async (req, res) => {
     throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
   }
 
-  const userId = req.user.userId
-  const posts = await PostModel.find({ likedBy: userId })
+  const id = req.user.id
+  const posts = await PostModel.find({ likedBy: id })
 
   res.json({
     status: "success",
