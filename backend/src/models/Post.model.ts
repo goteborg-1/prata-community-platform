@@ -44,11 +44,13 @@ const PostSchema = new Schema<IPost>(
     toJSON: {
       virtuals: true, //So we can add likeCount after likedBy is updated
       transform: (doc, ret) => {
-        delete ret.likedBy //Remove likedby before sending to frontend
-        if(ret.isAnonymous) {
-          ret.userId = null
+        const { _id, __v, likedBy, ...rest} = ret
+
+        return {
+          ...rest,
+          id: _id.toString(),
+          userId: rest.isAnonymous ? null : rest.userId
         }
-        return ret
       }
     }
   }

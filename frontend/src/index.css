@@ -1,6 +1,7 @@
 :root {
   /* Color Palatte */
-  --bg-main: #F7F4F0;
+  --bg-main: #FDFCFB;
+  --bg-secondary: #F7F4F0;
   --bg-surface: #F9F7F4;
   --border: #E2DDD8;
   
@@ -23,7 +24,8 @@
   --space-xs: 8px;
   --space-sm: 16px;
   --space-base: 24px;
-  --space-lg: 36px;
+  --space-md: 32px;
+  --space-lg: 40px;
 
   /* Radius */
   --radius-xs: 8px;

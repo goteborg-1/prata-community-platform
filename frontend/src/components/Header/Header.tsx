@@ -39,6 +39,7 @@ export default function Header() {
 
         <div className={s.buttonWrapper}>
           <Button
+            onClick={() => console.log("Klick")}
             size="small"
           >
             Skapa konto

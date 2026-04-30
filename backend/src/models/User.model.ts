@@ -1,7 +1,10 @@
 import mongoose, {Schema, Document, Model} from "mongoose";
 import type { User } from "@shared";
 
-export interface IUser extends User, Document {}
+export interface IUser extends Omit<User, "createdPosts" | "likedPosts">, Document {
+  createdPosts: Schema.Types.ObjectId,
+  likedPosts: Schema.Types.ObjectId
+}
 
 const UserSchema = new Schema<IUser>(
   {
@@ -42,7 +45,6 @@ const UserSchema = new Schema<IUser>(
       required: function(this: IUser) {
         return !this.googleId //Only required if not signed in with google
       },
-      select: false,
       minLength: [8, "Password must be at least 8 characters"],
       match: [/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^\s]+$/, "Password must include at least one capital, lowercase and number"]
     },
@@ -65,17 +67,16 @@ const UserSchema = new Schema<IUser>(
   {
     timestamps: true,
     toJSON: {
-      virtuals: true,
       transform: (doc, ret) => {
-        delete ret.password
-        return ret
+        const { _id, __v, password, ...rest} = ret
+
+        return {
+          ...rest,
+          id: _id.toString(),
+        }
       }
     }
   }
 )
-
-UserSchema.virtual("userId").get(function (this: IUser) {
-  return this._id.toHexString()
-})
 
 export const UserModel: Model<IUser> = mongoose.model<IUser>("User", UserSchema)
