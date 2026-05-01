@@ -3,6 +3,7 @@ import app from "../app.js";
 import request from "supertest"
 import * as db from "./helpers/db.js"
 import { beforeAll, afterEach, afterAll, describe, test, expect, beforeEach } from "@jest/globals"
+import { PostModel } from "../models/Post.model.js"; 
 
 dotenv.config()
 
@@ -125,7 +126,7 @@ describe("GET /posts/:id", () => {
         isAnonymous: true
       })
 
-    postId = res.body.data._id
+    postId = res.body.data.id
 
   })
   // ---- positive tests ----
@@ -179,7 +180,7 @@ describe("PATCH /posts/:id", () => {
         isAnonymous: true
       })
 
-    postId = res.body.data._id
+    postId = res.body.data.id
 
   })
 
@@ -195,6 +196,56 @@ describe("PATCH /posts/:id", () => {
     expect(res.status).toBe(200)
     expect(res.body.data).toHaveProperty("title", "Updated title")                           
     expect(res.body.data).toHaveProperty("description", "updated description")
+  })
+})
+
+
+describe("DELETE /posts/:id", () => {
+  // ---- create a post so it can be found ----
+  let token: string
+  let postId: string
+
+  beforeEach(async () => {
+    await request(app).post("/api/v1/users/register").send({
+      email: "test@test.com",
+      handle: "testuser",
+      password: "password123"
+    })
+
+    const login = await request(app).post("/api/v1/users/login").send({
+      email: "test@test.com",
+      password: "password123"
+    })
+
+    token = login.body.data.token
+
+
+
+    const res = await request(app)
+      .post("/api/v1/posts")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        title: "Test title specific",
+        description: "test description specific id",
+        categories: ["family", "anxiety"],
+        isAnonymous: true
+      })
+
+    postId = res.body.data.id
+
+  })
+
+  // make sure its removed from DB, not only server
+  test("Delete a post from DB", async () => {
+    const res = await request(app)
+      .delete(`/api/v1/posts/${postId}`)
+      .set("Authorization", `Bearer ${token}`)
+  
+    const found = await PostModel.findById(postId) 
+
+    expect(res.status).toBe(204)
+    expect(found).toBeNull()
+    
   })
 })
 
