@@ -241,7 +241,11 @@ describe("DELETE /posts/:id", () => {
       .delete(`/api/v1/posts/${postId}`)
       .set("Authorization", `Bearer ${token}`)
   
+    const found = await PostModel.findById(postId) 
+
     expect(res.status).toBe(204)
+    expect(found).toBeNull()
+    
   })
 })
 
