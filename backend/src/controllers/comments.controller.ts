@@ -2,7 +2,7 @@ import { Controller } from "../types/index.types.js";
 import { createError } from "../utils/createError.js";
 import { CommentModel } from "../models/Comment.model.js";
 
-import type { CommentParams, CreateCommentBody, UpdateCommentBody } from "../types/comments.types.js";
+import type { CommentParams, CreateCommentBody, UpdateCommentBody } from "@shared";
 
 export const getAllComments: Controller<CommentParams> = async (req, res) => {
   const postId = req.params.postId;
@@ -31,7 +31,7 @@ export const createComment: Controller<CommentParams, CreateCommentBody, {}> = a
     throw createError("Missing comment", 400, "MISSING_REQUIRED_FIELDS")
   }
 
-  const userId = req.user.userId
+  const userId = req.user.id
 
   if(!userId) {
     throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
@@ -95,7 +95,7 @@ export const deleteComment: Controller<CommentParams> = async (req, res) => {
 
 export const toggleCommentLike: Controller<CommentParams, {}> = async (req, res) => {
   const commentId = req.params.commentId
-  const userId = req.user.userId.toString()
+  const userId = req.user.id.toString()
 
   const comment = await CommentModel.findById(commentId).select("likedBy")
   if (!comment) throw createError(`Comment with id ${commentId} not found`, 404, "COMMENT_NOT_FOUND");
