@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "rootDir": "..",
+    "outDir": "./dist",
+    "module": "nodenext",
+    "target": "esnext",
+    "types": ["node"],
+    "paths": {
+      "@shared": ["../shared/index.ts"]
+    },
+
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    "strict": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*", "../shared/index.ts"],
+  "exclude": ["node_modules", "dist"]
+}

@@ -1,0 +1,87 @@
+:root {
+  /* Color Palatte */
+  --bg-main: #FDFCFB;
+  --bg-secondary: #F7F4F0;
+  --bg-surface: #F9F7F4;
+  --border: #E2DDD8;
+  
+  --color-primary: #F6BD60;
+  --color-primary-light: #F9D28A;
+  --color-secondary: #F5CAC3;
+  --color-secondary-light: #FBDDD9;
+  --color-accent: #84A59D;
+  
+  --color-text-main: #423E3B;
+  --color-text-muted: #747272;
+  --color-text-on-colors: #423E3B;
+
+  /* Shadow */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  /* Spacing */
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-base: 24px;
+  --space-md: 32px;
+  --space-lg: 40px;
+
+  /* Radius */
+  --radius-xs: 8px;
+  --radius-sm: 16px;
+  --radius-base: 24px;
+  --radius-pill: 999px;
+
+  /* Font size */
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-md: 20px;
+  --font-size-lg: 24px;
+  --font-size-xl: 28px;
+}
+
+/* Dark Mode */
+html.dark {
+  --bg-main: #2a2725;
+  --bg-secondary: #231f1d;
+  --bg-surface: #36312D;
+  --border: #423D39;
+
+  --color-primary: #F6BD60;
+  --color-primary-light: #B88E48;
+  --color-secondary: #D4A39B;
+  --color-secondary-light: #544542;
+  --color-accent: #84A59D;
+
+  --color-text-main: #F4F1EE;
+  --color-text-muted: #A8A4A0;
+  --color-text-on-colors: #23201E;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  transition: 
+    background-color 0.2s ease, 
+    border-color 0.2s ease, 
+    stroke 0.2s ease, 
+    box-shadow 0.2s ease;
+}
+
+h1, h2, h3 {
+  color: var(--color-text-main);
+}
+
+p {
+  color: var(--color-text-main);
+  font-size: var(--font-size-base);
+}
+
+a {
+  color: var(--color-accent);
+  font-size: var(--font-size-base);
+  text-decoration: none;
+}
