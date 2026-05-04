@@ -44,14 +44,14 @@ export default function Header() {
               size="small"
               variant="transparent"
             >
-              Logga in
+              Skapa konto
             </Button>
           </div>
           <Button
             onClick={() => console.log("Klick")}
             size="small"
           >
-            Skapa konto
+            Logga in
           </Button>
           <Button
             variant="transparent"
