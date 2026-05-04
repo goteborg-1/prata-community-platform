@@ -1,4 +1,5 @@
 import Illustration from "../../assets/support-community.png"
+import darktest from "../../assets/ny bild darkmode.png"
 import Button from "../Button/Button"
 import s from "./Hero.module.css"
 
@@ -9,7 +10,7 @@ export default function Hero() {
         
         <div className={s.visual}>
           <img 
-            src={Illustration} 
+            src={darktest} 
             alt="Två personer som sitter tillsammans och pratar mjukt, med ett symboliskt band av ljus mellan sig." 
             className={s.image}
           />
