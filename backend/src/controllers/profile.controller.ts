@@ -83,7 +83,7 @@ export const getMyPosts: Controller = async (req, res) => {
   }
   
   const id = req.user.id
-  const posts = await PostModel.find({ id })
+  const posts = await PostModel.find({ userId: id })
 
   res.json({
     status: "success",
