@@ -44,7 +44,8 @@
 
 /* Dark Mode */
 html.dark {
-  --bg-main: #23201E;
+  --bg-main: #2a2725;
+  --bg-secondary: #231f1d;
   --bg-surface: #36312D;
   --border: #423D39;
 
