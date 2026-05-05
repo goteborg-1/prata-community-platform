@@ -1,6 +1,6 @@
 import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 
-export default function Login() {
+export default function LoginWindow() {
   async function handleSucces(response: CredentialResponse) {
     const res = await fetch("http://localhost:3000/api/v1/users/google", {
       method: "POST",
