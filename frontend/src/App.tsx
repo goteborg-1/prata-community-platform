@@ -6,6 +6,8 @@ import Categories from './pages/Categories'
 import Profile from './pages/Profile'
 import About from './pages/About'
 import NotFound from './pages/NotFound'
+import SignUp from './pages/SignUp'
+import Success from './pages/Success'
 import './App.css'
 
 function App() {
@@ -17,6 +19,8 @@ function App() {
         <Route path='kategorier' element={<Categories />} />
         <Route path='profil' element={<Profile />} />
         <Route path='om-oss' element={<About />} />
+        <Route path='signup' element={<SignUp />} />
+        <Route path='success' element={<Success />} />
 
         <Route path='*' element={<NotFound />} />
       </Route>
