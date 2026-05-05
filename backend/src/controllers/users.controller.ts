@@ -6,16 +6,13 @@ import { comparePassword, hashPassword } from "../utils/password.js"
 import { UserModel } from "../models/User.model.js"
 import { PostModel } from "../models/Post.model.js"
 import { CommentModel } from "../models/Comment.model.js"
-import { createUserBody, getUserParams, getUsersQuery, loginUserBody, updateUserRoleParams, userParams } from "@shared"
+import { createUserBody, getUserParams, getUsersQuery, googleLoginBody, loginUserBody, updateUserRoleParams, userParams } from "@shared"
+import { createUserSchema, getUserParamsSchema, getUsersQuerySchema, loginUserSchema, googleLoginSchema, updateUserRoleSchema, UserParamsSchema } from "@shared"
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
-export const googleLogin: Controller = async (req, res) => {
-  const { idToken } = req.body as { idToken: string }
-
-  if (!idToken) {
-    throw createError("No token provided", 400, "NO_TOKEN_PROVIDED")
-  }
+export const googleLogin: Controller<{}, googleLoginBody> = async (req, res) => {
+  const { idToken } = googleLoginSchema.parse(req.body)
 
   // 1 -- ask google if its a valid token
   const ticket = await googleClient.verifyIdToken({
@@ -39,11 +36,13 @@ export const googleLogin: Controller = async (req, res) => {
 
   if (!user) {
 
+    const rawHandle = name?.replace(/\s+/g, "_") ?? email!.split("@")[0] as string
+
     user = await UserModel.create({
       googleId,
       email: email!,
-      handle: name?.replace(/\s+/g, "_") ?? email!.split("@")[0] as string, //TODO: make sure it still works even if handle is taken, and autogenerates handle until changed by user
-      displayName: name || "" // om null, blir den handle
+      handle: rawHandle.toLowerCase().slice(0, 30), //TODO: make sure it still works even if handle is taken, and autogenerates handle until changed by user
+      displayName: name || rawHandle // om null, blir den handle
     })
   }
 
@@ -55,22 +54,22 @@ export const googleLogin: Controller = async (req, res) => {
   )
 
   // 5 -- make sure front end gets info back
-  res.status(200).json({ token, user})
+  res.status(200).json({
+    status: "success",
+    data: {
+      token, 
+      user
+    }
+  })
 }
 
 export const createUser: Controller<{}, createUserBody> = async (req, res) => {
-  const {email, handle, displayName, password} = req.body
+  const validatedData = createUserSchema.parse(req.body)
 
-  if (!email || !handle || !password) {
-    throw createError("Email, handle and password are required", 400, "MISSING_FIELDS")
-  }
-
-  const hashedPassword = await hashPassword(password)
+  const hashedPassword = await hashPassword(validatedData.password)
 
   const newUser = await UserModel.create({
-    email,
-    handle,
-    displayName,
+    ...validatedData,
     password: hashedPassword
   })
 
@@ -81,11 +80,7 @@ export const createUser: Controller<{}, createUserBody> = async (req, res) => {
 }
 
 export const loginUser: Controller<{}, loginUserBody> = async (req, res) => {
-  const {email, password} = req.body
-  
-  if(!email || !password) {
-    throw createError("Email and password are required", 400, "MISSING_FIELDS")
-  }
+  const { email, password } = loginUserSchema.parse(req.body)
 
   const user = await UserModel.findOne({email}).select("+password")
 
@@ -115,7 +110,7 @@ export const loginUser: Controller<{}, loginUserBody> = async (req, res) => {
 }
 
 export const getUserByHandle: Controller<getUserParams> = async (req, res) => {
-  const handle = req.params.handle
+  const { handle } = getUserParamsSchema.parse(req.params)
 
   const user = await UserModel.findOne({handle}).select(["-likedPosts", "-email"])
 
@@ -130,7 +125,7 @@ export const getUserByHandle: Controller<getUserParams> = async (req, res) => {
 }
 
 export const getAllUsers: Controller<{}, {}, getUsersQuery> = async (req, res) => {
-  const { role, search, sort, page, limit } = req.query
+  const { role, search, sort, page, limit } = getUsersQuerySchema.parse(req.query)
 
   const query: Record<string, unknown> = {}
 
@@ -151,15 +146,13 @@ export const getAllUsers: Controller<{}, {}, getUsersQuery> = async (req, res) =
     sortOptions = {displayName: 1}
   }
 
-  const pageNum = Number(page) || 1
-  const limitNum = Number(limit) || 5
-  const skip = (pageNum - 1) * limitNum
+  const skip = (page - 1) * limit
 
   const [users, total] = await Promise.all([
     UserModel.find(query)
       .sort(sortOptions)
       .skip(skip)
-      .limit(limitNum),
+      .limit(limit),
     UserModel.countDocuments(query)
   ])
 
@@ -167,27 +160,17 @@ export const getAllUsers: Controller<{}, {}, getUsersQuery> = async (req, res) =
     status: "success",
     data: users,
     meta: {
-      page: pageNum,
-      limit: limitNum,
+      page,
+      limit,
       total,
-      totalPages: Math.ceil(total / limitNum)
+      totalPages: Math.ceil(total / limit)
     }
   })
 }
 
 export const updateUserRole: Controller<userParams, updateUserRoleParams> = async (req, res) => {
-  const id = req.params.id
-  const role = req.body.role.toLowerCase()
-
-  const allowedRoles = ["user", "admin", "psychologist"]
-  
-  if(!role) {
-    throw createError("No role provided", 400, "NO_UPDATE_FIELDS")
-  }
-
-  if(!allowedRoles.includes(role)) {
-    throw createError("Invalid role", 400, "INVALID_ROLE")
-  }
+  const { id } = UserParamsSchema.parse(req.params)
+  const { role } = updateUserRoleSchema.parse(req.body)
 
   const updatedUser = await UserModel.findByIdAndUpdate(
     id,
@@ -209,15 +192,15 @@ export const updateUserRole: Controller<userParams, updateUserRoleParams> = asyn
 }
 
 export const deleteUserById: Controller<userParams> = async (req, res) => {
-  const id = req.params.id
+  const { id } = UserParamsSchema.parse(req.params)
   const user = await UserModel.findById(id)
 
   if(!user) {
     throw createError("User not found", 404, "USER_NOT_FOUND")
   }
 
-  await PostModel.deleteMany({id})
-  await CommentModel.deleteMany({id})
+  await PostModel.deleteMany({userId: id})
+  await CommentModel.deleteMany({userId: id})
   await PostModel.updateMany(
     {likedBy: id},
     {$pull: {likedBy: id}}

@@ -6,8 +6,10 @@ interface IPost extends Post, Document {}
 const PostSchema = new Schema<IPost>(
   {
     userId: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "User",
       required: [true, "userId is required"],
+      index: true
     },
     isAnonymous: {
       type: Boolean,
@@ -35,8 +37,9 @@ const PostSchema = new Schema<IPost>(
       default: [],
     },
     likedBy: [{
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "User",
+      index: true
     }],
   },
   {

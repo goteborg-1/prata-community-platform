@@ -1,10 +1,10 @@
-import bcrypt from "bcrypt"
 import { Controller } from "../types/index.types.js"
 import { createError } from "../utils/createError.js"
 import { UserModel } from "../models/User.model.js"
 import { PostModel } from "../models/Post.model.js"
 import { CommentModel } from "../models/Comment.model.js"
-import { updateProfileBody } from "@shared"
+import { updateProfileBody, updateProfileSchema } from "@shared"
+import { hashPassword } from "../utils/password.js"
 
 export const getProfile: Controller = async (req, res) => {
   const user = req.user
@@ -26,15 +26,15 @@ export const updateProfile: Controller<{}, updateProfileBody> = async (req, res)
     throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
   }
 
-  const {displayName, password} = req.body
-  const updateData: Partial<{displayName: string, password: string}> = {}
+  const validatedData = updateProfileSchema.parse(req.body)
 
-  if(displayName) updateData.displayName = displayName
-  if(password) updateData.password = await bcrypt.hash(password, 10)
-
-  if(Object.keys(updateData).length === 0) {
+  if(Object.keys(validatedData).length === 0) {
     throw createError("No fields to update - provide at least displayName or password", 400, "NO_UPDATE_FIELDS")
   }
+
+  const updateData: Partial<updateProfileBody> = {...validatedData}
+  if(validatedData.password) updateData.password = await hashPassword(validatedData.password)
+
 
   const updatedUser = await UserModel.findByIdAndUpdate(
     user.id,
@@ -82,7 +82,7 @@ export const getMyPosts: Controller = async (req, res) => {
     throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
   }
   
-  const id = req.user.id
+  const id = user.id
   const posts = await PostModel.find({ userId: id })
 
   res.json({
@@ -98,7 +98,7 @@ export const getMyLikedPosts: Controller = async (req, res) => {
     throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
   }
 
-  const id = req.user.id
+  const id = user.id
   const posts = await PostModel.find({ likedBy: id })
 
   res.json({

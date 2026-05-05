@@ -1,10 +1,7 @@
 import mongoose, {Schema, Document, Model} from "mongoose";
 import type { User } from "@shared";
 
-export interface IUser extends Omit<User, "createdPosts" | "likedPosts">, Document {
-  createdPosts: Schema.Types.ObjectId,
-  likedPosts: Schema.Types.ObjectId
-}
+export interface IUser extends User, Document {}
 
 const UserSchema = new Schema<IUser>(
   {
@@ -52,16 +49,6 @@ const UserSchema = new Schema<IUser>(
       type: String,
       enum: ["user", "admin", "psychologist"],
       default: "user"
-    },
-    createdPosts: {
-      type: [Schema.Types.ObjectId],
-      ref: "Post",
-      default: []
-    },
-    likedPosts: {
-      type: [Schema.Types.ObjectId],
-      ref: "Post",
-      default: []
     },
   },
   {
