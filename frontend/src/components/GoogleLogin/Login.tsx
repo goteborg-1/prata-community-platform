@@ -1,17 +1,21 @@
 import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
+import { api } from "../../utils/api";
+import { useNavigate } from "react-router";
 
 export default function LoginWindow() {
+  const navigate = useNavigate()
+
   async function handleSucces(response: CredentialResponse) {
-    const res = await fetch("http://localhost:3000/api/v1/users/google", {
-      method: "POST",
-      headers: { "content-Type": "application/json" },
-      body: JSON.stringify({ idToken: response.credential })
-    })
-    const data = await res.json()
-    console.log(data)
+    const {data} = await api.post("/users/google", { idToken: response.credential })
+
+    console.log(data.data)
     // make sure user stays signed in. found in here i think? -> "users.controller { expiresIn: "7d" }"
-    localStorage.setItem("token", data.token)
+    localStorage.setItem("token", data.data.token)
+    localStorage.setItem("user", JSON.stringify(data.data.user))
+    navigate("/success")
   }
+
+  
 
   return (
     <div>
