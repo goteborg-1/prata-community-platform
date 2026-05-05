@@ -1,4 +1,7 @@
-export * from "./constants"
-export * from "./types/comments.types"
-export * from "./types/posts.types"
-export * from "./types/users.types"
+export * from "./constants.js"
+export * from "./types/comments.types.js"
+export * from "./types/posts.types.js"
+
+
+export * from "./schema/user/requests.schema.js"
+export * from "./schema/user/user.schema.js"
