@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { ZodError } from "zod"
+import { ZodError } from "@shared"
 import type { HttpError } from "../types/index.types.js";
 
 // catch all other crazy route attempts

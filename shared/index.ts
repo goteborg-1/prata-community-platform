@@ -5,3 +5,5 @@ export * from "./types/posts.types.js"
 
 export * from "./schema/user/requests.schema.js"
 export * from "./schema/user/user.schema.js"
+
+export { ZodError } from "zod"
