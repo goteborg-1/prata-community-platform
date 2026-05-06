@@ -2,7 +2,7 @@ import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 import { api } from "../../utils/api";
 import { useNavigate } from "react-router";
 
-export default function LoginWindow() {
+export default function GoogleLoginWindow() {
   const navigate = useNavigate()
 
   async function handleSucces(response: CredentialResponse) {
@@ -15,12 +15,11 @@ export default function LoginWindow() {
     navigate("/success")
   }
 
-  
-
   return (
-    <div>
-      <h1>Login pls</h1>
-      <GoogleLogin onSuccess={handleSucces} onError={() => console.log("Login failed")}></GoogleLogin>
-    </div>
+    <GoogleLogin 
+      onSuccess={handleSucces} 
+      onError={() => console.log("Login failed")}
+      shape="pill"
+    />
   )
 }

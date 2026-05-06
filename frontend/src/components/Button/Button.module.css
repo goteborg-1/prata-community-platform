@@ -18,6 +18,11 @@
   filter: brightness(0.9);
 }
 
+.base:disabled {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
 .small {
   padding: var(--space-xs) var(--space-sm);
 }

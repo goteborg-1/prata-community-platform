@@ -6,3 +6,8 @@
   scroll-margin-top: 60px;
   gap: var(--space-base);
 }
+
+.small {
+  max-width: 500px;
+  width: 80vw;
+}

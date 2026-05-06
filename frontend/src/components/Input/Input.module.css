@@ -1,0 +1,19 @@
+.input {
+  background-color: var(--bg-main);
+  padding: var(--space-sm);
+  border-radius: var(--radius-pill);
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-base);
+}
+
+.transparent {
+  border: 1px solid var(--color-secondary);
+}
+
+.neutral {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+}
