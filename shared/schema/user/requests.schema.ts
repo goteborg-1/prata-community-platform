@@ -10,7 +10,7 @@ export const createUserSchema = z.object({
 
 export const loginUserSchema = z.object({
   email,
-  password: z.string()
+  password
 })
 
 export const googleLoginSchema = z.object({

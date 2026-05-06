@@ -1,11 +1,11 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import { NavLink, Link } from "react-router";
 import { useTheme } from "../../context/useTheme";
 import { IoClose, IoMenu } from "react-icons/io5";
+import { mainMenu, secondaryMenu } from "./menuItems";
 import Button from "../Button/Button"
 import s from "./Header.module.css"
-import { useState } from "react";
-import { mainMenu, secondaryMenu } from "./menuItems";
-import { NavLink } from "react-router";
+import b from "../Button/Button.module.css"
 
 export default function Header() {
   const { resolvedTheme } = useTheme()
@@ -29,30 +29,25 @@ export default function Header() {
   return(
     <>
       <header className={s.header}>
-        <div className={s.logoWrapper}>
+        <Link to="/" className={s.logoWrapper}>
           <img 
             src={resolvedTheme === "dark" ? "/logo-dark.svg" : "/logo.svg"} 
             className={s.logo} 
           />
           <p className={s.logoText}>Prata Ut</p>
-        </div>
+        </Link>
 
         <div className={s.buttonWrapper}>
           <div className={s.hide}>
-            <Button
-              onClick={() => console.log("Klick")}
-              size="small"
-              variant="transparent"
-            >
+            <Link to="/registrera" className={`${b.base} ${b.small} ${b.transparent}`}>
               Skapa konto
-            </Button>
+            </Link>
           </div>
-          <Button
-            onClick={() => console.log("Klick")}
-            size="small"
-          >
+
+          <Link to="/logga-in" className={`${b.base} ${b.small} ${b.primary}`}>
             Logga in
-          </Button>
+          </Link>
+
           <Button
             variant="transparent"
             size="x-small"

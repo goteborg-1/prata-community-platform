@@ -13,6 +13,7 @@
   
   --color-text-main: #423E3B;
   --color-text-muted: #747272;
+  --color-error: #A63D2D;
   --color-text-on-colors: #423E3B;
 
   /* Shadow */
@@ -39,7 +40,7 @@
   --font-size-base: 16px;
   --font-size-md: 20px;
   --font-size-lg: 24px;
-  --font-size-xl: 28px;
+  --font-size-xl: 32px;
 }
 
 /* Dark Mode */
