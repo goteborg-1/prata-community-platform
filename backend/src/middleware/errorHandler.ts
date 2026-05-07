@@ -30,6 +30,7 @@ export function errorHandler(
       path: req.path,
       timestamp: new Date().toISOString()
     })
+    return
   }
 
   // gets data from controller or sends default
