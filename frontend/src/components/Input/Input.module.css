@@ -1,7 +1,15 @@
+.wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
 .input {
   background-color: var(--bg-main);
   padding: var(--space-sm);
   border-radius: var(--radius-pill);
+  width: 100%;
 }
 
 .input::placeholder {
@@ -16,4 +24,18 @@
 .neutral {
   background-color: var(--bg-secondary);
   border: 1px solid var(--border);
+}
+
+.toggleBtn {
+  position: absolute;
+  right: var(--space-sm);
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: var(--space-xs);
+}
+
+.toggleBtn:hover {
+  color: var(--color-text-main);
 }

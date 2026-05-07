@@ -73,9 +73,18 @@ export const createUser: Controller<{}, createUserBody> = async (req, res) => {
     password: hashedPassword
   })
 
+  const token = jwt.sign(
+    {id: newUser.id},
+    process.env.JWT_SECRET!,
+    {expiresIn: "7d"}
+  )
+
   res.status(201).json({
     status: "success",
-    data: newUser
+    data: {
+      token,
+      newUser
+    }
   })
 }
 

@@ -1,5 +1,6 @@
+import { Link } from "react-router"
 import Illustration from "../../assets/support-community.png"
-import Button from "../Button/Button"
+import b from "../Button/Button.module.css"
 import s from "./Hero.module.css"
 
 export default function Hero() {
@@ -24,9 +25,9 @@ export default function Hero() {
           </p>
           
           <div className={s.actions}>
-            <Button onClick={() => console.log("Klick")}>
+            <Link to="/registrera" className={`${b.base} ${b.primary}`}>
               Börja prata med andra
-            </Button>
+            </Link>
             
             <a href="/psykologer" className={s.link}>
               Läs mer om professionellt stöd

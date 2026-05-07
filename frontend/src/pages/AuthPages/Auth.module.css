@@ -42,12 +42,12 @@
   letter-spacing: 1px;
 }
 
-.signupSpan {
+.linkSpan {
   display: flex;
   gap: var(--space-xs);
   justify-content: center;
 }
 
-.signupLink {
+.link {
   text-decoration: underline;
 }

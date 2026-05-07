@@ -3,7 +3,7 @@ import { useTheme } from "../../context/useTheme";
 import Container from "../../components/Container/Container";
 import GoogleLoginWindow from "../../components/auth/GoogleLogin";
 import LoginForm from "../../components/auth/LoginForm";
-import s from "./Login.module.css"
+import s from "./Auth.module.css"
 
 export default function Login() {
   const { resolvedTheme } = useTheme()
@@ -28,9 +28,9 @@ export default function Login() {
 
       <LoginForm />
 
-      <span className={s.signupSpan}>
+      <span className={s.linkSpan}>
         <p>Har du inget konto?</p>
-        <Link to="/registrera" className={s.signupLink}>Skapa konto</Link>
+        <Link to="/registrera" className={s.link}>Skapa konto</Link>
       </span>
     </Container>
   )

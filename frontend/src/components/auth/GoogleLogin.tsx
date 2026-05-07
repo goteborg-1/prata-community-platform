@@ -20,6 +20,7 @@ export default function GoogleLoginWindow() {
       onSuccess={handleSucces} 
       onError={() => console.log("Login failed")}
       shape="pill"
+      text="continue_with"
     />
   )
 }

@@ -21,12 +21,26 @@ export function errorHandler(
 ): void {
   console.error(err.stack)
 
+  //Handle zod validation
   if(err instanceof ZodError) {
     res.status(400).json({
       status: 400,
       code: "VALIDATION_ERROR",
       message: "Data validation failed",
       errors: err.flatten().fieldErrors,
+      path: req.path,
+      timestamp: new Date().toISOString()
+    })
+    return
+  }
+
+  //Handle MongoDB duplicates
+  if(err.code === 11000) {
+    const field = Object.keys(err.keyValue ?? {})[0]
+    res.status(400).json({
+      status: 400,
+      code: "DUPLICATE_KEY_ERROR",
+      message: `${field} is already in use`,
       path: req.path,
       timestamp: new Date().toISOString()
     })
