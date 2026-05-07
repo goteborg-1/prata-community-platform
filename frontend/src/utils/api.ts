@@ -21,11 +21,12 @@ api.interceptors.response.use(
 
   (error) => {
     const status = error.response?.status
+    const isLoginRequest = error.config.url?.includes("/login")
 
-    if(status === 401) {
+    if(status === 401 && !isLoginRequest) {
       console.warn("Sessionen har gått ut, loggar ut...")
       localStorage.removeItem("token")
-      window.location.href = "/login"
+      window.location.href = "/logga-in"
     }
 
     if(status === 403) {

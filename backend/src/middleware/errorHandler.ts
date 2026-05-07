@@ -21,6 +21,7 @@ export function errorHandler(
 ): void {
   console.error(err.stack)
 
+  //Handle zod validation
   if(err instanceof ZodError) {
     res.status(400).json({
       status: 400,
@@ -31,6 +32,18 @@ export function errorHandler(
       timestamp: new Date().toISOString()
     })
     return
+  }
+
+  //Handle MongoDB duplicates
+  if(err.code === 11000) {
+    const field = Object.keys(err.keyValue ?? {})[0]
+    res.status(400).json({
+      status: 400,
+      code: "DUPLICATE_KEY_ERROR",
+      message: `${field} is already in use`,
+      path: req.path,
+      timestamp: new Date().toISOString()
+    })
   }
 
   // gets data from controller or sends default

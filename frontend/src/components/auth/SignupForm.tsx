@@ -1,11 +1,11 @@
-import { loginUserSchema } from "@shared";
 import { useAuthForm } from "../../hooks/useAuthForm";
+import { createUserSchema } from "@shared";
 import Button from "../Button/Button";
 import Input from "../Input/Input";
 import s from "./auth.module.css"
 
-export default function LoginForm() {
-  const { handleSubmit, handleChange, formData, errors, isLoading} = useAuthForm(loginUserSchema, "/users/login", {email: "", password: ""})
+export default function SignupForm() {
+  const { handleSubmit, handleChange, formData, errors, isLoading} = useAuthForm(createUserSchema, "/users/register", {handle: "", email: "", password: ""})
 
   return(
     <form action="submit" onSubmit={handleSubmit} className={s.form} noValidate>
@@ -23,6 +23,18 @@ export default function LoginForm() {
 
       <div className={s.inputWrapper}>
         <Input 
+          name="handle"
+          type="text"
+          placeholder="Användarnamn"
+          value={formData.handle}
+          onChange={handleChange}
+          required
+        />
+        {errors.handle && <p className={s.error}>{errors.handle[0]}</p>}
+      </div>
+
+      <div className={s.inputWrapper}>
+        <Input 
           name="password"
           type="password"
           placeholder="Lösenord"
@@ -34,7 +46,7 @@ export default function LoginForm() {
       </div>
 
       <Button type="submit" disabled={isLoading}>
-        {isLoading ? "Loggar in..." : "Logga in"}
+        {isLoading ? "Skapar konto..." : "Gå med nu"}
       </Button>
     </form>
   )

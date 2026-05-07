@@ -15,8 +15,9 @@ export type Middleware = (
 ) => void
 
 export interface HttpError extends Error {
-  code?: string,
-  status?: number
+  code?: number | string,
+  status?: number,
+  keyValue?: Record<string, string>
 }
 
 //Add user to req globally

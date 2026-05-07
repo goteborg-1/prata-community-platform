@@ -25,7 +25,7 @@ async function seedAdmin() {
   }
 
   //Hash password
-  const hashedPassword = await hashPassword("admin123")
+  const hashedPassword = await hashPassword("AdminPass123")
 
   //Create admin
   const admin = await UserModel.create({
@@ -36,6 +36,8 @@ async function seedAdmin() {
   })
 
   console.log(`Admin created: ${admin.email}`)
+  await mongoose.disconnect()
+  console.log("Disconnected from MongoDB")
   process.exit(0)
 }
 
