@@ -4,7 +4,7 @@ import s from "./Layout.module.css"
 
 export default function Layout() {
   return(
-    <div className="body-container">
+    <div>
       <Header/>
       <main className={s.main}>
         <Outlet />

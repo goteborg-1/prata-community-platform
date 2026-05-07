@@ -2,6 +2,7 @@
   position: relative;
   background-color: var(--bg-secondary);
   padding-bottom: 60px;
+  width: 100%;
 }
 
 .inner {
@@ -42,7 +43,7 @@
 
 .visual {
   width: 100%;
-  max-width: 300px;
+  max-width: 320px;
 }
 
 .image {
