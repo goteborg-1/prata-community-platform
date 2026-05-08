@@ -34,7 +34,7 @@ export const getUsersQuerySchema = z.object({
   limit: z.string().regex(/^\d+$/).default("5").transform(Number)
 })
 
-export const UserParamsSchema = z.object({
+export const userParamsSchema = z.object({
   id: z.string()
 })
 
@@ -43,14 +43,14 @@ export const getUserParamsSchema = z.object({
 })
 
 
-//Types
-export type createUserBody = z.infer<typeof createUserSchema>
-export type loginUserBody = z.infer<typeof loginUserSchema>
-export type googleLoginBody = z.infer<typeof googleLoginSchema>
+// --- Types ---
+export type CreateUserRequest = z.infer<typeof createUserSchema>
+export type LoginUserRequest = z.infer<typeof loginUserSchema>
+export type GoogleLoginRequest = z.infer<typeof googleLoginSchema>
 
-export type updateProfileBody = z.infer<typeof updateProfileSchema>
-export type updateUserRoleParams = z.infer<typeof updateUserRoleSchema>
+export type UpdateProfileRequest = z.infer<typeof updateProfileSchema>
+export type UpdateUserRoleRequest = z.infer<typeof updateUserRoleSchema>
 
-export type getUsersQuery = z.infer<typeof getUsersQuerySchema>
-export type userParams = z.infer<typeof UserParamsSchema>
-export type getUserParams = z.infer<typeof getUserParamsSchema>
+export type GetUsersQuery = z.infer<typeof getUsersQuerySchema>
+export type UserParams = z.infer<typeof userParamsSchema>
+export type GetUserParams = z.infer<typeof getUserParamsSchema>

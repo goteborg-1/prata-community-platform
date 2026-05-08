@@ -6,12 +6,11 @@ import { comparePassword, hashPassword } from "../utils/password.js"
 import { UserModel } from "../models/User.model.js"
 import { PostModel } from "../models/Post.model.js"
 import { CommentModel } from "../models/Comment.model.js"
-import { createUserBody, getUserParams, getUsersQuery, googleLoginBody, loginUserBody, updateUserRoleParams, userParams } from "@shared"
-import { createUserSchema, getUserParamsSchema, getUsersQuerySchema, loginUserSchema, googleLoginSchema, updateUserRoleSchema, UserParamsSchema } from "@shared"
+import { CreateUserRequest, createUserSchema, GetUserParams, getUserParamsSchema, GetUsersQuery, getUsersQuerySchema, GoogleLoginRequest, googleLoginSchema, LoginUserRequest, loginUserSchema, UpdateUserRoleRequest, updateUserRoleSchema, UserParams, userParamsSchema } from "@shared"
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
-export const googleLogin: Controller<{}, googleLoginBody> = async (req, res) => {
+export const googleLogin: Controller<{}, GoogleLoginRequest> = async (req, res) => {
   const { idToken } = googleLoginSchema.parse(req.body)
 
   // 1 -- ask google if its a valid token
@@ -63,7 +62,7 @@ export const googleLogin: Controller<{}, googleLoginBody> = async (req, res) => 
   })
 }
 
-export const createUser: Controller<{}, createUserBody> = async (req, res) => {
+export const createUser: Controller<{}, CreateUserRequest> = async (req, res) => {
   const validatedData = createUserSchema.parse(req.body)
 
   const hashedPassword = await hashPassword(validatedData.password)
@@ -88,7 +87,7 @@ export const createUser: Controller<{}, createUserBody> = async (req, res) => {
   })
 }
 
-export const loginUser: Controller<{}, loginUserBody> = async (req, res) => {
+export const loginUser: Controller<{}, LoginUserRequest> = async (req, res) => {
   const { email, password } = loginUserSchema.parse(req.body)
 
   const user = await UserModel.findOne({email}).select("+password")
@@ -118,7 +117,7 @@ export const loginUser: Controller<{}, loginUserBody> = async (req, res) => {
   })
 }
 
-export const getUserByHandle: Controller<getUserParams> = async (req, res) => {
+export const getUserByHandle: Controller<GetUserParams> = async (req, res) => {
   const { handle } = getUserParamsSchema.parse(req.params)
 
   const user = await UserModel.findOne({handle}).select(["-likedPosts", "-email"])
@@ -133,7 +132,7 @@ export const getUserByHandle: Controller<getUserParams> = async (req, res) => {
   })
 }
 
-export const getAllUsers: Controller<{}, {}, getUsersQuery> = async (req, res) => {
+export const getAllUsers: Controller<{}, {}, GetUsersQuery> = async (req, res) => {
   const { role, search, sort, page, limit } = getUsersQuerySchema.parse(req.query)
 
   const query: Record<string, unknown> = {}
@@ -177,8 +176,8 @@ export const getAllUsers: Controller<{}, {}, getUsersQuery> = async (req, res) =
   })
 }
 
-export const updateUserRole: Controller<userParams, updateUserRoleParams> = async (req, res) => {
-  const { id } = UserParamsSchema.parse(req.params)
+export const updateUserRole: Controller<UserParams, UpdateUserRoleRequest> = async (req, res) => {
+  const { id } = userParamsSchema.parse(req.params)
   const { role } = updateUserRoleSchema.parse(req.body)
 
   const updatedUser = await UserModel.findByIdAndUpdate(
@@ -200,8 +199,8 @@ export const updateUserRole: Controller<userParams, updateUserRoleParams> = asyn
   })
 }
 
-export const deleteUserById: Controller<userParams> = async (req, res) => {
-  const { id } = UserParamsSchema.parse(req.params)
+export const deleteUserById: Controller<UserParams> = async (req, res) => {
+  const { id } = userParamsSchema.parse(req.params)
   const user = await UserModel.findById(id)
 
   if(!user) {

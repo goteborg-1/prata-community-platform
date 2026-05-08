@@ -1,5 +1,5 @@
 import z from "zod"
-import { categories, description, isAnonymous, likedBy, title, triggerTags, userId } from "./atoms"
+import { categories, description, isAnonymous, likedBy, title, triggerTags, userId } from "./atoms.js"
 
 export const PostSchema = z.object({
   id: z.string(),

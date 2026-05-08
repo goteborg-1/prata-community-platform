@@ -1,5 +1,5 @@
 import z from "zod"
-import { categories, categoriesQuery, description, id, isAnonymous, title, triggerTags, triggerTagsQuery } from "./atoms"
+import { categories, categoriesQuery, description, id, isAnonymous, title, triggerTags, triggerTagsQuery } from "./atoms.js"
 
 export const postParamsSchema = z.object({id})
 
@@ -12,7 +12,7 @@ export const getPostsQuerySchema = z.object({
   limit: z.string().regex(/^\d+$/).default("5").transform(Number)
 })
 
-export const createPostBodySchema = z.object({
+export const createPostSchema = z.object({
   isAnonymous: isAnonymous.optional(),
   title,
   description,
@@ -20,7 +20,7 @@ export const createPostBodySchema = z.object({
   triggerTags,
 })
 
-export const UpdatePostBodySchema = z.object({
+export const updatePostSchema = z.object({
   title,
   description,
   categories,
@@ -30,5 +30,5 @@ export const UpdatePostBodySchema = z.object({
 // --- Types ---
 export type PostParams = z.infer<typeof postParamsSchema>;
 export type GetPostsQuery = z.infer<typeof getPostsQuerySchema>;
-export type CreatePostBody = z.infer<typeof createPostBodySchema>;
-export type UpdatePostBody = z.infer<typeof UpdatePostBodySchema>;
+export type CreatePostRequest = z.infer<typeof createPostSchema>;
+export type UpdatePostRequest = z.infer<typeof updatePostSchema>;

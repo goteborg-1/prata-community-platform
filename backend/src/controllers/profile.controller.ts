@@ -3,7 +3,7 @@ import { createError } from "../utils/createError.js"
 import { UserModel } from "../models/User.model.js"
 import { PostModel } from "../models/Post.model.js"
 import { CommentModel } from "../models/Comment.model.js"
-import { updateProfileBody, updateProfileSchema } from "@shared"
+import { UpdateProfileRequest, updateProfileSchema } from "@shared"
 import { hashPassword } from "../utils/password.js"
 
 export const getProfile: Controller = async (req, res) => {
@@ -19,7 +19,7 @@ export const getProfile: Controller = async (req, res) => {
   })
 }
 
-export const updateProfile: Controller<{}, updateProfileBody> = async (req, res) => {
+export const updateProfile: Controller<{}, UpdateProfileRequest> = async (req, res) => {
   const user = req.user
 
   if(!user) {
@@ -32,7 +32,7 @@ export const updateProfile: Controller<{}, updateProfileBody> = async (req, res)
     throw createError("No fields to update - provide at least displayName or password", 400, "NO_UPDATE_FIELDS")
   }
 
-  const updateData: Partial<updateProfileBody> = {...validatedData}
+  const updateData: Partial<UpdateProfileRequest> = {...validatedData}
   if(validatedData.password) updateData.password = await hashPassword(validatedData.password)
 
 
