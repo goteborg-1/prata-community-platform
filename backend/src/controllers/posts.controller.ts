@@ -1,7 +1,7 @@
 import { Controller } from "../types/index.types.js"
 import { createError } from "../utils/createError.js"
 import { PostModel } from "../models/Post.model.js"
-import { CreatePostRequest, createPostSchema, getPostsQuerySchema, PostParams, postParamsSchema, type GetPostsQuery } from "@shared"
+import { CreatePostRequest, createPostSchema, getPostsQuerySchema, PostParams, postParamsSchema, UpdatePostRequest, updatePostSchema, type GetPostsQuery } from "@shared"
 import { CommentModel } from "../models/Comment.model.js"
 
 export const getAllPosts: Controller<{}, {}, GetPostsQuery> = async (req, res) => {
@@ -89,13 +89,13 @@ export const createPost: Controller<{}, CreatePostRequest> = async (req, res) =>
   })
 }
 
-export const updatePost: Controller<PostParams, UpdatePostBody> = async (req, res) => {
-  const id = req.params.id
-  const updateData = req.body
+export const updatePost: Controller<PostParams, UpdatePostRequest> = async (req, res) => {
+  const { id } = postParamsSchema.parse(req.params)
+  const validatedData = updatePostSchema.parse(req.body)
 
   const updatedPost = await PostModel.findByIdAndUpdate(
     id,
-    {$set: updateData},
+    {$set: validatedData},
     {
       new: true,
       runValidators: true
