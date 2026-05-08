@@ -113,7 +113,7 @@ export const updatePost: Controller<PostParams, UpdatePostRequest> = async (req,
 }
 
 export const toggleLike: Controller<PostParams> = async (req, res) => {
-  const id = req.params.id
+  const { id } = postParamsSchema.parse(req.params)
   const userId = req.user.id
 
   if(!userId) {
