@@ -3,10 +3,10 @@ import z from "zod";
 // --- Helpers ---
 const toLowerCaseArray = z.array(z.string().toLowerCase().trim())
 const stringOrArray = <T extends z.ZodType>(schema: T) =>
-  z.preprocess(
-    (val) => (typeof val === "string" ? [val] : val),
-    schema
-  )
+  z.preprocess((val) => {
+    if(typeof val === "undefined") return []
+    return typeof val === "string" ? [val] : val
+  }, schema)
 
 // --- Atoms ---
 export const id = z.string()

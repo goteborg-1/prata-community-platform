@@ -8,17 +8,17 @@ export const isPostOwner: Middleware = async (req, res, next) => {
   // get the post object so we can get the user who posted
   const postId = req.params.id
   const post = await PostModel.findById(postId)
-  const postOwner = post?.userId
-
-  const userId = req.user.id
 
   if (!post) {
     throw createError(`post with id ${postId} does not exist`, 404, "POST_NOT_FOUND")
   }
+
+  const postOwner = post.userId!.toString()
+  const userId = req.user.id.toString()
+
   if (postOwner !== userId) {
     throw createError("Invalid user, post ID and user ID did not match", 403, "INVALID_USER")
   }
-
 
   next()
 }
