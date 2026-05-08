@@ -19,7 +19,8 @@ const PostSchema = new Schema<IPost>(
       type: String,
       required: [true, "Title is required"],
       trim: true,
-      maxlength: [200, "Title cannot be longer than 200 characters"],
+      minLength: [3, "Title cannot be shorter than 3 characters"],
+      maxlength: [100, "Title cannot be longer than 100 characters"],
     },
     description: {
       type: String,
