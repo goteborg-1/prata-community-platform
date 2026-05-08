@@ -1,7 +1,10 @@
-import NewPost from "../components/Posts/NewPost/NewPost";
+import Container from "../components/Container/Container"
+import CreatePost from "../components/Posts/CreatePost/CreatePost"
 
 export default function Feed() {
   return(
-    <NewPost />
+    <Container>
+      <CreatePost onSubmit={() => console.log("skickat")}/>
+    </Container>
   )
 }

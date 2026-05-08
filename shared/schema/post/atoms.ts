@@ -15,14 +15,15 @@ export const userId = z.string()
 
 export const isAnonymous = z.boolean().default(false)
 
-export const title = z.string().trim().min(3, "Title cannot be shorter than 3 characters").max(100, "Title cannot be longer than 100 character")
+export const title = z.string().trim().min(1, "Title is required").max(100, "Title cannot be longer than 100 character")
 
-export const description = z.string().trim().min(1, "Description is required")
+export const description = z.string().trim().min(1, "Description is required").max(1000, "Description cannot be longer than 1000 characters")
 
 export const categories = toLowerCaseArray.pipe(
   z.array(
     z.enum(["relationships", "family", "parenting", "stress", "anxiety", "loneliness", "grief-and-loss", "depression", "other"])
   )
+  .min(1, "At least one category is required")
 )
 
 export const triggerTags = toLowerCaseArray.pipe(

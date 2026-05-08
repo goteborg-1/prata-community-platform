@@ -1,0 +1,241 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+  transform-origin: top; 
+  animation: unfold 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+@keyframes unfold {
+  from {
+    opacity: 0;
+    transform: scaleY(0.4) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+  }
+}
+
+.form {
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: var(--space-base);
+  border-bottom: 1px solid var(--border);
+  width: 100%;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-base) 0;
+  gap: var(--space-sm);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border);
+}
+
+.row {
+  align-items: center;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.title {
+  font-size: var(--font-size-md);
+  font-weight: 600;
+}
+
+.error {
+  font-size: var(--font-size-xs);
+  color: var(--color-error);
+}
+
+/* --- Anonymous field --- */
+.anonymousLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--color-text-muted);
+}
+
+.toggle {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.toggle input {
+  display: none;
+}
+
+.track {
+  display: block;
+  width: 40px;
+  height: 22px;
+  background: var(--border);
+  border-radius: var(--radius-pill);
+  transition: background 0.2s;
+  position: relative;
+}
+
+.thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  background-color: var(--bg-main);
+  border-radius: var(--radius-pill);
+  transition: transform 0.2s;
+}
+
+.toggle input:checked ~ .track {
+  background-color: var(--color-secondary);
+}
+
+.toggle input:checked ~ .track .thumb {
+  transform: translateX(18px);
+}
+
+/* --- Character counter --- */
+.charCount {
+  text-align: end;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.charLimit {
+  color: var(--color-error);
+  font-weight: 600;
+}
+
+/* --- Categories and Triggers --- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+.pills {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.pill {
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background-color: transparent;
+  color: var(--color-text-muted);
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.pill:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.pillOn {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--bg-main);
+}
+
+.pillOn:hover {
+  background-color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  color: var(--bg-main);
+}
+
+.pillWarn:hover {
+  border-color: var(--color-secondary);
+  color: var(--color-secondary-dark);
+}
+
+.pillWarnOn {
+  background-color: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: var(--color-text-on-colors);
+}
+
+.pillWarnOn:hover {
+  background-color: var(--color-secondary-hover);
+  border-color: var(--color-secondary-hover);
+  color: var(--color-text-on-colors);
+}
+
+/* --- Footer --- */
+.hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+/* --- Closed view --- */
+.trigger {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  align-items: flex-start;
+  padding: var(--space-base) 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.triggerText {
+  font-size: var(--font-size-md);
+  font-weight: 300;
+  color: var(--color-text-muted);
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.triggerLine {
+  width: 60px;
+  height: 1px;
+  background-color: var(--border);
+  transition: width 0.4s cubic-bezier(0.23, 1, 0.32, 1), background-color 0.3s;
+}
+
+.trigger:hover .triggerText {
+  color: var(--color-text-main);
+  transform: translateX(4px);
+}
+
+.trigger:hover .triggerLine {
+  width: 100%;
+  background-color: var(--color-primary);
+}
+
+.trigger:active {
+  opacity: 0.7;
+}
