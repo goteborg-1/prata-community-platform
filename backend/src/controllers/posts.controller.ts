@@ -144,9 +144,9 @@ export const toggleLike: Controller<PostParams> = async (req, res) => {
 }
 
 export const deletePost: Controller<PostParams> = async (req, res) => {
-  const id = req.params.id
+  const { id } = postParamsSchema.parse(req.params)
 
-  await CommentModel.deleteMany({id})
+  await CommentModel.deleteMany({postId: id})
   const deletedPost = await PostModel.findByIdAndDelete(id)
 
   if(!deletedPost) {
