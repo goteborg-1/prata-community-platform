@@ -1,24 +1,21 @@
 import { Controller } from "../types/index.types.js"
 import { createError } from "../utils/createError.js"
 import { PostModel } from "../models/Post.model.js"
-import type { CreatePostBody, getPostQuery, PostParams, UpdatePostBody } from "@shared"
+import { getPostsQuerySchema, type GetPostsQuery } from "@shared"
 import { CommentModel } from "../models/Comment.model.js"
 
-export const getAllPosts: Controller<{}, {}, getPostQuery> = async (req, res) => {
-  const { categories, triggerTags, search, sort, page, limit } = req.query
+export const getAllPosts: Controller<{}, {}, GetPostsQuery> = async (req, res) => {
+  const { categories, triggerTags, search, sort, page, limit } = getPostsQuerySchema.parse(req.query)
 
   const query: Record<string, unknown> = {}
 
   //Filtering
-  if(categories) {
-    const categoryArray = Array.isArray(categories) ? categories : [categories]
-
-    query.categories = {$in: categoryArray} //Match at least one category
+  if(categories && categories.length > 0) {
+    query.categories = {$in: categories} //Match at least one category
   }
 
-  if(triggerTags) {
-    const triggerArray = Array.isArray(triggerTags) ? triggerTags : [triggerTags]
-    query.triggerTags = {$nin: triggerArray}
+  if(triggerTags && triggerTags.length > 0) {
+    query.triggerTags = {$nin: triggerTags}
   }
 
   //Search
@@ -33,31 +30,27 @@ export const getAllPosts: Controller<{}, {}, getPostQuery> = async (req, res) =>
   //Sort
   let sortOptions: Record<string, 1 | -1> = {createdAt: -1} //Default, newest first
   if(sort === "popular") {
-    sortOptions = {likedBy: -1}
+    sortOptions = {likeCount: -1}
   }
 
-  const pageNum = Number(page) || 1
-  const limitNum = Number(limit) || 5
-  const skip = (pageNum - 1) * limitNum
+  const skip = (page - 1) * limit
 
   const [posts, total] = await Promise.all([
     PostModel.find(query)
       .sort(sortOptions)
       .skip(skip)
-      .limit(limitNum),
+      .limit(limit),
     PostModel.countDocuments(query)
   ])
-
-  const totalPages = Math.ceil(total / limitNum)
 
   res.json({
     status: "success",
     data: posts,
     meta: {
-      page: pageNum,
-      limit: limitNum,
+      page,
+      limit,
       total,
-      totalPages
+      totalPages: Math.ceil(total / limit)
     }
   })
 }

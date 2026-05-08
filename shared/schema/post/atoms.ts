@@ -2,7 +2,7 @@ import z from "zod";
 
 // --- Helpers ---
 const toLowerCaseArray = z.array(z.string().toLowerCase().trim())
-const stringOrArray = (schema: z.ZodTypeAny) =>
+const stringOrArray = <T extends z.ZodType>(schema: T) =>
   z.preprocess(
     (val) => (typeof val === "string" ? [val] : val),
     schema
@@ -19,19 +19,17 @@ export const title = z.string().trim().min(3, "Title cannot be shorter than 3 ch
 
 export const description = z.string().trim().min(1, "Description is required")
 
-export const categories = toLowerCaseArray
-  .pipe(
-    z.array(
-      z.enum(["relationships", "family", "parenting", "stress", "anxiety", "loneliness", "grief-and-loss", "depression", "other"])
-    )
+export const categories = toLowerCaseArray.pipe(
+  z.array(
+    z.enum(["relationships", "family", "parenting", "stress", "anxiety", "loneliness", "grief-and-loss", "depression", "other"])
   )
+)
 
-export const triggerTags = toLowerCaseArray
-  .pipe(
-    z.array(
-      z.enum(["self-harm", "suicidal-thoughts", "substance-abuse", "gambling", "eating-disorders", "body-image", "abuse", "domestic-violence", "trauma"])
-    )
-  ).default([])
+export const triggerTags = toLowerCaseArray.pipe(
+  z.array(
+    z.enum(["self-harm", "suicidal-thoughts", "substance-abuse", "gambling", "eating-disorders", "body-image", "abuse", "domestic-violence", "trauma"])
+  )
+).default([])
 
 export const likedBy = z.array(z.string()).default([])
 
