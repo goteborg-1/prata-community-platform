@@ -1,7 +1,7 @@
 // SKALL SKRIVAS OM
 
 
-import LoginWindow from "../components/auth/GoogleLogin"
+import LoginWindow from "../components/Auth/GoogleLogin"
 
 export default function SignUp() {
   return(

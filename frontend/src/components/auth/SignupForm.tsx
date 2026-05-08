@@ -2,7 +2,7 @@ import { useAuthForm } from "../../hooks/useAuthForm";
 import { createUserSchema } from "@shared";
 import Button from "../Button/Button";
 import Input from "../Input/Input";
-import s from "./auth.module.css"
+import s from "./Auth.module.css"
 
 export default function SignupForm() {
   const { handleSubmit, handleChange, formData, errors, isLoading} = useAuthForm(createUserSchema, "/users/register", {handle: "", email: "", password: ""})

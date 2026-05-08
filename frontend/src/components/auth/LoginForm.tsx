@@ -2,7 +2,7 @@ import { loginUserSchema } from "@shared";
 import { useAuthForm } from "../../hooks/useAuthForm";
 import Button from "../Button/Button";
 import Input from "../Input/Input";
-import s from "./auth.module.css"
+import s from "./Auth.module.css"
 
 export default function LoginForm() {
   const { handleSubmit, handleChange, formData, errors, isLoading} = useAuthForm(loginUserSchema, "/users/login", {email: "", password: ""})

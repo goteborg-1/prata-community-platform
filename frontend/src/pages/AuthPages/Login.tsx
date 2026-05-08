@@ -1,8 +1,8 @@
 import { Link } from "react-router";
 import { useTheme } from "../../context/useTheme";
 import Container from "../../components/Container/Container";
-import GoogleLoginWindow from "../../components/auth/GoogleLogin";
-import LoginForm from "../../components/auth/LoginForm";
+import GoogleLoginWindow from "../../components/Auth/GoogleLogin";
+import LoginForm from "../../components/Auth/LoginForm";
 import s from "./Auth.module.css"
 
 export default function Login() {

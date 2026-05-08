@@ -1,8 +1,28 @@
-.wrapper {
+.passWrapper {
   position: relative;
   display: flex;
   align-items: center;
   width: 100%;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.label {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.textarea {
+  width: 100% !important;
+  resize: vertical;
+  min-height: 96px;
 }
 
 .input {
@@ -17,6 +37,11 @@
   font-size: var(--font-size-base);
 }
 
+.input:focus {
+  border: 1px solid var(--color-accent);
+  outline: none;
+}
+
 .transparent {
   border: 1px solid var(--color-secondary);
 }
@@ -24,6 +49,12 @@
 .neutral {
   background-color: var(--bg-secondary);
   border: 1px solid var(--border);
+}
+
+.form {
+  background-color: var(--bg-secondary);
+  border: none;
+  border-radius: var(--radius-sm);
 }
 
 .toggleBtn {

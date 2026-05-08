@@ -1,5 +1,10 @@
+import Container from "../components/Container/Container"
+import CreatePost from "../components/Posts/CreatePost/CreatePost"
+
 export default function Feed() {
   return(
-    <p>Flöde</p>
+    <Container>
+      <CreatePost onSubmit={() => console.log("skickat")}/>
+    </Container>
   )
 }

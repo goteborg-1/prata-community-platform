@@ -1,11 +1,11 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import type { createUserBody, loginUserBody, ZodSchema } from "@shared";
+import type { CreateUserRequest, LoginUserRequest, ZodSchema } from "@shared";
 import { api } from "../utils/api";
 import { setToken } from "../utils/auth";
 
-export function useAuthForm<T extends loginUserBody | createUserBody>(
+export function useAuthForm<T extends LoginUserRequest | CreateUserRequest>(
   schema: ZodSchema<T>, 
   endpoint: string,
   initialValues: T

@@ -1,8 +1,8 @@
 import { Link } from "react-router"
 import { useTheme } from "../../context/useTheme.tsx"
 import Container from "../../components/Container/Container.tsx"
-import GoogleLoginWindow from "../../components/auth/GoogleLogin.tsx"
-import SignupForm from "../../components/auth/SignupForm.tsx"
+import GoogleLoginWindow from "../../components/Auth/GoogleLogin.tsx"
+import SignupForm from "../../components/Auth/SignupForm.tsx"
 import s from "./Auth.module.css"
 
 export default function Signup() {

@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 100%;
+  max-width: 1200px;
   padding: var(--space-lg) var(--space-base);
   scroll-margin-top: 60px;
   gap: var(--space-base);
