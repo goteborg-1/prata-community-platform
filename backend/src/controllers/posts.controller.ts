@@ -1,7 +1,7 @@
 import { Controller } from "../types/index.types.js"
 import { createError } from "../utils/createError.js"
 import { PostModel } from "../models/Post.model.js"
-import { getPostsQuerySchema, type GetPostsQuery } from "@shared"
+import { CreatePostRequest, createPostSchema, getPostsQuerySchema, PostParams, postParamsSchema, type GetPostsQuery } from "@shared"
 import { CommentModel } from "../models/Comment.model.js"
 
 export const getAllPosts: Controller<{}, {}, GetPostsQuery> = async (req, res) => {
@@ -56,7 +56,7 @@ export const getAllPosts: Controller<{}, {}, GetPostsQuery> = async (req, res) =
 }
 
 export const getPostById: Controller<PostParams> = async (req, res) => {
-  const id = req.params.id
+  const { id } = postParamsSchema.parse(req.params)
   const post = await PostModel.findById(id)
 
   if(!post) {
@@ -69,13 +69,8 @@ export const getPostById: Controller<PostParams> = async (req, res) => {
   })
 }
 
-export const createPost: Controller<{}, CreatePostBody> = async (req, res) => {
-  const {isAnonymous, title, description, categories, triggerTags} = req.body
-  
-  if(!title || !description || !categories) {
-    throw createError("Missing title, description or categories", 400, "MISSING_REQUIRED_FIELDS")
-  }
-  
+export const createPost: Controller<{}, CreatePostRequest> = async (req, res) => {
+  const validatedData = createPostSchema.parse(req.body)  
   const userId = req.user.id
   
   if(!userId) {
@@ -84,11 +79,7 @@ export const createPost: Controller<{}, CreatePostBody> = async (req, res) => {
 
   const newPost = await PostModel.create({
     userId,
-    isAnonymous,
-    title,
-    description,
-    categories,
-    triggerTags: triggerTags || [],
+    ...validatedData,
     likedBy: [userId] //Make the writer like post by default
   })
 

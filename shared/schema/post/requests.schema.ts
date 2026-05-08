@@ -13,7 +13,7 @@ export const getPostsQuerySchema = z.object({
 })
 
 export const createPostSchema = z.object({
-  isAnonymous: isAnonymous.optional(),
+  isAnonymous,
   title,
   description,
   categories,
