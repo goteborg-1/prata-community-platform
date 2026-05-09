@@ -6,6 +6,7 @@ const config: Config = {
   extensionsToTreatAsEsm: ['.ts'],
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1', // if jest sees import with .js, remove and search without file ending (since we mostly use .ts etc)
+    '^@shared$': '<rootDir>/../shared/index.ts', // so jest finds @shared
   },
   testPathIgnorePatterns: ['/node_modules/', '/__tests__/helpers/'],
 }
