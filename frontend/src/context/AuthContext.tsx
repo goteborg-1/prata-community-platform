@@ -10,6 +10,7 @@ interface AuthContextValue {
   isLoggedIn: boolean,
   login: (credentials: LoginUserRequest) => Promise<void>,
   register: (credentials: CreateUserRequest) => Promise<void>,
+  loginWithGoogle: (token: string, userData: User) => void,
   logout: () => void
 
 }
@@ -42,6 +43,11 @@ export function AuthProvider({ children }: { children: React.ReactNode })  {
     setUser(newUser)
   }
 
+  const loginWithGoogle = (token: string, userData: User) => {
+    setToken(token)
+    setUser(userData)
+  }
+
   const logout = () => {
     removeToken()
     setUser(null)
@@ -54,7 +60,7 @@ export function AuthProvider({ children }: { children: React.ReactNode })  {
     // if token found, auto sign in user
     const restore = async () => {
       try {
-        const userData = await api.get("/api/v1/profile");
+        const userData = await api.get("/profile");
   
         setUser(userData.data.data)
         
@@ -68,7 +74,7 @@ export function AuthProvider({ children }: { children: React.ReactNode })  {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn, login, register, logout }}>
+    <AuthContext.Provider value={{ user, isLoggedIn, login, register, loginWithGoogle, logout }}>
       {children}
     </AuthContext.Provider>
   )
