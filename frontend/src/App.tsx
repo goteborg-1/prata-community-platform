@@ -10,6 +10,7 @@ import Login from './pages/AuthPages/Login'
 import Register from './pages/AuthPages/Register'
 import SignUp from './pages/SignUp'
 import Success from './pages/Success'
+import PostDetail from './pages/PostDetail'
 import './App.css'
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
         <Route path='om-oss' element={<About />} />
         <Route path='logga-in' element={<Login />} />
         <Route path='registrera' element={<Register />} />
+
+        <Route path='posts/:postId' element={<PostDetail />} />
 
         {/* Temporary paths */}
         <Route path='signup' element={<SignUp />} />
