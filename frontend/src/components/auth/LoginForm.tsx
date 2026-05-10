@@ -3,9 +3,19 @@ import { useAuthForm } from "../../hooks/useAuthForm";
 import Button from "../Button/Button";
 import Input from "../Input/Input";
 import s from "./Auth.module.css"
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router";
 
 export default function LoginForm() {
-  const { handleSubmit, handleChange, formData, errors, isLoading} = useAuthForm(loginUserSchema, "/users/login", {email: "", password: ""})
+  const {login} = useAuth()
+  const navigate = useNavigate()
+
+  const { handleSubmit, handleChange, formData, errors, isLoading} = useAuthForm(
+    loginUserSchema, 
+    async (data) => {
+      await login(data)
+      navigate("/") // separation of concerns, better to have navigation here than in hook or context
+    }, {email: "", password: ""})
 
   return(
     <form action="submit" onSubmit={handleSubmit} className={s.form} noValidate>

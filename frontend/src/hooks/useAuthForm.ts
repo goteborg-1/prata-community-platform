@@ -1,19 +1,15 @@
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router";
 import type { CreateUserRequest, LoginUserRequest, ZodSchema } from "@shared";
-import { api } from "../utils/api";
-import { setToken } from "../utils/auth";
 
 export function useAuthForm<T extends LoginUserRequest | CreateUserRequest>(
   schema: ZodSchema<T>,
-  endpoint: string,
+  onSubmit: (data: T) => Promise<void>,
   initialValues: T
 ) {
   const [formData, setFormData] = useState<T>(initialValues)
   const [errors, setErrors] = useState<Record<string, string[] | undefined>>({})
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = e.target
@@ -38,12 +34,7 @@ export function useAuthForm<T extends LoginUserRequest | CreateUserRequest>(
     setErrors({})
 
     try {
-      const response = await api.post(endpoint, result.data)
-
-      const { token } = response.data.data
-      setToken(token)
-
-      navigate("/")
+      await onSubmit(result.data)
     } catch (error: unknown) {
       if(axios.isAxiosError(error)) {
         const backendMessage = error.response?.data?.message
