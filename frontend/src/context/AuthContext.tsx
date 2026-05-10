@@ -1,7 +1,7 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import type { User, LoginUserRequest, CreateUserRequest } from "@shared"
 import { api } from "../utils/api";
-import { removeToken, setToken } from "../utils/auth";
+import { getToken, removeToken, setToken } from "../utils/auth";
 
 
 
@@ -46,6 +46,27 @@ export function AuthProvider({ children }: { children: React.ReactNode })  {
     removeToken()
     setUser(null)
   }
+
+  useEffect(() => {
+    const token = getToken()
+    if (!token) return
+
+    // if token found, auto sign in user
+    const restore = async () => {
+      try {
+        const userData = await api.get("/api/v1/profile");
+  
+        setUser(userData.data.data)
+        
+      } catch {
+        // if token fails or error, sign out/reset
+        logout()
+      }
+
+    } 
+    restore()
+  }, [])
+
   return (
     <AuthContext.Provider value={{ user, isLoggedIn, login, register, logout }}>
       {children}
