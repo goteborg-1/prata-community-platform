@@ -2,7 +2,7 @@ import { Controller } from "../types/index.types.js";
 import { createError } from "../utils/createError.js";
 import { CommentModel } from "../models/Comment.model.js";
 
-import type { CommentParams, CreateCommentBody, UpdateCommentBody } from "@shared";
+import { CreateCommentRequest, UpdateCommentRequest, CommentParams, commentParamsSchema, commentSchema, updateCommentSchema, createCommentSchema } from "@shared";
 
 export const getAllComments: Controller<CommentParams> = async (req, res) => {
   const postId = req.params.postId;
@@ -23,14 +23,10 @@ export const getAllComments: Controller<CommentParams> = async (req, res) => {
   })
 }
 
-export const createComment: Controller<CommentParams, CreateCommentBody, {}> = async (req, res) => {
-  const { isAnonymous, isPsychologist, content } = req.body;
-  const postId = req.params.postId;
-  
-  if (!content) {
-    throw createError("Missing comment", 400, "MISSING_REQUIRED_FIELDS")
-  }
+export const createComment: Controller<CommentParams, CreateCommentRequest, {}> = async (req, res) => {
+  const validatedData = createCommentSchema.parse(req.body)
 
+  const postId = req.params.postId;
   const userId = req.user.id
 
   if(!userId) {
@@ -38,13 +34,11 @@ export const createComment: Controller<CommentParams, CreateCommentBody, {}> = a
   }
   
   const newComment = await CommentModel.create({
+    ...validatedData,
     postId,
     userId,
-    isAnonymous,
-    isPsychologist,
     isEdited: false,
-    likedBy: [userId],
-    content
+    likedBy: [userId]
   })
 
   res.status(201).json({
@@ -53,18 +47,14 @@ export const createComment: Controller<CommentParams, CreateCommentBody, {}> = a
   })
 }
 
-// TODO: comments/:id/like endpoint in future to update likes separately
-export const updateComment: Controller<CommentParams, UpdateCommentBody, {}> = async (req, res) => {
+export const updateComment: Controller<CommentParams, UpdateCommentRequest, {}> = async (req, res) => {
+  const validatedData = updateCommentSchema.parse(req.body)
+  
   const commentId = req.params.commentId
-  const newContent = req.body.content
-
-  if (!newContent) {
-    throw createError("Missing content", 400, "MISSING_REQUIRED_FIELDS")
-  }
 
   const updatedComment = await CommentModel.findByIdAndUpdate(
     commentId,
-    { $set: { content: newContent, isEdited: true } },
+    { $set: { content: validatedData.content, isEdited: true } },
     { new: true }
   )
 

@@ -31,13 +31,13 @@ describe("POST /posts", () => {
     await request(app).post("/api/v1/users/register").send({
       email: "test@test.com",
       handle: "testuser",
-      password: "password123"
+      password: "Password123"
     })
 
     // sign in -> only signed in users can post
     const login = await request(app).post("/api/v1/users/login").send({
       email: "test@test.com",
-      password: "password123"
+      password: "Password123"
     })
 
     token = login.body.data.token
@@ -104,12 +104,12 @@ describe("GET /posts/:id", () => {
     await request(app).post("/api/v1/users/register").send({
       email: "test@test.com",
       handle: "testuser",
-      password: "password123"
+      password: "Password123"
     })
 
     const login = await request(app).post("/api/v1/users/login").send({
       email: "test@test.com",
-      password: "password123"
+      password: "Password123"
     })
 
     token = login.body.data.token
@@ -158,12 +158,12 @@ describe("PATCH /posts/:id", () => {
     await request(app).post("/api/v1/users/register").send({
       email: "test@test.com",
       handle: "testuser",
-      password: "password123"
+      password: "Password123"
     })
 
     const login = await request(app).post("/api/v1/users/login").send({
       email: "test@test.com",
-      password: "password123"
+      password: "Password123"
     })
 
     token = login.body.data.token
@@ -209,12 +209,12 @@ describe("DELETE /posts/:id", () => {
     await request(app).post("/api/v1/users/register").send({
       email: "test@test.com",
       handle: "testuser",
-      password: "password123"
+      password: "Password123"
     })
 
     const login = await request(app).post("/api/v1/users/login").send({
       email: "test@test.com",
-      password: "password123"
+      password: "Password123"
     })
 
     token = login.body.data.token

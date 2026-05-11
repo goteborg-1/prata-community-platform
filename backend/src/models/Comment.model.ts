@@ -41,15 +41,17 @@ export const commentSchema = new mongoose.Schema<IComment>(
     }
   },
   {
-    timestamps: true, // auto adds timestamps
+    timestamps: true,
     toJSON: {
-      virtuals: true,
+      virtuals: true, //So we can add likeCount after likedBy is updated
       transform: (doc, ret) => {
-        delete ret.likedBy
-        if(ret.isAnonymous) {
-          ret.userId = null
+        const { _id, __v, likedBy, ...rest} = ret
+
+        return {
+          ...rest,
+          id: _id.toString(),
+          userId: rest.isAnonymous ? null : rest.userId
         }
-        return ret
       }
     }
   }
