@@ -11,7 +11,7 @@ export const getAllComments: Controller<CommentParams> = async (req, res) => {
     throw createError("Invalid ID format", 400, "INVALID_ID")
   }
 
-  const comments = await CommentModel.find({ postId })
+  const comments = await CommentModel.find({ postId }).populate("userId", "displayName")
 
   if (comments.length === 0) {
     throw createError(`No comments attached to post id ${postId} found`, 404, "COMMENTS_NOT_FOUND")
@@ -43,7 +43,10 @@ export const createComment: Controller<CommentParams, CreateCommentRequest, {}> 
 
   res.status(201).json({
     status: "success",
-    data: newComment
+    data: {
+      ...newComment.toJSON(),
+      username: validatedData.isAnonymous ? null : req.user.displayName
+    }
   })
 }
 

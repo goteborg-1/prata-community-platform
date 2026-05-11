@@ -12,7 +12,8 @@ export const commentSchema = z.object({
   updatedAt: z.string(),
   content,
   isAnonymous,
-  isPsychologist
+  isPsychologist,
+  username: z.string().nullable().optional()
 })
 
 
