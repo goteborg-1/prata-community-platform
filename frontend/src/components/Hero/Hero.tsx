@@ -2,8 +2,11 @@ import { Link } from "react-router"
 import Illustration from "../../assets/support-community.png"
 import b from "../Button/Button.module.css"
 import s from "./Hero.module.css"
+import { useAuth } from "../../context/AuthContext"
 
 export default function Hero() {
+  const { isLoggedIn } = useAuth()
+  
   return(
     <section className={s.container}>
       <div className={s.inner}>
@@ -25,7 +28,7 @@ export default function Hero() {
           </p>
           
           <div className={s.actions}>
-            <Link to="/registrera" className={`${b.base} ${b.primary}`}>
+            <Link to={isLoggedIn ? "/flode" : "/registrera"} className={`${b.base} ${b.primary}`}>
               Börja prata med andra
             </Link>
             

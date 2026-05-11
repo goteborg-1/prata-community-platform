@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink, Link } from "react-router";
 import { useTheme } from "../../context/useTheme";
+import { useAuth } from "../../context/AuthContext";
 import { IoClose, IoMenu } from "react-icons/io5";
 import { mainMenu, secondaryMenu } from "./menuItems";
 import Button from "../Button/Button"
@@ -8,6 +9,7 @@ import s from "./Header.module.css"
 import b from "../Button/Button.module.css"
 
 export default function Header() {
+  const { isLoggedIn } = useAuth()
   const { resolvedTheme } = useTheme()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -38,15 +40,19 @@ export default function Header() {
         </Link>
 
         <div className={s.buttonWrapper}>
-          <div className={s.hide}>
-            <Link to="/registrera" className={`${b.base} ${b.small} ${b.transparent}`}>
-              Skapa konto
-            </Link>
-          </div>
+          {!isLoggedIn &&
+            <>
+              <div className={s.hide}>
+                <Link to="/registrera" className={`${b.base} ${b.small} ${b.transparent}`}>
+                  Skapa konto
+                </Link>
+              </div>
 
-          <Link to="/logga-in" className={`${b.base} ${b.small} ${b.primary}`}>
-            Logga in
-          </Link>
+              <Link to="/logga-in" className={`${b.base} ${b.small} ${b.primary}`}>
+                Logga in
+              </Link>
+            </>
+          }
 
           <Button
             variant="transparent"
