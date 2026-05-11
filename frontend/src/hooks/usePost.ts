@@ -5,7 +5,7 @@ import axios from "axios";
 
 export function usePost(postId: string | undefined) {
   const [post, setPost] = useState<Post |null>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState("")
 
   useEffect(() => {
