@@ -10,7 +10,7 @@ import i from "../../Input/Input.module.css"
 import c from "../../Card/Card.module.css"
 import s from "./CreatePost.module.css"
 
-const initialForm: CreatePostRequest = { isAnonymous: false, title: "", description: "", categories: [], triggerTags: [] };
+const initialForm: CreatePostRequest = { isAnonymous: false, title: "", description: "", categories: [], triggerTags: [] }
 
 export default function CreatePost() {
   const navigate = useNavigate()

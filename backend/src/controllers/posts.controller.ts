@@ -3,6 +3,7 @@ import { createError } from "../utils/createError.js"
 import { PostModel } from "../models/Post.model.js"
 import { CreatePostRequest, createPostSchema, getPostsQuerySchema, PostParams, postParamsSchema, UpdatePostRequest, updatePostSchema, type GetPostsQuery } from "@shared"
 import { CommentModel } from "../models/Comment.model.js"
+import mongoose from "mongoose"
 
 export const getAllPosts: Controller<{}, {}, GetPostsQuery> = async (req, res) => {
   const { categories, triggerTags, search, sort, page, limit } = getPostsQuerySchema.parse(req.query)
@@ -57,6 +58,11 @@ export const getAllPosts: Controller<{}, {}, GetPostsQuery> = async (req, res) =
 
 export const getPostById: Controller<PostParams> = async (req, res) => {
   const { id } = postParamsSchema.parse(req.params)
+
+  if(!mongoose.Types.ObjectId.isValid(id)) {
+    throw createError(`Invalid ID format: ${id}`, 400, "INVALID_ID")
+  }
+
   const post = await PostModel.findById(id)
 
   if(!post) {
@@ -91,6 +97,11 @@ export const createPost: Controller<{}, CreatePostRequest> = async (req, res) =>
 
 export const updatePost: Controller<PostParams, UpdatePostRequest> = async (req, res) => {
   const { id } = postParamsSchema.parse(req.params)
+
+  if(!mongoose.Types.ObjectId.isValid(id)) {
+    throw createError(`Invalid ID format: ${id}`, 400, "INVALID_ID")
+  }
+
   const validatedData = updatePostSchema.parse(req.body)
 
   const updatedPost = await PostModel.findByIdAndUpdate(
@@ -114,6 +125,11 @@ export const updatePost: Controller<PostParams, UpdatePostRequest> = async (req,
 
 export const toggleLike: Controller<PostParams> = async (req, res) => {
   const { id } = postParamsSchema.parse(req.params)
+
+  if(!mongoose.Types.ObjectId.isValid(id)) {
+    throw createError(`Invalid ID format: ${id}`, 400, "INVALID_ID")
+  }
+
   const userId = req.user.id
 
   if(!userId) {
@@ -145,6 +161,10 @@ export const toggleLike: Controller<PostParams> = async (req, res) => {
 
 export const deletePost: Controller<PostParams> = async (req, res) => {
   const { id } = postParamsSchema.parse(req.params)
+
+  if(!mongoose.Types.ObjectId.isValid(id)) {
+    throw createError(`Invalid ID format: ${id}`, 400, "INVALID_ID")
+  }
 
   await CommentModel.deleteMany({postId: id})
   const deletedPost = await PostModel.findByIdAndDelete(id)
