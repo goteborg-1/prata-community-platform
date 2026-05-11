@@ -1,7 +1,9 @@
-import mongoose from "mongoose"
+import mongoose, { Schema } from "mongoose"
 import type { Comment } from "@shared"
 
-interface IComment extends Comment, Document {}
+interface IComment extends Omit<Comment, 'userId' | 'username'>, Document {
+  userId: mongoose.Types.ObjectId
+}
 
 export const commentSchema = new mongoose.Schema<IComment>(
   {
@@ -11,7 +13,8 @@ export const commentSchema = new mongoose.Schema<IComment>(
     },
 
     userId: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'User',
       required: true
     },
 
@@ -43,14 +46,17 @@ export const commentSchema = new mongoose.Schema<IComment>(
   {
     timestamps: true,
     toJSON: {
-      virtuals: true, //So we can add likeCount after likedBy is updated
+      virtuals: true,
       transform: (doc, ret) => {
-        const { _id, __v, likedBy, ...rest} = ret
+        const { _id, __v, likedBy, ...rest } = ret
+        const populated = ret.userId
+        const isPopulated = populated && typeof populated === 'object' && 'displayName' in populated
 
         return {
           ...rest,
           id: _id.toString(),
-          userId: rest.isAnonymous ? null : rest.userId
+          userId: rest.isAnonymous ? null : (isPopulated ? populated.id : populated?.toString() ?? null),
+          username: rest.isAnonymous ? null : (isPopulated ? populated.displayName : null)
         }
       }
     }

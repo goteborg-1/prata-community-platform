@@ -65,7 +65,7 @@ export default function Comments({ postId }: Props) {
         <ul>
           {comments.map(comment => (
             <li key={comment.id}>
-              <p>{comment.isAnonymous ? "Anonym" : comment.userId}</p>
+              <p>{comment.isAnonymous ? "Anonym" : (comment.username ?? comment.userId)}</p>
               <p>{comment.content}</p>
               <small>{comment.likeCount} gillar</small>
             </li>
