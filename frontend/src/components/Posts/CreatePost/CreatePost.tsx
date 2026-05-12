@@ -12,6 +12,7 @@ import s from "./CreatePost.module.css"
 
 const initialForm: CreatePostRequest = { isAnonymous: false, title: "", description: "", categories: [], triggerTags: [] }
 
+
 export default function CreatePost() {
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
@@ -22,7 +23,7 @@ export default function CreatePost() {
     onSuccess: (newPost) => {
       close()
       const postId = newPost.id
-      navigate(`/posts/${postId}`)
+      navigate(`/inlagg/${postId}`)
     }
   })
 

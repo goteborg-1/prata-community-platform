@@ -87,7 +87,10 @@ export const getMyPosts: Controller = async (req, res) => {
 
   res.json({
     status: "success",
-    data: posts
+    data: posts.map((post) => ({
+      ...post.toJSON(),
+      isLiked: true,
+    }))
   })
 }
 
@@ -103,6 +106,9 @@ export const getMyLikedPosts: Controller = async (req, res) => {
 
   res.json({
     status: "success",
-    data: posts
+    data: posts.map((post) => ({
+      ...post.toJSON(),
+      isLiked: true,
+    }))
   })
 }

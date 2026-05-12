@@ -7,8 +7,22 @@
   box-shadow: var(--shadow-card);
   padding: var(--space-base);
   gap: var(--space-xs);
+  transition: transform 0.2s ease, border 0.2s ease;
 }
 
 .neutral {
   background-color: var(--bg-surface);
+}
+
+.isClickable {
+  cursor: pointer;
+}
+
+.isClickable:hover {
+  border: 1.5px solid var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.isClickable:active {
+  transform: translateY(0);
 }

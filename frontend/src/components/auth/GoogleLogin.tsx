@@ -4,13 +4,13 @@ import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router";
 
 export default function GoogleLoginWindow() {
-  const { loginWithGoogle } = useAuth()
+  const { handleAuthSuccess } = useAuth()
   const navigate = useNavigate()
 
   async function handleSucces(response: CredentialResponse) {
     const {data} = await api.post("/users/google", { idToken: response.credential })
 
-    loginWithGoogle(data.data.token, data.data.user)
+    handleAuthSuccess(data.data.token, data.data.user)
     navigate("/")
   }
 

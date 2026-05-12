@@ -1,0 +1,92 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.author {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted);
+}
+
+.date {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.title {
+  font-size: var(--font-size-md);
+}
+
+.warning {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--space-xs);
+  background-color: var(--color-secondary-light);
+  border: 1px solid var(--color-secondary-hover);
+  border-radius: var(--radius-xs);
+}
+
+.warningText {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.warningText, .warningText p {
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.footer {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.actionWrapper {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  background-color: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.isLiked svg {
+  color: var(--color-secondary-hover);
+}
+
+.pillWrapper {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.pill {
+  padding: var(--space-2xs) var(--space-xs);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  white-space: nowrap;
+  background-color: var(--color-accent-light);
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent-hover);
+}
+
+.pillWarn {
+  background-color: var(--color-secondary-light);
+  border-color: var(--color-secondary-hover);
+  color: var(--color-error);
+}

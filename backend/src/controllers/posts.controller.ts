@@ -40,13 +40,21 @@ export const getAllPosts: Controller<{}, {}, GetPostsQuery> = async (req, res) =
     PostModel.find(query)
       .sort(sortOptions)
       .skip(skip)
-      .limit(limit),
+      .limit(limit)
+      .populate("userId", "displayName"),
     PostModel.countDocuments(query)
   ])
 
+  const currentUserId = req.user?.id?.toString()
+
   res.json({
     status: "success",
-    data: posts,
+    data: posts.map(post => ({
+      ...post.toJSON(),
+      isLiked: currentUserId
+        ? (post.likedBy ?? []).some(id => id.toString() === currentUserId)
+        : false
+    })),
     meta: {
       page,
       limit,
@@ -63,15 +71,24 @@ export const getPostById: Controller<PostParams> = async (req, res) => {
     throw createError(`Invalid ID format: ${id}`, 400, "INVALID_ID")
   }
 
-  const post = await PostModel.findById(id)
+  const post = await PostModel.findById(id).populate("userId", "displayName")
 
   if(!post) {
     throw createError(`No posts with id ${id} found`, 404, "POST_NOT_FOUND")
   }
 
+  const currentUserId = req.user?.id?.toString()
+  const isOwner = (post.userId as any)?._id?.toString() === currentUserId
+
   res.status(200).json({
     status: "success",
-    data: post
+    data: {
+      ...post.toJSON(),
+      isLiked: currentUserId
+        ? (post.likedBy ?? []).some(id => id.toString() === currentUserId)
+        : false,
+      isOwner
+    }
   })
 }
 
@@ -136,13 +153,18 @@ export const toggleLike: Controller<PostParams> = async (req, res) => {
     throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
   }
 
-  const post = await PostModel.findById(id).select("likedBy")
+  const post = await PostModel.findById(id)
 
   if(!post) {
     throw createError("Could not find post", 404, "POST_NOT_FOUND")
   }
 
-  const hasLiked = (post.likedBy || []).includes(userId)
+  const hasLiked = (post.likedBy || []).some(id => id.toString() === userId.toString())
+  const isOwner = post.userId?.toString() === userId.toString()
+
+  if(isOwner && hasLiked) {
+    throw createError("You cannot unlike your own post", 403, "CANNOT_UNLIKE_OWN_POST")
+  }
 
   const updatedPost = await PostModel.findByIdAndUpdate(
     id,
@@ -152,9 +174,18 @@ export const toggleLike: Controller<PostParams> = async (req, res) => {
     {new: true}
   )
 
+  if(!updatedPost) {
+    throw createError("Could not find post to update", 404, "POST_NOT_FOUND")
+  }
+
+
   res.json({
     status: "success",
-    data: updatedPost,
+    data: {
+      ...updatedPost.toJSON(), 
+      isLiked: !hasLiked, 
+      isOwner
+    },
     message: hasLiked ? "Like removed" : "Like added"
   })
 }
