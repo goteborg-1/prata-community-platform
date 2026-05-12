@@ -9,8 +9,6 @@ import s from "./PostCard.module.css"
 export default function PostCard({post}: {post: Post}) {
   const navigate = useNavigate()
 
-  console.log(post.isLiked)
-
   const author = (typeof post.userId === 'object' && post.userId !== null)
     ? post.userId.displayName
     : "Anonym Medlem"
