@@ -48,6 +48,9 @@ export const createComment: Controller<CommentParams, CreateCommentRequest, {}> 
     likedBy: [userId]
   })
 
+  //Add comment to counter in posts
+  await PostModel.findByIdAndUpdate(postId, { $inc: { commentCount: 1 } });
+
   res.status(201).json({
     status: "success",
     data: {
@@ -81,11 +84,20 @@ export const updateComment: Controller<CommentParams, UpdateCommentRequest, {}> 
 export const deleteComment: Controller<CommentParams> = async (req, res) => {
   const commentId = req.params.commentId
 
+  const comment = await CommentModel.findById(commentId)
+
+  if (!comment) {
+    throw createError(`Comment with id ${commentId} not found`, 404, "COMMENT_NOT_FOUND")
+  }
+
   const deletedComment = await CommentModel.findByIdAndDelete(commentId)
 
   if (!deletedComment) {
     throw createError(`Comment with id ${commentId} not found`, 404, "COMMENT_NOT_FOUND")
   }
+
+  //Remove one comment count on posts
+  await PostModel.findByIdAndUpdate(comment.postId, { $inc: { commentCount: -1 } })
 
   res.status(204).send()
 }

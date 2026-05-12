@@ -7,10 +7,13 @@
   
   --color-primary: #F6BD60;
   --color-primary-light: #F9D28A;
+  
   --color-secondary: #F5CAC3;
   --color-secondary-light: #FBDDD9;
   --color-secondary-dark: #c17a73;
   --color-secondary-hover: #efb8b0;
+
+  --color-accent-light: #e2ede9;
   --color-accent: #84A59D;
   --color-accent-hover: #6e9189;
   

@@ -1,18 +1,16 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import type { User, LoginUserRequest, CreateUserRequest } from "@shared"
-import { api } from "../utils/api";
+import { createContext, useContext} from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getToken, removeToken, setToken } from "../utils/auth";
+import { api } from "../utils/api";
+import type { User, LoginUserRequest, CreateUserRequest } from "@shared"
 
 
 
 interface AuthContextValue {
   user: User | null,
   isLoggedIn: boolean,
-  login: (credentials: LoginUserRequest) => Promise<void>,
-  register: (credentials: CreateUserRequest) => Promise<void>,
-  loginWithGoogle: (token: string, userData: User) => void,
+  handleAuthSuccess: (token: string, userData: User) => void,
   logout: () => void
-
 }
 
 // createcontext
@@ -23,58 +21,36 @@ export const AuthContext = createContext<AuthContextValue | undefined>(undefined
 // export authProvider
 
 export function AuthProvider({ children }: { children: React.ReactNode })  {
-  const [user, setUser] = useState<User | null>(null)
-  
+  const queryClient = useQueryClient()
+
+  const { data: user } = useQuery({
+    queryKey: ["auth-user"],
+    queryFn: async () => {
+      const token = getToken()
+      if(!token) return null
+      const res = await api.get("/profile")
+      return res.data.data as User
+    },
+    retry: false,
+    staleTime: Infinity
+  })
+
   const isLoggedIn = !!user
 
-  const login = async (credentials: LoginUserRequest) => {
-    const response = await api.post("/users/login", credentials)
-
-    const { token, user: userData } = response.data.data // renamed to userData to avoid conflict with user from setUser
-    setToken(token) // added to localstorage
-    setUser(userData)
-  }
-
-  const register = async (credentials: CreateUserRequest) => {
-    const response = await api.post("/users/register", credentials)
-
-    const { token, newUser } = response.data.data
-    setToken(token) // added to localstorage
-    setUser(newUser)
-  }
-
-  const loginWithGoogle = (token: string, userData: User) => {
+  const handleAuthSuccess = (token: string, userData: User) => {
     setToken(token)
-    setUser(userData)
+    queryClient.setQueryData(["auth-user"], userData)
+    queryClient.invalidateQueries()
   }
 
   const logout = () => {
     removeToken()
-    setUser(null)
+    queryClient.removeQueries({ queryKey: ["auth-user"] })
+    queryClient.clear()
   }
 
-  useEffect(() => {
-    const token = getToken()
-    if (!token) return
-
-    // if token found, auto sign in user
-    const restore = async () => {
-      try {
-        const userData = await api.get("/profile");
-  
-        setUser(userData.data.data)
-        
-      } catch {
-        // if token fails or error, sign out/reset
-        logout()
-      }
-
-    } 
-    restore()
-  }, [])
-
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn, login, register, loginWithGoogle, logout }}>
+    <AuthContext.Provider value={{ user: user ?? null, isLoggedIn, handleAuthSuccess, logout }}>
       {children}
     </AuthContext.Provider>
   )
