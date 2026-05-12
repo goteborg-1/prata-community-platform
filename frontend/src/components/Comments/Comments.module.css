@@ -1,0 +1,31 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-base);
+  padding-top: var(--space-base);
+  border-top: 1px solid var(--border);
+}
+
+.heading {
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.empty {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.loginHint {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border);
+}

@@ -1,5 +1,7 @@
+import { useRef } from "react"
 import { useParams } from "react-router"
 import { usePost } from "../hooks/usePost"
+import { useToggleLike } from "../hooks/useToggleLike"
 import { FaHeart, FaRegComment, FaRegHeart } from "react-icons/fa"
 import { formatDate } from "../utils/formatDate"
 import { CATEGORY_LABELS, TRIGGER_LABELS } from "@shared"
@@ -10,8 +12,6 @@ import Button from "../components/Button/Button"
 import Comments from "../components/Comments/Comments"
 import p from "../components/Posts/PostCard/PostCard.module.css"
 import s from "./PostDetails.module.css"
-import { useRef } from "react"
-import { useToggleLike } from "../hooks/useToggleLike"
 
 export default function PostDetail() {
   const { postId } = useParams()
@@ -84,7 +84,7 @@ export default function PostDetail() {
       </Card>
 
       <div ref={commentsRef}>
-        <Comments postId={postId} />
+        <Comments postId={postId} postAuthorId={post.userId} />
       </div>
     </Container>
   )
