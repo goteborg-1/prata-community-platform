@@ -4,6 +4,7 @@ import { CommentModel } from "../models/Comment.model.js";
 import { PostModel } from "../models/Post.model.js";
 
 import { CreateCommentRequest, UpdateCommentRequest, CommentParams, commentParamsSchema, commentSchema, updateCommentSchema, createCommentSchema } from "@shared";
+import { create } from "node:domain";
 
 export const getAllComments: Controller<CommentParams> = async (req, res) => {
   const postId = req.params.postId;
@@ -26,13 +27,18 @@ export const getAllComments: Controller<CommentParams> = async (req, res) => {
 
 export const createComment: Controller<CommentParams, CreateCommentRequest, {}> = async (req, res) => {
   const validatedData = createCommentSchema.parse(req.body)
-
+  
   const postId = req.params.postId;
   const userId = req.user.id
-
+  
   if(!userId) {
     throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
   }
+  const post = await PostModel.findById(postId)
+  if (!post) {
+    throw createError(`Post with id ${postId} not found`, 404, "POST_NOT_FOUND")
+  }
+
   
   const newComment = await CommentModel.create({
     ...validatedData,
