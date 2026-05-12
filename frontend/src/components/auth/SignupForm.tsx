@@ -1,22 +1,33 @@
-import { useAuthForm } from "../../hooks/useAuthForm";
-import { createUserSchema } from "@shared";
+import { type CreateUserRequest, createUserSchema, type User } from "@shared";
 import Button from "../Button/Button";
 import Input from "../Input/Input";
 import s from "./Auth.module.css"
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router";
+import { useForm } from "../../hooks/useForm";
+
+interface SignupResponse {
+  token: string,
+  user: User
+}
 
 export default function SignupForm() {
-  const {register} = useAuth()
   const navigate = useNavigate()
+  const {handleAuthSuccess} = useAuth()
 
-  const { handleSubmit, handleChange, formData, errors, isLoading} = useAuthForm(
-    createUserSchema, 
-    async (data) => {
-      await register(data)
-      navigate("/") // separation of concerns, better to have navigation here than in hook or context
-    }, 
-    {handle: "", email: "", password: ""})
+  const { handleSubmit, handleChange, form, errors, isLoading} = useForm<CreateUserRequest, SignupResponse>({
+    schema: createUserSchema,
+    endpoint: "/users/register",
+    initialValues: {
+      handle: "",
+      email: "",
+      password: ""
+    },
+    onSuccess: (data) => {
+      handleAuthSuccess(data.token, data.user)
+      navigate("/")
+    }
+  })
 
   return(
     <form action="submit" onSubmit={handleSubmit} className={s.form} noValidate>
@@ -25,8 +36,8 @@ export default function SignupForm() {
           name="email"
           type="email"
           placeholder="E-postadress"
-          value={formData.email}
-          onChange={handleChange}
+          value={form.email}
+          onChange={(e) => handleChange("email", e.target.value)}
           required
         />
         {errors.email && <p className={s.error}>{errors.email[0]}</p>}
@@ -37,8 +48,8 @@ export default function SignupForm() {
           name="handle"
           type="text"
           placeholder="Användarnamn"
-          value={formData.handle}
-          onChange={handleChange}
+          value={form.handle}
+          onChange={(e) => handleChange("handle", e.target.value)}
           required
         />
         {errors.handle && <p className={s.error}>{errors.handle[0]}</p>}
@@ -49,8 +60,8 @@ export default function SignupForm() {
           name="password"
           type="password"
           placeholder="Lösenord"
-          value={formData.password}
-          onChange={handleChange}
+          value={form.password}
+          onChange={(e) => handleChange("password", e.target.value)}
           required
         />
         {errors.password && <p className={s.error}>{errors.password[0]}</p>}

@@ -24,8 +24,7 @@ function App() {
         <Route path='om-oss' element={<About />} />
         <Route path='logga-in' element={<Login />} />
         <Route path='registrera' element={<Register />} />
-
-        <Route path='posts/:postId' element={<PostDetail />} />
+        <Route path='inlagg/:postId' element={<PostDetail />} />
 
         {/* Temporary paths */}
         <Route path='signup' element={<SignUp />} />

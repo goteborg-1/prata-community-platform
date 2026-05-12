@@ -42,6 +42,10 @@ const PostSchema = new Schema<IPost>(
       ref: "User",
       index: true
     }],
+    commentCount: {
+      type: Number,
+      default: 0
+    }
   },
   {
     timestamps: true,

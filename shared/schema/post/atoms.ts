@@ -32,7 +32,14 @@ export const triggerTags = toLowerCaseArray.pipe(
 
 export const likedBy = z.array(z.string()).default([])
 
+export const commentCount = z.number().nonnegative().default(0)
+
+// --- Populated User ---
+export const populatedUserSchema = z.object({
+  id,
+  displayName: z.string()
+})
+
 // --- Query Atoms ---
-// Ingen min(1) här som på "categories". main page behöver kunna hämta inlägg utan att bestämma kategori
-export const categoriesQuery = stringOrArray(toLowerCaseArray.pipe(z.array(z.enum(CATEGORY_OPTIONS))))
-export const triggerTagsQuery = stringOrArray(triggerTags)
+export const categoriesQuery = stringOrArray(z.array(z.enum(CATEGORY_OPTIONS)))
+export const triggerTagsQuery = stringOrArray(z.array(z.enum(TRIGGER_OPTIONS))).default([])
