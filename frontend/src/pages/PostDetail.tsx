@@ -84,7 +84,7 @@ export default function PostDetail() {
       </Card>
 
       <div ref={commentsRef}>
-        <Comments postId={postId} postAuthorId={post.userId} />
+        <Comments postId={postId} postAuthorId={(post.userId as { id: string }).id} />
       </div>
     </Container>
   )
