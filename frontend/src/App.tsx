@@ -12,6 +12,7 @@ import PostDetail from './pages/PostDetail'
 import EditPost from './pages/EditPost'
 import './App.css'
 import ProtectedRoute from './pages/ProtectedRoute'
+import Settings from './pages/Settings'
 
 function App() {
   return(
@@ -28,6 +29,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path='profil' element={<Profile />} />
           <Route path='inlagg/:postId/redigera' element={<EditPost />} />
+          <Route path='installningar' element={<Settings />} />
         </Route>
 
         <Route path='*' element={<NotFound />} />

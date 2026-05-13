@@ -9,6 +9,7 @@ import type { User, LoginUserRequest, CreateUserRequest } from "@shared"
 interface AuthContextValue {
   user: User | null,
   isLoggedIn: boolean,
+  isLoading: boolean,
   handleAuthSuccess: (token: string, userData: User) => void,
   logout: () => void
 }
@@ -23,7 +24,7 @@ export const AuthContext = createContext<AuthContextValue | undefined>(undefined
 export function AuthProvider({ children }: { children: React.ReactNode })  {
   const queryClient = useQueryClient()
 
-  const { data: user } = useQuery({
+  const { data: user, isLoading } = useQuery({
     queryKey: ["auth-user"],
     queryFn: async () => {
       const token = getToken()
@@ -50,7 +51,7 @@ export function AuthProvider({ children }: { children: React.ReactNode })  {
   }
 
   return (
-    <AuthContext.Provider value={{ user: user ?? null, isLoggedIn, handleAuthSuccess, logout }}>
+    <AuthContext.Provider value={{ user: user ?? null, isLoading, isLoggedIn, handleAuthSuccess, logout }}>
       {children}
     </AuthContext.Provider>
   )
