@@ -1,5 +1,5 @@
 {
-  "name": "studiematerial-v2",
+  "name": "backend",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -40,6 +40,7 @@
     "typescript": "^6.0.2"
   },
   "dependencies": {
+    "shared": "*",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
