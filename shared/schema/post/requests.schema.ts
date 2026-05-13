@@ -27,8 +27,15 @@ export const updatePostSchema = z.object({
   triggerTags
 }).partial()
 
+export const updatePostSchemaFrontEnd = z.object({
+  title,
+  description,
+  categories,
+  triggerTags
+})
+
 // --- Types ---
 export type PostParams = z.infer<typeof postParamsSchema>;
 export type GetPostsQuery = z.input<typeof getPostsQuerySchema>;
 export type CreatePostRequest = z.infer<typeof createPostSchema>;
-export type UpdatePostRequest = z.infer<typeof updatePostSchema>;
+export type UpdatePostRequest = z.infer<typeof updatePostSchemaFrontEnd>;

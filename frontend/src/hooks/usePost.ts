@@ -1,14 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { api } from "../utils/api";
-import type { Post } from "@shared";
+import { getPost } from "../api/posts.api";
 
 export function usePost(postId: string | undefined) {
   const query = useQuery({
     queryKey: ["post", postId],
-    queryFn: async () => {
-      const res = await api.get(`/posts/${postId}`)
-      return res.data.data as Post
-    },
+    queryFn: () => getPost(postId!),
     enabled: !!postId
   })
 
