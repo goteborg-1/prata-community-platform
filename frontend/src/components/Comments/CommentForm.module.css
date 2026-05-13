@@ -1,0 +1,54 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Toggle — same pattern as CreatePost */
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  cursor: pointer;
+}
+
+.toggle input {
+  display: none;
+}
+
+.track {
+  display: block;
+  width: 36px;
+  height: 20px;
+  background: var(--border);
+  border-radius: var(--radius-pill);
+  position: relative;
+  transition: background 0.2s;
+}
+
+.thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background-color: var(--bg-main);
+  border-radius: var(--radius-pill);
+  transition: transform 0.2s;
+}
+
+.toggle input:checked ~ .track {
+  background-color: var(--color-secondary);
+}
+
+.toggle input:checked ~ .track .thumb {
+  transform: translateX(16px);
+}

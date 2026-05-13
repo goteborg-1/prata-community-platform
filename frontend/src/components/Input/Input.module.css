@@ -27,6 +27,7 @@
 
 .input {
   background-color: var(--bg-main);
+  color: var(--color-text-main);
   padding: var(--space-sm);
   border-radius: var(--radius-pill);
   width: 100%;

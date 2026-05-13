@@ -1,76 +1,129 @@
 import { useState, useEffect } from "react"
 import { useAuth } from "../../context/AuthContext"
-import { useForm } from "../../hooks/useForm"
-import { createCommentSchema, type Comment, type CreateCommentRequest } from "@shared"
 import { api } from "../../utils/api"
+import type { Comment } from "@shared"
+import CommentCard from "./CommentCard"
+import CommentForm from "./CommentForm"
+import s from "./Comments.module.css"
 
 interface Props {
   postId: string
+  postAuthorId: string | null
 }
 
-const initialForm: CreateCommentRequest = {
-  content: "",
-  isAnonymous: false,
-  isPsychologist: false
-}
-
-export default function Comments({ postId }: Props) {
-  const { isLoggedIn } = useAuth()
+export default function Comments({ postId, postAuthorId }: Props) {
+  const { user, isLoggedIn } = useAuth()
   const [comments, setComments] = useState<Comment[]>([])
+  const [replyTarget, setReplyTarget] = useState("")
+  const [likedIds, setLikedIds] = useState<Set<string>>(new Set())
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    api.get(`/posts/${postId}/comments`)
-      .then(res => setComments(res.data.data))
+    api
+      .get(`/posts/${postId}/comments`)
+      .then((res) => setComments(res.data.data))
       .catch(() => setComments([]))
+      .finally(() => setIsLoading(false))
   }, [postId])
 
-  const { form, handleChange, handleSubmit, isLoading, reset } = useForm<CreateCommentRequest, Comment>({
-    endpoint: `/posts/${postId}/comments`,
-    initialValues: initialForm,
-    schema: createCommentSchema,
-    onSuccess: (newComment) => {
-      setComments(prev => [...prev, newComment])
-      reset()
+  const handleSuccess = (newComment: Comment) => {
+    setComments((prev) => [...prev, newComment])
+    setReplyTarget("")
+  }
+
+  const handleReply = (username: string) => {
+    setReplyTarget(`@${username} `)
+  }
+
+  const handleLike = async (id: string) => {
+    const alreadyLiked = likedIds.has(id)
+
+    // optimistic update
+    setLikedIds((prev) => {
+      const next = new Set(prev)
+      alreadyLiked ? next.delete(id) : next.add(id)
+      return next
+    })
+    setComments((prev) =>
+      prev.map((c) =>
+        c.id === id
+          ? { ...c, likeCount: alreadyLiked ? c.likeCount - 1 : c.likeCount + 1 }
+          : c
+      )
+    )
+
+    try {
+      await api.patch(`/posts/${postId}/comments/${id}/like`)
+    } catch {
+      // revert on error
+      setLikedIds((prev) => {
+        const next = new Set(prev)
+        alreadyLiked ? next.add(id) : next.delete(id)
+        return next
+      })
+      setComments((prev) =>
+        prev.map((c) =>
+          c.id === id
+            ? { ...c, likeCount: alreadyLiked ? c.likeCount + 1 : c.likeCount - 1 }
+            : c
+        )
+      )
     }
-  })
+  }
+
+  const handleEdit = async (id: string, content: string) => {
+    try {
+      await api.patch(`/posts/${postId}/comments/${id}`, { content })
+      setComments((prev) =>
+        prev.map((c) => (c.id === id ? { ...c, content, isEdited: true } : c))
+      )
+    } catch {
+      // comment stays unchanged
+    }
+  }
+
+  const handleDelete = async (id: string) => {
+    try {
+      await api.delete(`/posts/${postId}/comments/${id}`)
+      setComments((prev) => prev.filter((c) => c.id !== id))
+    } catch {
+      // comment stays unchanged
+    }
+  }
 
   return (
-    <section>
-      <h2>Kommentarer ({comments.length})</h2>
+    <section className={s.section}>
+      <h2 className={s.heading}>Kommentarer ({comments.length})</h2>
 
-      {isLoggedIn && (
-        <form onSubmit={handleSubmit}>
-          <textarea
-            value={form.content}
-            onChange={e => handleChange("content", e.target.value)}
-            placeholder="Skriv en kommentar..."
-          />
-          <label>
-            <input
-              type="checkbox"
-              checked={form.isAnonymous}
-              onChange={e => handleChange("isAnonymous", e.target.checked)}
+      <div className={s.list}>
+        {isLoading ? null : comments.length === 0 ? (
+          <p className={s.empty}>Inga kommentarer än. Var den första!</p>
+        ) : (
+          comments.map((comment) => (
+            <CommentCard
+              key={comment.id}
+              comment={comment}
+              currentUserId={user?.id ?? null}
+              currentUserDisplayName={user?.displayName ?? null}
+              postAuthorId={postAuthorId}
+              isLiked={likedIds.has(comment.id)}
+              onReply={handleReply}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onLike={handleLike}
             />
-            Anonym
-          </label>
-          <button type="submit" disabled={isLoading}>
-            {isLoading ? "Skickar..." : "Kommentera"}
-          </button>
-        </form>
-      )}
+          ))
+        )}
+      </div>
 
-      {comments.length === 0 ? (
-        <p>Inga kommentarer än.</p>
+      {isLoggedIn ? (
+        <CommentForm
+          postId={postId}
+          replyTarget={replyTarget}
+          onSuccess={handleSuccess}
+        />
       ) : (
-        <ul>
-          {comments.map(comment => (
-            <li key={comment.id}>
-              <p>{comment.isAnonymous ? "Anonym" : (comment.username ?? comment.userId)}</p>
-              <p>{comment.content}</p>
-              <small>{comment.likeCount} gillar</small>
-            </li>
-          ))}
-        </ul>
+        <p className={s.loginHint}>Logga in för att kommentera</p>
       )}
     </section>
   )
