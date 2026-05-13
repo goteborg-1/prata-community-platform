@@ -25,3 +25,12 @@ export const TRIGGER_LABELS: Record<string, string> = {
   "domestic-violence": "Våld i nära relationer",
   "trauma": "Trauma"
 }
+
+export const AVATAR_COLORS = [
+  "#84A59D", // accent
+  "#F6BD60", // primary
+  "#F5CAC3", // secondary
+  "#A63D2D", // error/röd
+  "#747272", // muted
+  "#423E3B", // dark
+] as const

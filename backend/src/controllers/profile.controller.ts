@@ -29,10 +29,10 @@ export const updateProfile: Controller<{}, UpdateProfileRequest> = async (req, r
   const validatedData = updateProfileSchema.parse(req.body)
 
   if(Object.keys(validatedData).length === 0) {
-    throw createError("No fields to update - provide at least displayName or password", 400, "NO_UPDATE_FIELDS")
+    throw createError("No fields to update", 400, "NO_UPDATE_FIELDS")
   }
 
-  const updateData: Partial<UpdateProfileRequest> = {...validatedData}
+  const updateData: UpdateProfileRequest = {...validatedData}
   if(validatedData.password) updateData.password = await hashPassword(validatedData.password)
 
 

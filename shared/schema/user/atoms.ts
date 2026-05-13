@@ -1,4 +1,5 @@
 import z from "zod"
+import { AVATAR_COLORS } from "../../constants"
 
 export const googleId = z
   .string()
@@ -32,3 +33,7 @@ export const role = z
     z.enum(["user", "admin", "psychologist"])
   )
   .default("user");
+
+export const avatarColor = z
+  .enum(AVATAR_COLORS)
+  .default(() => AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)]) //Randomise which color as default
