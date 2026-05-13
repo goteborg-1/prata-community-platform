@@ -1,11 +1,12 @@
 import z from "zod"
 import { handle, email, displayName, password, role } from "./atoms.js"
+import { AVATAR_COLORS } from "../../constants.js"
 
 export const createUserSchema = z.object({
   handle,
   displayName,
   email,
-  password
+  password,
 })
 
 export const loginUserSchema = z.object({
@@ -18,9 +19,11 @@ export const googleLoginSchema = z.object({
 })
 
 export const updateProfileSchema = z.object({
+  handle,
   displayName,
-  password: password.optional()
-})
+  password,
+  avatarColor: z.enum(AVATAR_COLORS)
+}).partial()
 
 export const updateUserRoleSchema = z.object({
   role

@@ -155,37 +155,30 @@
 }
 
 .pill:hover {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
+  border-color: var(--color-tag-border);
+  color: var(--color-tag-text);
 }
 
 .pillOn {
-  background-color: var(--color-accent);
-  border-color: var(--color-accent);
-  color: var(--bg-main);
+  background-color: var(--color-tag-bg);
+  border-color: var(--color-tag-border);
+  color: var(--color-tag-text);
 }
 
-.pillOn:hover {
-  background-color: var(--color-accent-hover);
-  border-color: var(--color-accent-hover);
-  color: var(--bg-main);
+.pillOn:hover,
+.pillWarnOn:hover {
+  filter: brightness(0.95) saturate(1.5);
 }
 
 .pillWarn:hover {
-  border-color: var(--color-secondary);
-  color: var(--color-secondary-dark);
+  border-color: var(--color-tag-warn-border);
+  color: var(--color-tag-warn-text);
 }
 
 .pillWarnOn {
-  background-color: var(--color-secondary);
-  border-color: var(--color-secondary);
-  color: var(--color-text-on-colors);
-}
-
-.pillWarnOn:hover {
-  background-color: var(--color-secondary-hover);
-  border-color: var(--color-secondary-hover);
-  color: var(--color-text-on-colors);
+  background-color: var(--color-tag-warn-bg);
+  border-color: var(--color-tag-warn-border);
+  color: var(--color-tag-warn-text);
 }
 
 /* --- Footer --- */

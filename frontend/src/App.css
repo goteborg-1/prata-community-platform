@@ -1,3 +1,8 @@
 body {
   background-color: var(--bg-main);
 }
+
+.secondary-background {
+  background-color: var(--bg-secondary);
+  width: 100%;
+}

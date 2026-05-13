@@ -1,5 +1,5 @@
 import mongoose, {Schema, Document, Model} from "mongoose";
-import type { User } from "@shared";
+import { AVATAR_COLORS, type User } from "@shared";
 
 export interface IUser extends User, Document {}
 
@@ -49,6 +49,11 @@ const UserSchema = new Schema<IUser>(
       type: String,
       enum: ["user", "admin", "psychologist"],
       default: "user"
+    },
+    avatarColor: {
+      type: String,
+      enum: AVATAR_COLORS,
+      default: () => AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)]
     },
   },
   {

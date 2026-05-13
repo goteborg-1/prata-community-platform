@@ -11,5 +11,6 @@ export const mainMenu: MenuItem[] = [
 
 export const secondaryMenu: MenuItem[] = [
   {title: "Konto", path: "/profil"},
+  {title: "Inställningar", path: "/installningar"},
   {title: "Om PrataUt", path: "/om-oss"}
 ]

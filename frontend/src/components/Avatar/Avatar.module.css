@@ -1,0 +1,42 @@
+.avatar {
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.initial {
+  color: white;
+  font-weight: 700;
+  line-height: 1;
+  mix-blend-mode: overlay;
+}
+
+.small { 
+  width: 32px;  
+  height: 32px;  
+  font-size: var(--font-size-xs); 
+}
+
+.medium { 
+  width: 48px;  
+  height: 48px;  
+  font-size: var(--font-size-base); 
+}
+
+.large { 
+  width: 72px;  
+  height: 72px;  
+  font-size: var(--font-size-lg); 
+}
+
+.clickable {
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.clickable:hover {
+  opacity: 0.85;
+  transform: scale(1.05);
+}

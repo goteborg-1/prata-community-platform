@@ -1,0 +1,70 @@
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+
+.displayName {
+  font-size: var(--font-size-md);
+  font-weight: 700;
+}
+
+.handle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.tabsWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.tabs {
+  display: flex;
+  background-color: var(--bg-main);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  overflow: hidden;
+}
+
+.tab {
+  flex: 1;
+  padding: var(--space-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  background-color: var(--bg-main);
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tab:hover { 
+  color: var(--color-text-main);
+}
+
+.active {
+  color: var(--color-text-main);
+  border-bottom-color: var(--color-primary);
+}
+
+.posts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  box-shadow: var(--shadow-card);
+}
+
+.empty {
+  text-align: center;
+  padding: var(--space-lg) 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}

@@ -5,7 +5,7 @@ import s from "./Input.module.css"
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id?: string,
   label?: string,
-  variant?: "transparent" | "neutral" | "form"
+  variant?: "transparent" | "neutral" | "form" | "inLine"
 }
 
 export default function Input({type, id, label, variant = "transparent", ...props}: InputProps) {

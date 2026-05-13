@@ -5,11 +5,12 @@ import { useAuth } from "../../context/AuthContext";
 import { IoClose, IoMenu } from "react-icons/io5";
 import { mainMenu, secondaryMenu } from "./menuItems";
 import Button from "../Button/Button"
+import AvatarMenu from "../Avatar/AvatarMenu";
 import s from "./Header.module.css"
 import b from "../Button/Button.module.css"
 
 export default function Header() {
-  const { isLoggedIn } = useAuth()
+  const { user } = useAuth()
   const { resolvedTheme } = useTheme()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -40,7 +41,9 @@ export default function Header() {
         </Link>
 
         <div className={s.buttonWrapper}>
-          {!isLoggedIn &&
+          {user ? (
+            <AvatarMenu/>
+          ) : (
             <>
               <div className={s.hide}>
                 <Link to="/registrera" className={`${b.base} ${b.small} ${b.transparent}`}>
@@ -52,7 +55,7 @@ export default function Header() {
                 Logga in
               </Link>
             </>
-          }
+          )}
 
           <Button
             variant="transparent"
