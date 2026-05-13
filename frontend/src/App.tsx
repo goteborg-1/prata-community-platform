@@ -11,6 +11,7 @@ import Register from './pages/AuthPages/Register'
 import SignUp from './pages/SignUp'
 import Success from './pages/Success'
 import PostDetail from './pages/PostDetail'
+import EditPost from './pages/EditPost'
 import './App.css'
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
         <Route path='logga-in' element={<Login />} />
         <Route path='registrera' element={<Register />} />
         <Route path='inlagg/:postId' element={<PostDetail />} />
+        <Route path='inlagg/:postId/redigera' element={<EditPost />} />
 
         {/* Temporary paths */}
         <Route path='signup' element={<SignUp />} />

@@ -1,4 +1,7 @@
 .base {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: var(--font-size-sm);
   font-weight: 500;
   padding: var(--space-sm) var(--space-base);
@@ -28,7 +31,7 @@
 }
 
 .x-small {
-  padding: 0;
+  padding: 2px 6px;
 }
 
 .primary {
@@ -43,4 +46,8 @@
   background-color: transparent;
   color: var(--color-text-main);
   box-shadow: none;
+}
+
+.transparent:hover {
+  background-color: var(--bg-secondary);
 }

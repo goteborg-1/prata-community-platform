@@ -2,7 +2,7 @@ import { useNavigate } from "react-router";
 import { IoWarningOutline } from "react-icons/io5";
 import { FaHeart, FaRegComment, FaRegHeart } from "react-icons/fa";
 import { CATEGORY_LABELS, TRIGGER_LABELS, type Post } from "@shared";
-import { formatDate } from "../../../utils/formatDate";
+import { formatTime } from "../../../utils/formatTime";
 import Card from "../../Card/Card";
 import s from "./PostCard.module.css"
 
@@ -17,22 +17,20 @@ export default function PostCard({post}: {post: Post}) {
     <Card isClickable={true} onClick={() => navigate(`/inlagg/${post.id}`)}>
       <header className={s.header}>
         <p className={s.author}>{author}</p>
-        <p className={s.date}>{formatDate(post.createdAt)}</p>
+        <p className={s.date}>{formatTime(post.createdAt)}</p>
       </header>
 
       <h3 className={s.title}>{post.title}</h3>
 
       {post.triggerTags.length > 0 ? (
-          <div className={s.warning}>
-            <span className={s.warningText}>
-              <IoWarningOutline />
-              <p>Känsligt innehåll - klicka för att läsa</p>
-            </span>
-          </div>
+          <span className={s.warning}>
+            <IoWarningOutline />
+            <p>Känsligt innehåll - klicka för att läsa</p>
+          </span>
         ):(
           <p>
-            {post.description.length > 200
-              ? `${post.description.substring(0, 150)}...`
+            {post.description.length > 150
+              ? post.description.substring(0, post.description.lastIndexOf(" ", 150)) + "..."
               : post.description
             }
           </p>

@@ -1,15 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "../utils/api";
+import { toggleLike } from "../api/posts.api";
 
 export function useToggleLike() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (postId: string) => {
-      const res = await api.patch(`/posts/${postId}/like`)
-      return res.data.data
-    },
+    mutationFn: toggleLike,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] })
       queryClient.invalidateQueries({ queryKey: ["post"]})
     }
   })
