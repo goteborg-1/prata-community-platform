@@ -14,14 +14,16 @@ export const getAllComments: Controller<CommentParams> = async (req, res) => {
   }
 
   const comments = await CommentModel.find({ postId }).populate("userId", "displayName")
-
-  if (comments.length === 0) {
-    throw createError(`No comments attached to post id ${postId} found`, 404, "COMMENTS_NOT_FOUND")
-  }
+  const currentUserId = req.user?.id?.toString()
 
   res.status(200).json({
     status: "success",
-    data: comments
+    data: comments.map(comment => ({
+      ...comment.toJSON(),
+      isLikedByCurrentUser: currentUserId
+        ? (comment.likedBy ?? []).includes(currentUserId)
+        : false
+    }))
   })
 }
 

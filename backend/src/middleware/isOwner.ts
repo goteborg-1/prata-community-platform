@@ -28,9 +28,9 @@ export const isCommentOwner: Middleware = async (req, res, next) => {
   // get the comment object so we can get the user who posted
   const commentId = req.params.commentId
   const comment = await CommentModel.findById(commentId)
-  const commentOwner = comment?.userId
+  const commentOwner = comment?.userId.toString()
 
-  const userId = req.user.id
+  const userId = req.user.id.toString()
 
 
   if (!comment) {

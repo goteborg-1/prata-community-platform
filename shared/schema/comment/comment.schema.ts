@@ -13,7 +13,8 @@ export const commentSchema = z.object({
   content,
   isAnonymous,
   isPsychologist,
-  username: z.string().nullable().optional()
+  username: z.string().nullable().optional(),
+  isLikedByCurrentUser: z.boolean().optional()
 })
 
 

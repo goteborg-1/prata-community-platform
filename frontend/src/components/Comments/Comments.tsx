@@ -21,13 +21,20 @@ export default function Comments({ postId, postAuthorId }: Props) {
   useEffect(() => {
     api
       .get(`/posts/${postId}/comments`)
-      .then((res) => setComments(res.data.data))
+      .then((res) => {
+        const data = res.data.data
+        setComments(data)
+        setLikedIds(new Set(
+          data.filter((c: Comment) => c.isLikedByCurrentUser).map((c: Comment) => c.id)
+        ))
+      })
       .catch(() => setComments([]))
       .finally(() => setIsLoading(false))
   }, [postId])
 
   const handleSuccess = (newComment: Comment) => {
     setComments((prev) => [...prev, newComment])
+    setLikedIds((prev) => new Set(prev).add(newComment.id))
     setReplyTarget("")
   }
 
