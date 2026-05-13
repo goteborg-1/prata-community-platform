@@ -30,7 +30,7 @@ export const AVATAR_COLORS = [
   "#84A59D", // accent
   "#F6BD60", // primary
   "#F5CAC3", // secondary
-  "#A63D2D", // error/röd
+  "#A63D2D", // error
   "#747272", // muted
   "#423E3B", // dark
 ] as const
