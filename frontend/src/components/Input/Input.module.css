@@ -71,3 +71,19 @@
 .toggleBtn:hover {
   color: var(--color-text-main);
 }
+
+.inLine {
+  padding: 2px 6px;
+  border: none;
+  outline: none;
+  border-radius: 0;
+  border-bottom: 1px solid var(--color-primary);
+  background-color: var(--bg-secondary);
+  margin-top: 2px;
+}
+
+.inLine:focus {
+  border: none;
+  border-bottom: 1px solid var(--color-primary);
+  background-color: var(--bg-secondary);
+}

@@ -12,7 +12,7 @@ import PostDetail from './pages/PostDetail'
 import EditPost from './pages/EditPost'
 import './App.css'
 import ProtectedRoute from './pages/ProtectedRoute'
-import Settings from './pages/Settings'
+import Settings from './pages/Profile/Settings'
 
 function App() {
   return(

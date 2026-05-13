@@ -48,6 +48,7 @@ export function AuthProvider({ children }: { children: React.ReactNode })  {
     removeToken()
     queryClient.removeQueries({ queryKey: ["auth-user"] })
     queryClient.clear()
+    window.location.href = "/"
   }
 
   return (

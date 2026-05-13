@@ -7,8 +7,10 @@
 
 .title {
   padding: var(--radius-sm) var(--space-base);
-  font-size: var(--font-size-base);
-  font-weight: 600;
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.6px;
+  font-weight: 700;
+  text-transform: uppercase;
   color: var(--color-text-muted);
   background-color: var(--bg-main);
   border-bottom: 1px solid var(--border);

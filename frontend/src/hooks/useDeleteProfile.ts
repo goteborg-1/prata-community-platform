@@ -1,16 +1,14 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { useAuth } from "../context/AuthContext";
 import { deleteProfile } from "../api/profile.api";
-import { removeToken } from "../utils/auth";
 
 export function useDeleteProfile() {
-  const queryClient = useQueryClient()
+  const { logout } = useAuth()
 
   return useMutation({
     mutationFn: deleteProfile,
     onSuccess: () => {
-      removeToken()
-      queryClient.clear()
-      window.location.href = "/"
+      logout()
     }
   })
 }
