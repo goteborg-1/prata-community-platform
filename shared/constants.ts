@@ -34,3 +34,5 @@ export const AVATAR_COLORS = [
   "#747272", // muted
   "#423E3B", // dark
 ] as const
+
+export type AvatarColor = (typeof AVATAR_COLORS)[number]

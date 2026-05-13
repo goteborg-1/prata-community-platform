@@ -18,6 +18,7 @@ export const googleLoginSchema = z.object({
 })
 
 export const updateProfileSchema = z.object({
+  handle,
   displayName,
   password,
   avatarColor,

@@ -1,0 +1,23 @@
+.picker {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-pill);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+}
+
+.swatch:hover {
+  transform: scale(1.15);
+}
+
+.selected {
+  border-color: var(--color-text-main);
+  transform: scale(1.15);
+}

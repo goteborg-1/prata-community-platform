@@ -7,11 +7,13 @@
   box-shadow: var(--shadow-card);
   padding: var(--space-base);
   gap: var(--space-xs);
+  background-color: var(--bg-main);
   transition: transform 0.2s ease, border 0.2s ease;
 }
 
-.neutral {
-  background-color: var(--bg-surface);
+.center {
+  justify-content: center;
+  align-items: center;
 }
 
 .isClickable {
