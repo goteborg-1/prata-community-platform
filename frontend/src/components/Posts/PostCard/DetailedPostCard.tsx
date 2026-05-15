@@ -39,8 +39,6 @@ export default function DetailedPostCard({post, scrollTo}: Props) {
     ? post.userId.displayName
     : "Anonym Medlem"
 
-  const wasEdited = new Date(post.createdAt).getTime() !== new Date(post.updatedAt).getTime()
-
   return(
     <Card>
       <header className={s.header}>
@@ -49,7 +47,6 @@ export default function DetailedPostCard({post, scrollTo}: Props) {
             <p className={p.author}>{author}</p>
             <p className={p.date}>
               {formatTime(post.createdAt)}
-              {wasEdited && ` · uppdaterad ${formatTime(post.updatedAt)}`}
             </p>
           </div>
 
