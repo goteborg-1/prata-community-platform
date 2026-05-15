@@ -38,9 +38,13 @@
 }
 
 .navContainer {
-  position: sticky;
+  position: fixed;
   top: 60px;
-  height: calc(100dvh - 60px);
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: var(--bg-main);
+  z-index: 998;
   padding: var(--space-base);
 }
 
