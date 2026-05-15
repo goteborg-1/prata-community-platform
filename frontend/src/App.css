@@ -2,6 +2,11 @@ body {
   background-color: var(--bg-main);
 }
 
+html {
+  scrollbar-gutter: stable;
+
+}
+
 .secondary-background {
   background-color: var(--bg-secondary);
   width: 100%;
