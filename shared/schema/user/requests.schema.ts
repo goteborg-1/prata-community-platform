@@ -30,7 +30,15 @@ export const updateUserRoleSchema = z.object({
 })
 
 export const getUsersQuerySchema = z.object({
-  role: role.optional(),
+  role: z
+    .preprocess((val) => {
+      if (!val) return undefined;
+      if (Array.isArray(val)) {
+        return val.map(v => String(v).toLowerCase());
+      }
+      return [String(val).toLowerCase()];
+    }, z.array(z.enum(["user", "admin", "psychologist"])))
+    .optional(),
   search: z.string().optional(),
   sort: z.enum(["name", "newest"]).optional(),
   page: z.string().regex(/^\d+$/).default("1").transform(Number),

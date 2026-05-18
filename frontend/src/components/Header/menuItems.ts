@@ -6,11 +6,14 @@ interface MenuItem {
 export const mainMenu: MenuItem[] = [
   {title: "Hem", path: "/"},
   {title: "Flöde", path: "/flode"},
-  {title: "Kategorier", path: "/kategorier"}
+  {title: "Om PrataUt", path: "/om-oss"},
 ]
 
-export const secondaryMenu: MenuItem[] = [
+export const loggedInMenu: MenuItem[] = [
   {title: "Konto", path: "/profil"},
   {title: "Inställningar", path: "/installningar"},
-  {title: "Om PrataUt", path: "/om-oss"}
+]
+
+export const adminMenu: MenuItem[] = [
+  {title: "Administration", path: "/admin"}
 ]

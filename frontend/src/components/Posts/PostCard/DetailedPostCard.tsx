@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react"
 import { useNavigate } from "react-router"
-import { deletePost } from "../../../api/posts.api"
 import { FaHeart, FaRegHeart, FaRegComment } from "react-icons/fa"
+import { useDeletePost } from "../../../hooks/useDeletePost"
 import { useToggleLike } from "../../../hooks/useToggleLike"
 import { formatTime } from "../../../utils/formatTime"
 import { CATEGORY_LABELS, TRIGGER_LABELS, type Post } from "@shared"
@@ -19,9 +19,9 @@ interface Props {
 export default function DetailedPostCard({post, scrollTo}: Props) {
   const [ menuOpen, setMenuOpen ] = useState(false)
   const { mutate: toggleLike, isPending } = useToggleLike()
+  const { mutateAsync: deletePost } = useDeletePost()
   const navigate = useNavigate()
   const menuRef = useRef<HTMLDivElement>(null)
-
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if(!menuRef.current?.contains(e.target as Node)) setMenuOpen(false)
@@ -30,9 +30,10 @@ export default function DetailedPostCard({post, scrollTo}: Props) {
     return() => document.removeEventListener("mousedown", handler)
   })
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if(window.confirm("Är du säker på att du vill ta bort inlägget?")) {
-      deletePost(post.id)
+      await deletePost(post.id)
+      navigate(-1)
     }
   }
 
