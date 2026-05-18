@@ -42,6 +42,15 @@
   background-color: var(--color-secondary-light);
 }
 
+.neutral {
+  background-color: var(--bg-main);
+  border: 1px solid var(--border);
+}
+
+.neutral:hover {
+  filter: none;
+}
+
 .transparent {
   background-color: transparent;
   color: var(--color-text-main);
@@ -50,4 +59,5 @@
 
 .transparent:hover {
   background-color: var(--bg-secondary);
+  filter: none;
 }

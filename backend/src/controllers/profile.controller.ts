@@ -83,7 +83,7 @@ export const getMyPosts: Controller = async (req, res) => {
   }
   
   const id = user.id
-  const posts = await PostModel.find({ userId: id })
+  const posts = await PostModel.find({ userId: id }).populate("userId", "displayName avatarColor")
 
   res.json({
     status: "success",
@@ -102,7 +102,7 @@ export const getMyLikedPosts: Controller = async (req, res) => {
   }
 
   const id = user.id
-  const posts = await PostModel.find({ likedBy: id })
+  const posts = await PostModel.find({ likedBy: id }).populate("userId", "displayName avatarColor")
 
   res.json({
     status: "success",

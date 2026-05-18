@@ -9,6 +9,7 @@ export function useUpdateProfile() {
     mutationFn: (data: UpdateProfileRequest) => updateProfile(data),
     onSuccess: (updatedUser) => {
       queryClient.setQueryData(["auth-user"], updatedUser)
+      queryClient.invalidateQueries({ queryKey: ["posts"] })
     }
   })
 }

@@ -1,12 +1,10 @@
-import { createContext, useContext} from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { AuthContext } from "./useAuth";
 import { getToken, removeToken, setToken } from "../utils/auth";
 import { api } from "../utils/api";
-import type { User, LoginUserRequest, CreateUserRequest } from "@shared"
+import type { User } from "@shared"
 
-
-
-interface AuthContextValue {
+export interface AuthContextValue {
   user: User | null,
   isLoggedIn: boolean,
   isLoading: boolean,
@@ -14,13 +12,7 @@ interface AuthContextValue {
   logout: () => void
 }
 
-// createcontext
-
-export const AuthContext = createContext<AuthContextValue | undefined>(undefined)
-
-
 // export authProvider
-
 export function AuthProvider({ children }: { children: React.ReactNode })  {
   const queryClient = useQueryClient()
 
@@ -60,12 +52,3 @@ export function AuthProvider({ children }: { children: React.ReactNode })  {
 
 // export useAuth 
 
-export function useAuth(): AuthContextValue {
-  const context = useContext(AuthContext)
-
-  if (!context) {
-    throw new Error("useAuth must be used within AuthProvider")
-  }
-
-  return context
-}

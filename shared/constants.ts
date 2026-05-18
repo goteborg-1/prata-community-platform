@@ -35,4 +35,12 @@ export const AVATAR_COLORS = [
   "#423E3B", // dark
 ] as const
 
+export const SORT_OPTIONS = [
+  "newest",
+  "popular"
+]
+
+export type Sort = (typeof SORT_OPTIONS)[number]
+export type Category = (typeof CATEGORY_OPTIONS)[number]
+export type TriggerTag = (typeof TRIGGER_OPTIONS)[number]
 export type AvatarColor = (typeof AVATAR_COLORS)[number]

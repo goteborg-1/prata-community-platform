@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink, Link } from "react-router";
 import { useTheme } from "../../context/useTheme";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../context/useAuth";
 import { mainMenu, secondaryMenu } from "./menuItems";
 import Button from "../Button/Button"
 import AvatarMenu from "../Avatar/AvatarMenu";

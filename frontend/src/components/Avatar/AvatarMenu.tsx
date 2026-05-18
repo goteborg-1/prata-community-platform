@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react"
 import { useNavigate } from "react-router"
-import { useAuth } from "../../context/AuthContext"
+import { useAuth } from "../../context/useAuth"
 import Avatar from "./Avatar"
 import s from "./AvatarMenu.module.css"
 

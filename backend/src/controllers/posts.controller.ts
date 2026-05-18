@@ -41,7 +41,7 @@ export const getAllPosts: Controller<{}, {}, GetPostsQuery> = async (req, res) =
       .sort(sortOptions)
       .skip(skip)
       .limit(limit)
-      .populate("userId", "displayName"),
+      .populate("userId", "displayName avatarColor"),
     PostModel.countDocuments(query)
   ])
 
@@ -71,7 +71,7 @@ export const getPostById: Controller<PostParams> = async (req, res) => {
     throw createError(`Invalid ID format: ${id}`, 400, "INVALID_ID")
   }
 
-  const post = await PostModel.findById(id).populate("userId", "displayName")
+  const post = await PostModel.findById(id).populate("userId", "displayName avatarColor")
 
   if(!post) {
     throw createError(`No posts with id ${id} found`, 404, "POST_NOT_FOUND")

@@ -12,6 +12,12 @@
   align-items: flex-start;
 }
 
+.authorWrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
 .body {
   display: flex;
   flex-direction: column;

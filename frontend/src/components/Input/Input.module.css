@@ -9,6 +9,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
+  width: 100%;
 }
 
 .label {
@@ -48,8 +49,17 @@
 }
 
 .neutral {
-  background-color: var(--bg-secondary);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-pill);
   border: 1px solid var(--border);
+  outline: none;
+  box-shadow: var(--shadow-sm);
+  height: 36px;
+}
+
+.neutral:focus { 
+  box-shadow: var(--shadow-card);
+  border-color: var(--border);
 }
 
 .form {

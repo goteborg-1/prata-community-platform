@@ -1,8 +1,8 @@
 import { Link } from "react-router"
+import { useAuth } from "../../context/useAuth"
 import Illustration from "../../assets/support-community.png"
 import b from "../Button/Button.module.css"
 import s from "./Hero.module.css"
-import { useAuth } from "../../context/AuthContext"
 
 export default function Hero() {
   const { isLoggedIn } = useAuth()

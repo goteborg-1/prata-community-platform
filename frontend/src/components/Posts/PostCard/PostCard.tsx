@@ -5,19 +5,23 @@ import { CATEGORY_LABELS, TRIGGER_LABELS, type Post } from "@shared";
 import { formatTime } from "../../../utils/formatTime";
 import Card from "../../Card/Card";
 import s from "./PostCard.module.css"
+import Avatar from "../../Avatar/Avatar";
 
 export default function PostCard({post}: {post: Post}) {
   const navigate = useNavigate()
 
-  const author = (typeof post.userId === 'object' && post.userId !== null)
-    ? post.userId.displayName
-    : "Anonym Medlem"
+  const userData = post.userId && typeof post.userId === "object" ? post.userId : null;
+  const author = userData?.displayName || "Anonym Medlem"
+  const avatarColor = userData?.avatarColor || "#84A59D"
 
   return(
     <Card isClickable={true} onClick={() => navigate(`/inlagg/${post.id}`)}>
       <header className={s.header}>
-        <p className={s.author}>{author}</p>
-        <p className={s.date}>{formatTime(post.createdAt)}</p>
+        <Avatar displayName={author} color={avatarColor} size="small"/>
+        <span>
+          <p className={s.author}>{author}</p>
+          <p className={s.date}>{formatTime(post.createdAt)}</p>
+        </span>
       </header>
 
       <h3 className={s.title}>{post.title}</h3>
@@ -49,7 +53,7 @@ export default function PostCard({post}: {post: Post}) {
           </span>
         </div>
 
-        <div className={s.pillWrapper}>
+        <div className={`${s.pillWrapper} ${s.hide}`}>
           {post.triggerTags.map((t) => (
             <p key={t} className={`${s.pill} ${s.pillWarn}`}>{TRIGGER_LABELS[t]}</p>
           ))}

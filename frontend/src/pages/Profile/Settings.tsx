@@ -1,4 +1,4 @@
-import { useAuth } from "../../context/AuthContext"
+import { useAuth } from "../../context/useAuth"
 import { useDeleteProfile } from "../../hooks/useDeleteProfile"
 import { useUpdateProfile } from "../../hooks/useUpdateProfile"
 import { SettingsCard, SettingsDivider, SettingsRow } from "../../components/SettingsCard/SettingsCard"
