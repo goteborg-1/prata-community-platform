@@ -1,0 +1,76 @@
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-base);
+}
+
+.limitSelect {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.label {
+  font-size: 13px;
+  color: var(--color-text-tertiary);
+}
+
+.select {
+  font-size: 13px;
+  padding: 2px 4px;
+  border-radius: var(--radius-sm);
+  border: 0.5px solid var(--border);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.divider {
+  width: 0.5px;
+  height: 14px;
+  background: var(--border);
+}
+
+.pages {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.pageBtn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  transition: background 0.1s;
+}
+
+.pageBtn:hover {
+  background: var(--bg-secondary);
+}
+
+.active {
+  border: 0.5px solid var(--border);
+  background: var(--bg-secondary);
+  font-weight: 500;
+  color: var(--color-text-main);
+}
+
+.ellipsis {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}

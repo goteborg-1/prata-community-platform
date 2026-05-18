@@ -1,54 +1,12 @@
-import { useEffect, useReducer, useState } from "react"
+import { useEffect, useState } from "react"
 import type { GetPostsQuery, Category, TriggerTag, Sort } from "@shared"
 import { FeedFilterContext } from "./useFeedFilter"
+import { useSearchParams } from "react-router"
 
 export type FeedFilters = Omit<GetPostsQuery, "categories" | "triggerTags" | "search"> & {
   categories: Category[],
   triggerTags: TriggerTag[],
   search: string,
-}
-
-const initialState: FeedFilters = {
-  search: "",
-  sort: "newest",
-  categories: [],
-  triggerTags: [],
-  page: 1,
-  limit: 5,
-}
-
-type FilterAction =
-  | { type: "SET_SEARCH"; payload: string }
-  | { type: "SET_SORT"; payload: Sort }
-  | { type: "SET_PAGE"; payload: number }
-  | { type: "SET_LIMIT"; payload: number }
-  | { type: "TOGGLE_CATEGORY"; payload: Category }
-  | { type: "TOGGLE_TRIGGER"; payload: TriggerTag }
-  | { type: "CLEAR" }
-
-function filterReducer(state: FeedFilters, action: FilterAction): FeedFilters {
-  switch (action.type) {
-    case "SET_SEARCH": return { ...state, search: action.payload, page: 1 }
-    case "SET_SORT": return { ...state, sort: action.payload, page: 1 }
-    case "SET_PAGE": return { ...state, page: action.payload }
-    case "SET_LIMIT": return { ...state, limit: action.payload, page: 1 }
-    case "TOGGLE_CATEGORY":
-      return {
-        ...state, page: 1,
-        categories: state.categories.includes(action.payload)
-          ? state.categories.filter(c => c !== action.payload)
-          : [...state.categories, action.payload]
-      }
-    case "TOGGLE_TRIGGER":
-      return {
-        ...state, page: 1,
-        triggerTags: state.triggerTags.includes(action.payload)
-          ? state.triggerTags.filter(t => t !== action.payload)
-          : [...state.triggerTags, action.payload]
-      }
-    case "CLEAR": return initialState
-    default: return state
-  }
 }
 
 export type FeedFilterContextValue = {
@@ -65,13 +23,48 @@ export type FeedFilterContextValue = {
 }
 
 export function FeedFilterProvider({ children }: { children: React.ReactNode }) {
-  const [filters, dispatch] = useReducer(filterReducer, initialState)
+  const [searchParams, setSearchParams] = useSearchParams()
   const [debouncedSearch, setDebouncedSearch] = useState("")
+
+  const filters: FeedFilters = {
+    search: searchParams.get("search") ?? "",
+    sort: (searchParams.get("sort") as Sort) ?? "newest",
+    page: Number(searchParams.get("page")) || 1,
+    limit: Number(searchParams.get("limit")) || 5,
+    categories: searchParams.getAll("categories") as Category[],
+    triggerTags: searchParams.getAll("triggerTags") as TriggerTag[],
+  }
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(filters.search), 350)
     return () => clearTimeout(timer)
   }, [filters.search])
+
+  const setParam = (updates: Partial<FeedFilters>) => {
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev)
+
+      Object.entries(updates).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+          next.delete(key)
+          value.forEach(v => next.append(key, v))
+        } else if (value === "" || value === null || value === undefined) {
+          next.delete(key)
+        } else {
+          next.set(key, String(value))
+        }
+      })
+
+      return next
+    })
+  }
+
+  const toggleArray = <T extends string>(key: "categories" | "triggerTags", value: T, current: T[]) => {
+    const next = current.includes(value)
+      ? current.filter(v => v !== value)
+      : [...current, value]
+    setParam({ [key]: next, page: 1 })
+  }
 
   const activeCount = filters.categories.length + filters.triggerTags.length
 
@@ -84,17 +77,17 @@ export function FeedFilterProvider({ children }: { children: React.ReactNode }) 
     ...(filters.triggerTags.length > 0 && { triggerTags: filters.triggerTags }),
   }
 
-  const value = {
+  const value: FeedFilterContextValue = {
     filters,
     activeCount,
     queryParams,
-    setSearch: (search: string) => dispatch({ type: "SET_SEARCH", payload: search }),
-    setSort: (sort: Sort) => dispatch({ type: "SET_SORT", payload: sort }),
-    setPage: (page: number) => dispatch({ type: "SET_PAGE", payload: page }),
-    setLimit: (limit: number) => dispatch({ type: "SET_LIMIT", payload: limit }),
-    toggleCategory: (cat: Category) => dispatch({ type: "TOGGLE_CATEGORY", payload: cat }),
-    toggleTriggerTag: (tag: TriggerTag) => dispatch({ type: "TOGGLE_TRIGGER", payload: tag }),
-    clearAll: () => dispatch({ type: "CLEAR" }),
+    setSearch: (search) => setParam({ search, page: 1 }),
+    setSort: (sort) => setParam({ sort, page: 1 }),
+    setPage: (page) => setParam({ page }),
+    setLimit: (limit) => setParam({ limit, page: 1 }),
+    toggleCategory: (cat) => toggleArray("categories", cat, filters.categories),
+    toggleTriggerTag: (tag) => toggleArray("triggerTags", tag, filters.triggerTags),
+    clearAll: () => setSearchParams(new URLSearchParams()),
   }
 
   return (

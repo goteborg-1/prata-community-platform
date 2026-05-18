@@ -6,6 +6,7 @@ import CreatePost from "../components/Posts/CreatePost/CreatePost"
 import FeedFilter from "../components/FeedFilter/FeedFilter"
 import PostCard from "../components/Posts/PostCard/PostCard"
 import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner"
+import Pagination from "../components/Pagination/Pagination"
 
 export default function Feed() {
   const { queryParams } = useFeedFilter()
@@ -24,7 +25,7 @@ export default function Feed() {
         posts && posts.length ? posts?.map(post => <PostCard key={post.id} post={post} />) : <p>Inga inlägg hittades</p>
       )}
 
-      {/* TODO: Add pagination */}
+      <Pagination totalPages={data?.meta.totalPages ?? 0} />
     </Container>
   )
 }
