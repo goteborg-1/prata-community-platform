@@ -1,0 +1,33 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-base);
+}
+
+.icon {
+  align-self: center;
+  font-size: 1.5rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-xs);
+}
+
+.title {
+  font-size: 1.5rem;
+  color: var(--color-text-main);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.description {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+@keyframes lockScale {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}

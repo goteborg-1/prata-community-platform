@@ -1,7 +1,7 @@
 import { Outlet } from "react-router"
 import { useAuth } from "../context/useAuth";
 import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
-import Unauthorized from "./Unauthorized";
+import Unauthorized from "./ErrorPages/Unauthorized";
 
 export default function AdminProtectedRoute() {
   const { user, isLoading } = useAuth();

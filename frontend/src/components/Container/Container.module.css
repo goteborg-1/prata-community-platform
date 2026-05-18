@@ -16,6 +16,11 @@
   justify-content: flex-start;
 }
 
+.center {
+  align-items: center;
+  height: calc(100vh - 100px);
+}
+
 .small {
   max-width: 500px;
   width: 80vw;
