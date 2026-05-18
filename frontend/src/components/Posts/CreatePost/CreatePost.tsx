@@ -3,9 +3,11 @@ import { useNavigate } from "react-router";
 import { IoClose, IoEyeOffOutline } from "react-icons/io5";
 import { CATEGORY_OPTIONS, CATEGORY_LABELS, createPostSchema, TRIGGER_OPTIONS, TRIGGER_LABELS, type CreatePostRequest, type Post } from "@shared";
 import { useForm } from "../../../hooks/useForm";
+import { useAuth } from "../../../context/useAuth";
 import Button from "../../Button/Button";
 import Input from "../../Input/Input";
 import Textarea from "../../Input/Textarea";
+import Avatar from "../../Avatar/Avatar";
 import i from "../../Input/Input.module.css"
 import c from "../../Card/Card.module.css"
 import s from "./CreatePost.module.css"
@@ -15,6 +17,7 @@ const initialForm: CreatePostRequest = { isAnonymous: false, title: "", descript
 
 export default function CreatePost() {
   const navigate = useNavigate()
+  const { user } = useAuth()
   const [open, setOpen] = useState(false)
   const { form, isLoading, errors, handleChange, handleSubmit, reset } = useForm<CreatePostRequest, Post>({
     endpoint: "/posts",
@@ -26,6 +29,8 @@ export default function CreatePost() {
       navigate(`/inlagg/${postId}`)
     }
   })
+
+  if(!user) return null
 
   const toggle = (key: "categories" | "triggerTags", value: string) => {
     const currentArray = form[key] as string[]
@@ -43,8 +48,10 @@ export default function CreatePost() {
 
   if(!open) return(
     <button className={s.trigger} onClick={() => setOpen(true)}>
-      <p className={s.triggerText}>Vad har du på hjärtat idag?</p>
-      <div className={s.triggerLine} />
+      <span>
+        <Avatar displayName={user.displayName!} color={user.avatarColor!} size="small"/>
+      </span>
+      <span className={s.triggerText}>Vad har du på hjärtat idag?</span>
     </button>
   )
 

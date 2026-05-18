@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink, Link } from "react-router";
 import { useTheme } from "../../context/useTheme";
-import { useAuth } from "../../context/AuthContext";
-import { IoClose, IoMenu } from "react-icons/io5";
+import { useAuth } from "../../context/useAuth";
 import { mainMenu, secondaryMenu } from "./menuItems";
 import Button from "../Button/Button"
 import AvatarMenu from "../Avatar/AvatarMenu";
@@ -62,7 +61,11 @@ export default function Header() {
             size="x-small"
             onClick={toggleMenu}
           >
-            {isMenuOpen ? <IoClose size={24} /> : <IoMenu size={24}/>}
+            <div className={`${s.hamburger} ${isMenuOpen ? s.open : ""}`}>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
           </Button>
         </div>
       </header>

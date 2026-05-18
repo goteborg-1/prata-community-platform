@@ -10,21 +10,20 @@ export default function PostDetail() {
   const { postId } = useParams()
   const { post, isLoading, error } = usePost(postId)
   const commentsRef = useRef<HTMLDivElement>(null)
-
-  if (!postId || !post) return <NotFound />
-
+  
   const scrollToComments = () => {
     commentsRef.current?.scrollIntoView({ behavior: "smooth" })
   }
-
+  
   if(isLoading) return <p>Laddar inlägg...</p>
   if(error) return <p>Inlägg kunde inte hittas</p>
+  if (!postId || !post) return <NotFound />
 
   return (
     <Container>
       <DetailedPostCard post={post} scrollTo={scrollToComments} />
       <div ref={commentsRef}>
-        <Comments postId={postId} postAuthorId={(post.userId as { id: string }).id} />
+        <Comments postId={postId} postAuthorId={(post.userId as { id: string } | null)?.id || null} />
       </div>
     </Container>
   )

@@ -1,10 +1,10 @@
+import { useNavigate } from "react-router";
 import { type CreateUserRequest, createUserSchema, type User } from "@shared";
+import { useAuth } from "../../context/useAuth";
+import { useForm } from "../../hooks/useForm";
 import Button from "../Button/Button";
 import Input from "../Input/Input";
 import s from "./Auth.module.css"
-import { useAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router";
-import { useForm } from "../../hooks/useForm";
 
 interface SignupResponse {
   token: string,

@@ -5,7 +5,12 @@ import PostCard from "../components/Posts/PostCard/PostCard";
 import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
 
 export default function Home() {
-  const { data: posts, isLoading, error } = usePosts()
+  const { data, isLoading, error } = usePosts({ 
+    sort: "newest", 
+    page: 1, 
+    limit: 5
+  })
+  const posts = data?.data
 
   return(
     <>
