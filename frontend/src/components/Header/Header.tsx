@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import { NavLink, Link } from "react-router";
 import { useTheme } from "../../context/useTheme";
 import { useAuth } from "../../context/useAuth";
-import { mainMenu, secondaryMenu } from "./menuItems";
+import { adminMenu, loggedInMenu, mainMenu } from "./menuItems";
 import Button from "../Button/Button"
 import AvatarMenu from "../Avatar/AvatarMenu";
 import s from "./Header.module.css"
 import b from "../Button/Button.module.css"
 
 export default function Header() {
-  const { user } = useAuth()
+  const { user, isLoggedIn } = useAuth()
   const { resolvedTheme } = useTheme()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -87,19 +87,37 @@ export default function Header() {
               ))}
             </div>
 
-            <div className={s.navWrapper}>
-              {secondaryMenu.map((link) => (
-                <li key={link.path}>
-                  <NavLink
-                    to={link.path}
-                    onClick={closeMenu}
-                    className={({isActive}) => (isActive ? s.isActive : "")}
-                  >
-                    {link.title}
-                  </NavLink>
-                </li>
-              ))}
-            </div>
+            {isLoggedIn && 
+              <div className={s.navWrapper}>
+                {loggedInMenu.map((link) => (
+                  <li key={link.path}>
+                    <NavLink
+                      to={link.path}
+                      onClick={closeMenu}
+                      className={({isActive}) => (isActive ? s.isActive : "")}
+                    >
+                      {link.title}
+                    </NavLink>
+                  </li>
+                ))}
+              </div>
+            }
+
+            {user?.role === "admin" && 
+              <div className={s.navWrapper}>
+                {adminMenu.map((link) => (
+                  <li key={link.path}>
+                    <NavLink
+                      to={link.path}
+                      onClick={closeMenu}
+                      className={({isActive}) => (isActive ? s.isActive : "")}
+                    >
+                      {link.title}
+                    </NavLink>
+                  </li>
+                ))}
+              </div>
+            }
           </ul>
         </nav>
       }
