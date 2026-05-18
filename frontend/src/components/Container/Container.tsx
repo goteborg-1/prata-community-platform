@@ -9,8 +9,10 @@ interface ContainerProps {
 
 export default function Container({ variant = "medium", color = "main", center, children }: ContainerProps) {
   return (
-    <section className={`${s.container} ${s[variant]} ${s[color]} ${center && s.center}`}>
-      {children}
-    </section>
+    <div className={`${s.outerWrapper} ${s[color]}`}>
+      <section className={`${s.container} ${s[variant]} ${center && s.center}`}>
+        {children}
+      </section>
+    </div>
   );
 }
