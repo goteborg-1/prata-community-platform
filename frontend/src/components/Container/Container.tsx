@@ -1,7 +1,7 @@
 import s from "./Container.module.css";
 
 interface ContainerProps {
-  variant?: "medium" | "small"
+  variant?: "medium" | "narrow" |"small"
   color?: "main" | "secondary"
   center?: boolean
   children: React.ReactNode
