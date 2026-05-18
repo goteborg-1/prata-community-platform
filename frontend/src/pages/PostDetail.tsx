@@ -2,7 +2,7 @@ import { useRef } from "react"
 import { useParams } from "react-router"
 import { usePost } from "../hooks/usePost"
 import Container from "../components/Container/Container"
-import NotFound from "./NotFound"
+import NotFound from "./ErrorPages/NotFound"
 import Comments from "../components/Comments/Comments"
 import DetailedPostCard from "../components/Posts/PostCard/DetailedPostCard"
 
