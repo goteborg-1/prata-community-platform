@@ -10,6 +10,10 @@
   margin: 0 auto;
 }
 
+.narrow {
+  max-width: 720px;
+}
+
 .small {
   max-width: 500px;
   width: 80vw;

@@ -92,7 +92,7 @@ h1, h2, h3 {
   color: var(--color-text-main);
 }
 
-p {
+p, li {
   color: var(--color-text-main);
   font-size: var(--font-size-base);
 }
