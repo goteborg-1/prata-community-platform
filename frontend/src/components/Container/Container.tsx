@@ -1,14 +1,18 @@
 import s from "./Container.module.css";
 
 interface ContainerProps {
-  variant?: "medium" | "narrow" | "small"
-  children: React.ReactNode;
+  variant?: "medium" | "narrow" |"small"
+  color?: "main" | "secondary"
+  center?: boolean
+  children: React.ReactNode
 }
 
-export default function Container({ variant = "medium", children }: ContainerProps) {
+export default function Container({ variant = "medium", color = "main", center, children }: ContainerProps) {
   return (
-    <section className={`${s.container} ${s[variant]}`}>
-      {children}
-    </section>
+    <div className={`${s.outerWrapper} ${s[color]}`}>
+      <section className={`${s.container} ${s[variant]} ${center && s.center}`}>
+        {children}
+      </section>
+    </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useAuth } from "../../context/AuthContext"
+import { useAuth } from "../../context/useAuth"
 import { useDeleteProfile } from "../../hooks/useDeleteProfile"
 import { useUpdateProfile } from "../../hooks/useUpdateProfile"
 import { SettingsCard, SettingsDivider, SettingsRow } from "../../components/SettingsCard/SettingsCard"
@@ -42,17 +42,67 @@ export default function Settings() {
   }
 
   return(
-    <div className="secondary-background">
-      <Container>
-        <h2>Inställningar</h2>
+    <Container color="secondary">
+      <h2>Inställningar</h2>
 
-        <SettingsCard title="Konto">
-          {editingField === "displayName" ? (
+      <SettingsCard title="Konto">
+        {editingField === "displayName" ? (
+          <form className={c.row}>
+            <div>
+              <span className={c.label}>Visningsnamn</span>
+              <Input
+                autoFocus
+                variant="inLine"
+                value={tempValue}
+                onChange={(e) => setTempValue(e.target.value)}
+              />
+            </div>
+            <div className={s.buttonWrapper}>
+              <Button size="small" onClick={handleSave} disabled={isPending}>Spara</Button>
+              <Button type="button" size="small" variant="transparent" onClick={() => setEditingField(null)}>Avbryt</Button>
+            </div>
+          </form>
+        ) : (
+          <SettingsRow label="Visningsnamn" description={user?.displayName}>
+            <Button variant="transparent" size="small" onClick={() => handleEdit("displayName", user.displayName!)}>Ändra</Button>
+          </SettingsRow>
+        )}
+
+        <SettingsDivider />
+
+        {editingField === "handle" ? (
+          <form className={c.row}>
+            <div>
+              <span className={c.label}>Användarnamn</span>
+              <Input
+                autoFocus
+                variant="inLine"
+                value={tempValue}
+                onChange={(e) => setTempValue(e.target.value)}
+              />
+            </div>
+            <div className={s.buttonWrapper}>
+              <Button size="small" onClick={handleSave} disabled={isPending}>Spara</Button>
+              <Button type="button" size="small" variant="transparent" onClick={() => setEditingField(null)}>Avbryt</Button>
+            </div>
+          </form>
+        ) : (
+          <SettingsRow label="Användarnamn" description={user?.handle}>
+            <Button variant="transparent" size="small" onClick={() => handleEdit("handle", user.handle)}>Ändra</Button>
+          </SettingsRow>
+        )}
+
+        <SettingsDivider />
+
+        {!user?.googleId && (
+          editingField === "password" ? (
+            // TODO: Make password change safer
             <form className={c.row}>
               <div>
-                <span className={c.label}>Visningsnamn</span>
+                <span className={c.label}>Lösenord</span>
                 <Input
                   autoFocus
+                  type="password"
                   variant="inLine"
                   value={tempValue}
                   onChange={(e) => setTempValue(e.target.value)}
@@ -64,87 +114,35 @@ export default function Settings() {
               </div>
             </form>
           ) : (
-            <SettingsRow label="Visningsnamn" description={user?.displayName}>
-              <Button variant="transparent" size="small" onClick={() => handleEdit("displayName", user.displayName!)}>Ändra</Button>
+            <SettingsRow label="Lösenord">
+              <Button variant="transparent" size="small" onClick={() => handleEdit("password", "")}>Ändra</Button>
             </SettingsRow>
-          )}
+          )
+        )}
 
-          <SettingsDivider />
+      </SettingsCard>
 
-          {editingField === "handle" ? (
-            <form className={c.row}>
-              <div>
-                <span className={c.label}>Användarnamn</span>
-                <Input
-                  autoFocus
-                  variant="inLine"
-                  value={tempValue}
-                  onChange={(e) => setTempValue(e.target.value)}
-                />
-              </div>
-              <div className={s.buttonWrapper}>
-                <Button size="small" onClick={handleSave} disabled={isPending}>Spara</Button>
-                <Button type="button" size="small" variant="transparent" onClick={() => setEditingField(null)}>Avbryt</Button>
-              </div>
-            </form>
-          ) : (
-            <SettingsRow label="Användarnamn" description={user?.handle}>
-              <Button variant="transparent" size="small" onClick={() => handleEdit("handle", user.handle)}>Ändra</Button>
-            </SettingsRow>
-          )}
+      <SettingsCard title="Utseende">
+        <SettingsRow label="Tema">
+          <span style={{display: "flex"}}>
+            <Button variant="transparent" size="small" onClick={() => setTheme("light")}>Ljust</Button>
+            <Button variant="transparent" size="small" onClick={() => setTheme("dark")}>Mörkt</Button>
+            <Button variant="transparent" size="small" onClick={() => setTheme("system")}>Automatiskt</Button>
+          </span>
+        </SettingsRow>
+      </SettingsCard>
 
-          <SettingsDivider />
+      <SettingsCard title="Session">
+        <SettingsRow label="Logga ut">
+          <Button variant="transparent" size="small" onClick={logout}>Logga ut</Button>
+        </SettingsRow>
+      </SettingsCard>
 
-          {!user?.googleId && (
-            editingField === "password" ? (
-              // TODO: Make password change safer
-              <form className={c.row}>
-                <div>
-                  <span className={c.label}>Lösenord</span>
-                  <Input
-                    autoFocus
-                    type="password"
-                    variant="inLine"
-                    value={tempValue}
-                    onChange={(e) => setTempValue(e.target.value)}
-                  />
-                </div>
-                <div className={s.buttonWrapper}>
-                  <Button size="small" onClick={handleSave} disabled={isPending}>Spara</Button>
-                  <Button type="button" size="small" variant="transparent" onClick={() => setEditingField(null)}>Avbryt</Button>
-                </div>
-              </form>
-            ) : (
-              <SettingsRow label="Lösenord">
-                <Button variant="transparent" size="small" onClick={() => handleEdit("password", "")}>Ändra</Button>
-              </SettingsRow>
-            )
-          )}
-
-        </SettingsCard>
-
-        <SettingsCard title="Utseende">
-          <SettingsRow label="Tema">
-            <span style={{display: "flex"}}>
-              <Button variant="transparent" size="small" onClick={() => setTheme("light")}>Ljust</Button>
-              <Button variant="transparent" size="small" onClick={() => setTheme("dark")}>Mörkt</Button>
-              <Button variant="transparent" size="small" onClick={() => setTheme("system")}>Automatiskt</Button>
-            </span>
-          </SettingsRow>
-        </SettingsCard>
-
-        <SettingsCard title="Session">
-          <SettingsRow label="Logga ut">
-            <Button variant="transparent" size="small" onClick={logout}>Logga ut</Button>
-          </SettingsRow>
-        </SettingsCard>
-
-        <SettingsCard title="Fara">
-          <SettingsRow label="Ta bort konto" description="Permanent åtgärd, kan inte ångras">
-            <Button variant="transparent" size="small" onClick={handleDelete}>Ta bort</Button>
-          </SettingsRow>
-        </SettingsCard>
-      </Container>
-    </div>
+      <SettingsCard title="Fara">
+        <SettingsRow label="Ta bort konto" description="Permanent åtgärd, kan inte ångras">
+          <Button variant="transparent" size="small" onClick={handleDelete}>Ta bort</Button>
+        </SettingsRow>
+      </SettingsCard>
+    </Container>
   )
 }

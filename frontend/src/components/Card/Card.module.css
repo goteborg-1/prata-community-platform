@@ -16,6 +16,11 @@
   align-items: center;
 }
 
+.horizontal {
+  flex-direction: row;
+  align-items: center;
+}
+
 .isClickable {
   cursor: pointer;
 }

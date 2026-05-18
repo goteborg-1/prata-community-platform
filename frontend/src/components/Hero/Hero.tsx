@@ -1,8 +1,8 @@
 import { Link } from "react-router"
+import { useAuth } from "../../context/useAuth"
 import Illustration from "../../assets/support-community.png"
 import b from "../Button/Button.module.css"
 import s from "./Hero.module.css"
-import { useAuth } from "../../context/AuthContext"
 
 export default function Hero() {
   const { isLoggedIn } = useAuth()
@@ -32,7 +32,7 @@ export default function Hero() {
               Börja prata med andra
             </Link>
             
-            <a href="/psykologer" className={s.link}>
+            <a target="_blank" href="https://www.1177.se/liv--halsa/psykisk-halsa/att-soka-stod-och-hjalp/rad-och-stod-pa-chatt-och-telefon-vid-psykisk-ohalsa-och-beroende/" className={s.link}>
               Läs mer om professionellt stöd
             </a>
           </div>

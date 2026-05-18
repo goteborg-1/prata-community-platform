@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react"
 import { useNavigate } from "react-router"
-import { deletePost } from "../../../api/posts.api"
 import { FaHeart, FaRegHeart, FaRegComment } from "react-icons/fa"
+import { useDeletePost } from "../../../hooks/useDeletePost"
 import { useToggleLike } from "../../../hooks/useToggleLike"
 import { formatTime } from "../../../utils/formatTime"
 import { CATEGORY_LABELS, TRIGGER_LABELS, type Post } from "@shared"
@@ -9,6 +9,7 @@ import Card from "../../Card/Card"
 import Button from "../../Button/Button"
 import s from "./DetailedPostCard.module.css"
 import p from "./PostCard.module.css"
+import Avatar from "../../Avatar/Avatar"
 
 interface Props {
   post: Post,
@@ -18,9 +19,9 @@ interface Props {
 export default function DetailedPostCard({post, scrollTo}: Props) {
   const [ menuOpen, setMenuOpen ] = useState(false)
   const { mutate: toggleLike, isPending } = useToggleLike()
+  const { mutateAsync: deletePost } = useDeletePost()
   const navigate = useNavigate()
   const menuRef = useRef<HTMLDivElement>(null)
-
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if(!menuRef.current?.contains(e.target as Node)) setMenuOpen(false)
@@ -29,28 +30,29 @@ export default function DetailedPostCard({post, scrollTo}: Props) {
     return() => document.removeEventListener("mousedown", handler)
   })
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if(window.confirm("Är du säker på att du vill ta bort inlägget?")) {
-      deletePost(post.id)
+      await deletePost(post.id)
+      navigate(-1)
     }
   }
 
-  const author = (typeof post.userId === 'object' && post.userId !== null)
-    ? post.userId.displayName
-    : "Anonym Medlem"
-
-  const wasEdited = new Date(post.createdAt).getTime() !== new Date(post.updatedAt).getTime()
+  const userData = post.userId && typeof post.userId === "object" ? post.userId : null;
+  const author = userData?.displayName || "Anonym Medlem"
+  const avatarColor = userData?.avatarColor || "#84A59D"
 
   return(
     <Card>
       <header className={s.header}>
         <div className={s.headerTop}>
-          <div>
-            <p className={p.author}>{author}</p>
-            <p className={p.date}>
-              {formatTime(post.createdAt)}
-              {wasEdited && ` · uppdaterad ${formatTime(post.updatedAt)}`}
-            </p>
+          <div className={s.authorWrapper}>
+            <Avatar displayName={author} color={avatarColor} size="small" />
+            <span>
+              <p className={p.author}>{author}</p>
+              <p className={p.date}>
+                {formatTime(post.createdAt)}
+              </p>
+            </span>
           </div>
 
           {post.isOwner && (

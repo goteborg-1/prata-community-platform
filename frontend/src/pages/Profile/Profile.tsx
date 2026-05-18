@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../context/useAuth";
 import { useMyLikedPosts, useMyPosts } from "../../hooks/useMyPosts";
 import { useUpdateProfile } from "../../hooks/useUpdateProfile";
 import type { AvatarColor } from "@shared";

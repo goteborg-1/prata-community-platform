@@ -53,7 +53,7 @@ const UserSchema = new Schema<IUser>(
     avatarColor: {
       type: String,
       enum: AVATAR_COLORS,
-      default: () => AVATAR_COLORS[Math.floor(Math.random() * AVATAR_COLORS.length)]
+      default: "#84A59D"
     },
   },
   {
