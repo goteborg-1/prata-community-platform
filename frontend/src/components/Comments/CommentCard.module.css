@@ -100,12 +100,9 @@
   background-color: rgba(245, 202, 195, 0.2);
 }
 
-.liked {
-  color: var(--color-secondary-dark);
-}
-
 .liked svg {
-  filter: drop-shadow(0 1px 4px var(--color-secondary));
+  color: var(--color-secondary);
+  filter: drop-shadow(0 1px 4px var(--color-secondary-light));
 }
 
 .actions {

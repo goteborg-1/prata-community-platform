@@ -47,7 +47,8 @@ export const createComment: Controller<CommentParams, CreateCommentRequest, {}> 
     postId,
     userId,
     isEdited: false,
-    likedBy: [userId]
+    likedBy: [userId],
+    isPsychologist: req.user.role === 'psychologist'
   })
 
   //Add comment to counter in posts

@@ -48,6 +48,10 @@
   display: contents;
 }
 
+.cards ul {
+  list-style-position: inside;
+}
+
 .cards p,
 .cards li {
   color: var(--color-text-muted);
