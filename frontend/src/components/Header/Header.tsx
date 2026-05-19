@@ -70,57 +70,58 @@ export default function Header() {
         </div>
       </header>
 
-      {isMenuOpen &&
-        <nav className={s.navContainer}>
-          <ul className={s.navList}>
+      {/* Menu */}
+      <div className={`${s.overlay} ${isMenuOpen ? s.overlayVisible : ""}`} onClick={closeMenu} />
+      
+      <nav className={`${s.navContainer} ${isMenuOpen ? s.navContainerOpen : ""}`}>
+        <ul className={s.navList}>
+          <div className={s.navWrapper}>
+            {mainMenu.map((link) => (
+              <li key={link.path}>
+                <NavLink
+                  to={link.path}
+                  onClick={closeMenu}
+                  className={({isActive}) => (isActive ? s.active : "")}
+                >
+                  {link.title}
+                </NavLink>
+              </li>
+            ))}
+          </div>
+
+          {isLoggedIn && 
             <div className={s.navWrapper}>
-              {mainMenu.map((link) => (
+              {loggedInMenu.map((link) => (
                 <li key={link.path}>
                   <NavLink
                     to={link.path}
                     onClick={closeMenu}
-                    className={({isActive}) => (isActive ? s.active : "")}
+                    className={({isActive}) => (isActive ? s.isActive : "")}
                   >
                     {link.title}
                   </NavLink>
                 </li>
               ))}
             </div>
+          }
 
-            {isLoggedIn && 
-              <div className={s.navWrapper}>
-                {loggedInMenu.map((link) => (
-                  <li key={link.path}>
-                    <NavLink
-                      to={link.path}
-                      onClick={closeMenu}
-                      className={({isActive}) => (isActive ? s.isActive : "")}
-                    >
-                      {link.title}
-                    </NavLink>
-                  </li>
-                ))}
-              </div>
-            }
-
-            {user?.role === "admin" && 
-              <div className={s.navWrapper}>
-                {adminMenu.map((link) => (
-                  <li key={link.path}>
-                    <NavLink
-                      to={link.path}
-                      onClick={closeMenu}
-                      className={({isActive}) => (isActive ? s.isActive : "")}
-                    >
-                      {link.title}
-                    </NavLink>
-                  </li>
-                ))}
-              </div>
-            }
-          </ul>
-        </nav>
-      }
+          {user?.role === "admin" && 
+            <div className={s.navWrapper}>
+              {adminMenu.map((link) => (
+                <li key={link.path}>
+                  <NavLink
+                    to={link.path}
+                    onClick={closeMenu}
+                    className={({isActive}) => (isActive ? s.isActive : "")}
+                  >
+                    {link.title}
+                  </NavLink>
+                </li>
+              ))}
+            </div>
+          }
+        </ul>
+      </nav>
     </>
   )
 }

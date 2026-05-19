@@ -1,3 +1,18 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+
+.overlayVisible {
+  opacity: 1;
+  pointer-events: all;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -41,11 +56,17 @@
   position: fixed;
   top: 60px;
   right: 0;
-  left: 0;
   bottom: 0;
+  width: 100%;
   background-color: var(--bg-main);
   z-index: 998;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   padding: var(--space-base);
+}
+
+.navContainerOpen {
+  transform: translateX(0);
 }
 
 .navWrapper {
@@ -91,12 +112,6 @@
   color: var(--color-primary);
 }
 
-@media (min-width: 768px) {
-  .hide {
-    display: block;
-  }
-}
-
 /* --- Menu animation --- */
 
 .hamburger {
@@ -135,4 +150,15 @@
 
 .hamburger.open span:nth-child(3) {
   transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (min-width: 768px) {
+  .hide {
+    display: block;
+  }
+
+  .navContainer {
+    width: 60vw;
+    max-width: 600px;
+  }
 }
