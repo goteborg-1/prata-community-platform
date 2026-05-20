@@ -64,11 +64,19 @@ html.dark {
   --color-primary: #F6BD60;
   --color-primary-light: #B88E48;
 
-  --color-secondary: #D4A39B;
-  --color-secondary-light: #544542;
+  --color-secondary: #c99a92;
+  --color-secondary-light: #c08272;
 
   --color-accent: #84A59D;
   --color-accent-light: #2a3b38;
+
+  --color-tag-bg: #705c42;
+  --color-tag-border: #af9579;
+  --color-tag-text: #f3cb8c;
+
+  --color-tag-warn-bg: #874c40;
+  --color-tag-warn-border: #b87b75;
+  --color-tag-warn-text: #ffc8bd;
 
   --color-text-main: #F4F1EE;
   --color-text-muted: #A8A4A0;
