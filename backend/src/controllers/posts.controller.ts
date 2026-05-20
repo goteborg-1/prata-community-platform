@@ -4,7 +4,7 @@ import { PostModel } from "../models/Post.model.js"
 import { CreatePostRequest, createPostSchema, getPostsQuerySchema, PostParams, postParamsSchema, UpdatePostRequest, updatePostSchema, type GetPostsQuery } from "@shared"
 import { CommentModel } from "../models/Comment.model.js"
 
-export const getAllPosts: Controller<{}, {}, GetPostsQuery> = async (req, res) => {
+export const getAllPosts: Controller = async (req, res) => {
   const { categories, triggerTags, search, sort, page, limit } = getPostsQuerySchema.parse(req.query)
 
   const query: Record<string, unknown> = {}
