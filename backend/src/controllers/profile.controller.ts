@@ -1,5 +1,5 @@
+import * as error from "../errors/AppError.js"
 import { Controller } from "../types/index.types.js"
-import { createError } from "../utils/createError.js"
 import { UserModel } from "../models/User.model.js"
 import { PostModel } from "../models/Post.model.js"
 import { CommentModel } from "../models/Comment.model.js"
@@ -9,9 +9,7 @@ import { hashPassword } from "../utils/password.js"
 export const getProfile: Controller = async (req, res) => {
   const user = req.user
 
-  if(!user) {
-    throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
-  }
+  if(!user) throw new error.UnAuthorizedError()
 
   res.json({
     status: "success",
@@ -22,15 +20,11 @@ export const getProfile: Controller = async (req, res) => {
 export const updateProfile: Controller<{}, UpdateProfileRequest> = async (req, res) => {
   const user = req.user
 
-  if(!user) {
-    throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
-  }
+  if(!user) throw new error.UnAuthorizedError()
 
   const validatedData = updateProfileSchema.parse(req.body)
 
-  if(Object.keys(validatedData).length === 0) {
-    throw createError("No fields to update", 400, "NO_UPDATE_FIELDS")
-  }
+  if(Object.keys(validatedData).length === 0) throw new error.ValidationError("No fields to update")
 
   const updateData: UpdateProfileRequest = {...validatedData}
   if(validatedData.password) updateData.password = await hashPassword(validatedData.password)
@@ -45,9 +39,7 @@ export const updateProfile: Controller<{}, UpdateProfileRequest> = async (req, r
     }
   ).select("-password")
 
-  if(!updatedUser) {
-    throw createError("User no longer exists", 404, "USER_NOT_FOUND")
-  }
+  if(!updatedUser) throw new error.UnAuthorizedError()
 
   res.json({
     status: "success",
@@ -57,10 +49,7 @@ export const updateProfile: Controller<{}, UpdateProfileRequest> = async (req, r
 
 export const deleteProfile: Controller = async (req, res) => {
   const user = req.user
-  
-  if(!user) {
-    throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
-  }
+  if(!user) throw new error.UnAuthorizedError()
 
   const id = user.id
 
@@ -77,10 +66,7 @@ export const deleteProfile: Controller = async (req, res) => {
 
 export const getMyPosts: Controller = async (req, res) => {
   const user = req.user
-  
-  if(!user) {
-    throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
-  }
+  if(!user) throw new error.UnAuthorizedError()
   
   const id = user.id
   const posts = await PostModel.find({ userId: id }).populate("userId", "displayName avatarColor")
@@ -96,10 +82,7 @@ export const getMyPosts: Controller = async (req, res) => {
 
 export const getMyLikedPosts: Controller = async (req, res) => {
   const user = req.user
-  
-  if(!user) {
-    throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
-  }
+  if(!user) throw new error.UnAuthorizedError()
 
   const id = user.id
   const posts = await PostModel.find({ likedBy: id }).populate("userId", "displayName avatarColor")

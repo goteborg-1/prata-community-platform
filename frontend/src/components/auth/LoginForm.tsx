@@ -49,6 +49,7 @@ export default function LoginForm() {
           required
         />
         {errors.password && <p className={s.error}>{errors.password[0]}</p>}
+        {errors.form && <p className={s.error}>{errors.form[0]}</p>}
       </div>
 
       <Button type="submit" disabled={isLoading}>
