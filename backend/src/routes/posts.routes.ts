@@ -6,7 +6,7 @@ import { optionalAuth } from "../middleware/optionalAuth.js"
 
 const postsRouter = express.Router()
 
-postsRouter.get("/", optionalAuth ,getAllPosts)
+postsRouter.get("/", optionalAuth, getAllPosts)
 postsRouter.get("/:id", optionalAuth, getPostById)
 postsRouter.post("/", checkAuth, createPost)
 postsRouter.patch("/:id", checkAuth, isPostOwner, updatePost)

@@ -1,16 +1,12 @@
+import * as error from "../errors/AppError.js"
 import { Middleware } from "../types/index.types.js";
-import { createError } from "../utils/createError.js";
 
 export const checkAdmin: Middleware = (req, res, next) => {
   const user = req.user
 
-  if(!user) {
-    throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
-  }
+  if(!user) throw new error.UnAuthorizedError()
 
-  if(user.role !== "admin") {
-    throw createError("Access denied: Admin privileges required", 403, "FORBIDDEN_ADMIN_ONLY")
-  }
+  if(user.role !== "admin") throw new error.ForbiddenError("Admin access required")
 
   next()
 }
