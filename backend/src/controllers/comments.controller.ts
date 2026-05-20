@@ -1,17 +1,11 @@
+import * as error from "../errors/AppError.js"
 import { Controller } from "../types/index.types.js";
-import { createError } from "../utils/createError.js";
 import { CommentModel } from "../models/Comment.model.js";
 import { PostModel } from "../models/Post.model.js";
-
-import { CreateCommentRequest, UpdateCommentRequest, CommentParams, commentParamsSchema, commentSchema, updateCommentSchema, createCommentSchema } from "@shared";
-import { create } from "node:domain";
+import { CreateCommentRequest, UpdateCommentRequest, CommentParams, updateCommentSchema, createCommentSchema } from "@shared";
 
 export const getAllComments: Controller<CommentParams> = async (req, res) => {
   const postId = req.params.postId;
-
-  if (!postId) {
-    throw createError("Invalid ID format", 400, "INVALID_ID")
-  }
 
   const comments = await CommentModel.find({ postId }).populate("userId", "displayName")
   const currentUserId = req.user?.id?.toString()
@@ -33,14 +27,10 @@ export const createComment: Controller<CommentParams, CreateCommentRequest, {}> 
   const postId = req.params.postId;
   const userId = req.user.id
   
-  if(!userId) {
-    throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
-  }
-  const post = await PostModel.findById(postId)
-  if (!post) {
-    throw createError(`Post with id ${postId} not found`, 404, "POST_NOT_FOUND")
-  }
+  if(!userId) throw new error.UnAuthorizedError()
 
+  const post = await PostModel.findById(postId)
+  if (!post) throw new error.NotFoundError()
   
   const newComment = await CommentModel.create({
     ...validatedData,
@@ -74,9 +64,7 @@ export const updateComment: Controller<CommentParams, UpdateCommentRequest, {}> 
     { new: true }
   )
 
-  if (!updatedComment) {
-    throw createError(`Comment with id ${commentId} not found`, 404, "COMMENT_NOT_FOUND")
-  }
+  if (!updatedComment) throw new error.NotFoundError()
 
   res.status(200).json({
     status: "success",
@@ -88,16 +76,10 @@ export const deleteComment: Controller<CommentParams> = async (req, res) => {
   const commentId = req.params.commentId
 
   const comment = await CommentModel.findById(commentId)
-
-  if (!comment) {
-    throw createError(`Comment with id ${commentId} not found`, 404, "COMMENT_NOT_FOUND")
-  }
+  if (!comment) throw new error.NotFoundError()
 
   const deletedComment = await CommentModel.findByIdAndDelete(commentId)
-
-  if (!deletedComment) {
-    throw createError(`Comment with id ${commentId} not found`, 404, "COMMENT_NOT_FOUND")
-  }
+  if (!deletedComment) throw new error.NotFoundError()
 
   //Remove one comment count on posts
   await PostModel.findByIdAndUpdate(comment.postId, { $inc: { commentCount: -1 } })
@@ -113,7 +95,7 @@ export const toggleCommentLike: Controller<CommentParams, {}> = async (req, res)
   const userId = req.user.id.toString()
 
   const comment = await CommentModel.findById(commentId).select("likedBy")
-  if (!comment) throw createError(`Comment with id ${commentId} not found`, 404, "COMMENT_NOT_FOUND");
+  if (!comment) throw new error.NotFoundError()
 
   const alreadyLiked = (comment.likedBy || []).includes(userId)
 
@@ -122,5 +104,8 @@ export const toggleCommentLike: Controller<CommentParams, {}> = async (req, res)
     alreadyLiked ? { $pull: {likedBy: userId} } : { $addToSet: {likedBy: userId} }
   )
 
-  res.status(200).json({updateComment})
+  res.status(200).json({
+    status: "success",
+    data: { isLiked: !alreadyLiked }
+  })
 }

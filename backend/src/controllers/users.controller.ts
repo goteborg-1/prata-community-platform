@@ -1,7 +1,7 @@
+import * as error from "../errors/AppError.js"
 import jwt from "jsonwebtoken"
 import { OAuth2Client } from "google-auth-library"
 import { Controller } from "../types/index.types.js"
-import { createError } from "../utils/createError.js"
 import { comparePassword, hashPassword } from "../utils/password.js"
 import { UserModel } from "../models/User.model.js"
 import { PostModel } from "../models/Post.model.js"
@@ -21,9 +21,7 @@ export const googleLogin: Controller<{}, GoogleLoginRequest> = async (req, res) 
 
   // 2 -- exract info from google
   const payload = ticket.getPayload()
-  if (!payload) {
-    throw createError("Invalid Google token", 400, "INVALID_GOOGLE_TOKEN")
-  }
+  if (!payload) throw new error.ValidationError("Invalid Google token")
 
   // only grab the tasty bits
   const { sub: googleId, email, name } = payload
@@ -92,15 +90,11 @@ export const loginUser: Controller<{}, LoginUserRequest> = async (req, res) => {
 
   const user = await UserModel.findOne({email}).select("+password")
 
-  if(!user || !user.password) {
-    throw createError("Invalid credentials", 401, "INVALID_CREDENTIALS")
-  }
+  if(!user || !user.password) throw new error.UnAuthorizedError("Invalid credentials")
 
   const isMatch = await comparePassword(password, user.password)
   
-  if(!isMatch) {
-    throw createError("Invalid credentials", 401, "INVALID_CREDENTIALS")
-  }
+  if(!isMatch) throw new error.UnAuthorizedError("Invalid credentials")
 
   const token = jwt.sign(
     {id: user.id},
@@ -122,9 +116,7 @@ export const getUserByHandle: Controller<GetUserParams> = async (req, res) => {
 
   const user = await UserModel.findOne({handle}).select(["-likedPosts", "-email"])
 
-  if(!user) {
-    throw createError("User not found", 404, "USER_NOT_FOUND")
-  }
+  if(!user) throw new error.NotFoundError()
 
   res.json({
     status: "success",
@@ -189,9 +181,7 @@ export const updateUserRole: Controller<UserParams, UpdateUserRoleRequest> = asy
     }
   ).select("-password")
 
-  if(!updatedUser) {
-    throw createError("User no longer exists", 404, "USER_NOT_FOUND")
-  }
+  if(!updatedUser) throw new error.NotFoundError()
 
   res.json({
     status: "success",
@@ -203,9 +193,7 @@ export const deleteUserById: Controller<UserParams> = async (req, res) => {
   const { id } = userParamsSchema.parse(req.params)
   const user = await UserModel.findById(id)
 
-  if(!user) {
-    throw createError("User not found", 404, "USER_NOT_FOUND")
-  }
+  if(!user) throw new error.NotFoundError()
 
   await PostModel.deleteMany({userId: id})
   await CommentModel.deleteMany({userId: id})
