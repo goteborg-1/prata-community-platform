@@ -10,6 +10,7 @@
   align-items: center;
   gap: 6px;
   white-space: nowrap;
+  color: var(--color-text-muted);
 }
 
 .filterCount {
