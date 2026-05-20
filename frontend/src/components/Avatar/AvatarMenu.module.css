@@ -1,0 +1,55 @@
+.wrap {
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--bg-main);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  box-shadow: var(--shadow-card);
+  min-width: 180px;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.userInfo {
+  padding: var(--space-sm) var(--space-sm) var(--space-xs);
+}
+
+.name {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+}
+
+.handle {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+.sep {
+  height: 1px;
+  background: var(--border);
+}
+
+.item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px var(--space-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-main);
+  transition: background 0.1s;
+}
+
+.item:hover { background: var(--bg-secondary); }
+
+.danger { color: var(--color-error); }
+.danger:hover { background: var(--color-tag-warn-bg); }

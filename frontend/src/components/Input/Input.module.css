@@ -1,0 +1,99 @@
+.passWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  width: 100%;
+}
+
+.label {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.textarea {
+  width: 100% !important;
+  resize: vertical;
+  min-height: 96px;
+}
+
+.input {
+  background-color: var(--bg-main);
+  color: var(--color-text-main);
+  padding: var(--space-sm);
+  border-radius: var(--radius-pill);
+  width: 100%;
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-base);
+}
+
+.input:focus {
+  border: 1px solid var(--color-accent);
+  outline: none;
+}
+
+.transparent {
+  border: 1px solid var(--color-secondary);
+}
+
+.neutral {
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  outline: none;
+  box-shadow: var(--shadow-sm);
+  height: 36px;
+}
+
+.neutral:focus { 
+  box-shadow: var(--shadow-card);
+  border-color: var(--border);
+}
+
+.form {
+  background-color: var(--bg-secondary);
+  border: none;
+  border-radius: var(--radius-sm);
+}
+
+.toggleBtn {
+  position: absolute;
+  right: var(--space-sm);
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: var(--space-xs);
+}
+
+.toggleBtn:hover {
+  color: var(--color-text-main);
+}
+
+.inLine {
+  padding: 2px 6px;
+  border: none;
+  outline: none;
+  border-radius: 0;
+  border-bottom: 1px solid var(--color-primary);
+  background-color: var(--bg-secondary);
+  margin-top: 2px;
+}
+
+.inLine:focus {
+  border: none;
+  border-bottom: 1px solid var(--color-primary);
+  background-color: var(--bg-secondary);
+}

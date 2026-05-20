@@ -1,0 +1,127 @@
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-main);
+}
+
+.badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+}
+
+.user {
+  background: var(--bg-secondary);
+  color: var(--color-text-muted);
+  border: 0.5px solid var(--border);
+}
+
+.psychologist {
+  background: var(--color-tag-warn-bg);
+  color: var(--color-tag-warn-text);
+  border: 1px solid var(--color-tag-warn-border);
+}
+
+.admin {
+  background: var(--color-tag-bg);
+  color: var(--color-tag-text);
+  border: 1px solid var(--color-tag-border);
+}
+
+.email {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.date {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.menuWrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+}
+
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  background: var(--bg-main);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 4px;
+  z-index: 11;
+  min-width: 160px;
+}
+
+.subLabel {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  padding: 6px 10px 2px;
+  display: block;
+}
+
+.dropItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 13px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-main);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.dropItem:hover {
+  background: var(--bg-secondary);
+}
+
+.dropItem.danger {
+  color: var(--color-error);
+}
+
+.dropItem.danger:hover {
+  background: var(--color-tag-warn-bg);
+}
+
+.checkIcon {
+  width: 14px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.separator {
+  height: 0.5px;
+  background: var(--color-border-tertiary);
+  margin: 4px 0;
+}

@@ -5,6 +5,8 @@ import {GoogleOAuthProvider} from "@react-oauth/google"
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter } from 'react-router'
 import { ThemeProvider } from './context/ThemeContext.tsx'
+import { AuthProvider } from './context/AuthContext.tsx'
+import { FeedFilterProvider } from './context/FeedFilterContext.tsx'
 import App from './App.tsx'
 
 const queryClient = new QueryClient()
@@ -14,9 +16,13 @@ createRoot(document.getElementById('root')!).render(
     <GoogleOAuthProvider clientId='190516201423-jk46485nrchrf1j0dq6tv16ht4bnkjq6.apps.googleusercontent.com'>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <ThemeProvider>
-            <App />
-          </ThemeProvider>
+          <AuthProvider>
+            <ThemeProvider>
+              <FeedFilterProvider>
+                <App />
+              </FeedFilterProvider>
+            </ThemeProvider>
+          </AuthProvider>
         </BrowserRouter>
       </QueryClientProvider>
     </GoogleOAuthProvider>

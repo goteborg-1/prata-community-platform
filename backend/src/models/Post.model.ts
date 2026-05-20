@@ -6,8 +6,10 @@ interface IPost extends Post, Document {}
 const PostSchema = new Schema<IPost>(
   {
     userId: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: "User",
       required: [true, "userId is required"],
+      index: true
     },
     isAnonymous: {
       type: Boolean,
@@ -17,7 +19,8 @@ const PostSchema = new Schema<IPost>(
       type: String,
       required: [true, "Title is required"],
       trim: true,
-      maxlength: [200, "Title cannot be longer than 200 characters"],
+      minLength: [3, "Title cannot be shorter than 3 characters"],
+      maxlength: [100, "Title cannot be longer than 100 characters"],
     },
     description: {
       type: String,
@@ -35,9 +38,14 @@ const PostSchema = new Schema<IPost>(
       default: [],
     },
     likedBy: [{
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: "User",
+      index: true
     }],
+    commentCount: {
+      type: Number,
+      default: 0
+    }
   },
   {
     timestamps: true,

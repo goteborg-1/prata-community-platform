@@ -1,0 +1,28 @@
+.row {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: center;
+  width: 100%;
+}
+
+.filterBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  color: var(--color-text-muted);
+}
+
+.filterCount {
+  background: var(--color-accent);
+  color: white;
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  padding: 1px 8px;
+}
+
+.filterActive .filterCount {
+  background: var(--bg-main);
+  color: var(--color-text-main);
+}

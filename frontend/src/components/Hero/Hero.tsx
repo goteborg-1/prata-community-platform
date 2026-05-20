@@ -1,8 +1,12 @@
+import { Link } from "react-router"
+import { useAuth } from "../../context/useAuth"
 import Illustration from "../../assets/support-community.png"
-import Button from "../Button/Button"
+import b from "../Button/Button.module.css"
 import s from "./Hero.module.css"
 
 export default function Hero() {
+  const { isLoggedIn } = useAuth()
+  
   return(
     <section className={s.container}>
       <div className={s.inner}>
@@ -24,11 +28,11 @@ export default function Hero() {
           </p>
           
           <div className={s.actions}>
-            <Button onClick={() => console.log("Klick")}>
+            <Link to={isLoggedIn ? "/flode" : "/registrera"} className={`${b.base} ${b.primary}`}>
               Börja prata med andra
-            </Button>
+            </Link>
             
-            <a href="/psykologer" className={s.link}>
+            <a target="_blank" href="https://www.1177.se/liv--halsa/psykisk-halsa/att-soka-stod-och-hjalp/rad-och-stod-pa-chatt-och-telefon-vid-psykisk-ohalsa-och-beroende/" className={s.link}>
               Läs mer om professionellt stöd
             </a>
           </div>

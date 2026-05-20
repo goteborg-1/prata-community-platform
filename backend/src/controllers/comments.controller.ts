@@ -1,8 +1,10 @@
 import { Controller } from "../types/index.types.js";
 import { createError } from "../utils/createError.js";
 import { CommentModel } from "../models/Comment.model.js";
+import { PostModel } from "../models/Post.model.js";
 
-import type { CommentParams, CreateCommentBody, UpdateCommentBody } from "@shared";
+import { CreateCommentRequest, UpdateCommentRequest, CommentParams, commentParamsSchema, commentSchema, updateCommentSchema, createCommentSchema } from "@shared";
+import { create } from "node:domain";
 
 export const getAllComments: Controller<CommentParams> = async (req, res) => {
   const postId = req.params.postId;
@@ -11,60 +13,64 @@ export const getAllComments: Controller<CommentParams> = async (req, res) => {
     throw createError("Invalid ID format", 400, "INVALID_ID")
   }
 
-  const comments = await CommentModel.find({ postId })
-
-  if (comments.length === 0) {
-    throw createError(`No comments attached to post id ${postId} found`, 404, "COMMENTS_NOT_FOUND")
-  }
+  const comments = await CommentModel.find({ postId }).populate("userId", "displayName")
+  const currentUserId = req.user?.id?.toString()
 
   res.status(200).json({
     status: "success",
-    data: comments
+    data: comments.map(comment => ({
+      ...comment.toJSON(),
+      isLikedByCurrentUser: currentUserId
+        ? (comment.likedBy ?? []).includes(currentUserId)
+        : false
+    }))
   })
 }
 
-export const createComment: Controller<CommentParams, CreateCommentBody, {}> = async (req, res) => {
-  const { isAnonymous, isPsychologist, content } = req.body;
-  const postId = req.params.postId;
+export const createComment: Controller<CommentParams, CreateCommentRequest, {}> = async (req, res) => {
+  const validatedData = createCommentSchema.parse(req.body)
   
-  if (!content) {
-    throw createError("Missing comment", 400, "MISSING_REQUIRED_FIELDS")
-  }
-
+  const postId = req.params.postId;
   const userId = req.user.id
-
+  
   if(!userId) {
     throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
   }
+  const post = await PostModel.findById(postId)
+  if (!post) {
+    throw createError(`Post with id ${postId} not found`, 404, "POST_NOT_FOUND")
+  }
+
   
   const newComment = await CommentModel.create({
+    ...validatedData,
     postId,
     userId,
-    isAnonymous,
-    isPsychologist,
     isEdited: false,
     likedBy: [userId],
-    content
+    isPsychologist: req.user.role === 'psychologist'
   })
+
+  //Add comment to counter in posts
+  await PostModel.findByIdAndUpdate(postId, { $inc: { commentCount: 1 } });
 
   res.status(201).json({
     status: "success",
-    data: newComment
+    data: {
+      ...newComment.toJSON(),
+      username: validatedData.isAnonymous ? null : req.user.displayName
+    }
   })
 }
 
-// TODO: comments/:id/like endpoint in future to update likes separately
-export const updateComment: Controller<CommentParams, UpdateCommentBody, {}> = async (req, res) => {
+export const updateComment: Controller<CommentParams, UpdateCommentRequest, {}> = async (req, res) => {
+  const validatedData = updateCommentSchema.parse(req.body)
+  
   const commentId = req.params.commentId
-  const newContent = req.body.content
-
-  if (!newContent) {
-    throw createError("Missing content", 400, "MISSING_REQUIRED_FIELDS")
-  }
 
   const updatedComment = await CommentModel.findByIdAndUpdate(
     commentId,
-    { $set: { content: newContent, isEdited: true } },
+    { $set: { content: validatedData.content, isEdited: true } },
     { new: true }
   )
 
@@ -81,11 +87,20 @@ export const updateComment: Controller<CommentParams, UpdateCommentBody, {}> = a
 export const deleteComment: Controller<CommentParams> = async (req, res) => {
   const commentId = req.params.commentId
 
+  const comment = await CommentModel.findById(commentId)
+
+  if (!comment) {
+    throw createError(`Comment with id ${commentId} not found`, 404, "COMMENT_NOT_FOUND")
+  }
+
   const deletedComment = await CommentModel.findByIdAndDelete(commentId)
 
   if (!deletedComment) {
     throw createError(`Comment with id ${commentId} not found`, 404, "COMMENT_NOT_FOUND")
   }
+
+  //Remove one comment count on posts
+  await PostModel.findByIdAndUpdate(comment.postId, { $inc: { commentCount: -1 } })
 
   res.status(204).send()
 }

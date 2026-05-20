@@ -1,0 +1,141 @@
+.card {
+  padding: var(--space-sm) var(--space-base);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  border-left: 3px solid var(--border);
+}
+
+.borderNormal  { border-left-color: var(--border); }
+.borderAuthor  { border-left-color: var(--color-accent); }
+.borderPsychologist { border-left-color: var(--color-primary); }
+
+.mentioned {
+  background-color: rgba(249, 210, 138, 0.12);
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.name {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.time {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  padding: 2px var(--space-xs);
+  border-radius: var(--radius-pill);
+}
+
+.badgeAuthor {
+  background-color: var(--color-accent);
+  color: white;
+}
+
+.badgePsyk {
+  background-color: var(--color-primary);
+  color: var(--color-text-on-colors);
+}
+
+.content {
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  color: var(--color-text-main);
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.edited {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-2xs);
+}
+
+.likeBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  padding: var(--space-2xs) var(--space-xs);
+  border-radius: var(--radius-pill);
+  transition: background 0.15s;
+}
+
+.likeBtn:hover {
+  background-color: rgba(245, 202, 195, 0.2);
+}
+
+.liked svg {
+  color: var(--color-secondary);
+  filter: drop-shadow(0 1px 4px var(--color-secondary-light));
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.actionBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  padding: 0;
+  transition: color 0.15s;
+}
+
+.actionBtn:hover {
+  color: var(--color-text-main);
+}
+
+.deleteBtn:hover {
+  color: var(--color-error);
+}
+
+.editWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.editActions {
+  display: flex;
+  gap: var(--space-xs);
+}

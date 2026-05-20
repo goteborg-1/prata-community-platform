@@ -1,8 +1,35 @@
+.outerWrapper {
+  width: 100%;
+}
+
+.secondary {
+  background-color: var(--bg-secondary);
+  min-height: calc(100vh - 60px);
+  justify-content: flex-start;
+}
+
 .container {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 100%;
+  max-width: 1200px;
   padding: var(--space-lg) var(--space-base);
   scroll-margin-top: 60px;
   gap: var(--space-base);
+  margin: 0 auto;
+}
+
+.narrow {
+  max-width: 720px;
+}
+
+.center {
+  align-items: center;
+  height: calc(100vh - 100px);
+}
+
+.small {
+  max-width: 500px;
+  width: 80vw;
 }

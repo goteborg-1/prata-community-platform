@@ -1,24 +1,22 @@
 import { Controller } from "../types/index.types.js"
 import { createError } from "../utils/createError.js"
 import { PostModel } from "../models/Post.model.js"
-import type { CreatePostBody, getPostQuery, PostParams, UpdatePostBody } from "@shared"
+import { CreatePostRequest, createPostSchema, getPostsQuerySchema, PostParams, postParamsSchema, UpdatePostRequest, updatePostSchema, type GetPostsQuery } from "@shared"
 import { CommentModel } from "../models/Comment.model.js"
+import mongoose from "mongoose"
 
-export const getAllPosts: Controller<{}, {}, getPostQuery> = async (req, res) => {
-  const { categories, triggerTags, search, sort, page, limit } = req.query
+export const getAllPosts: Controller<{}, {}, GetPostsQuery> = async (req, res) => {
+  const { categories, triggerTags, search, sort, page, limit } = getPostsQuerySchema.parse(req.query)
 
   const query: Record<string, unknown> = {}
 
   //Filtering
-  if(categories) {
-    const categoryArray = Array.isArray(categories) ? categories : [categories]
-
-    query.categories = {$in: categoryArray} //Match at least one category
+  if(categories && categories.length > 0) {
+    query.categories = {$in: categories} //Match at least one category
   }
 
-  if(triggerTags) {
-    const triggerArray = Array.isArray(triggerTags) ? triggerTags : [triggerTags]
-    query.triggerTags = {$nin: triggerArray}
+  if(triggerTags && triggerTags.length > 0) {
+    query.triggerTags = {$nin: triggerTags}
   }
 
   //Search
@@ -33,56 +31,69 @@ export const getAllPosts: Controller<{}, {}, getPostQuery> = async (req, res) =>
   //Sort
   let sortOptions: Record<string, 1 | -1> = {createdAt: -1} //Default, newest first
   if(sort === "popular") {
-    sortOptions = {likedBy: -1}
+    sortOptions = {likeCount: -1}
   }
 
-  const pageNum = Number(page) || 1
-  const limitNum = Number(limit) || 5
-  const skip = (pageNum - 1) * limitNum
+  const skip = (page - 1) * limit
 
   const [posts, total] = await Promise.all([
     PostModel.find(query)
       .sort(sortOptions)
       .skip(skip)
-      .limit(limitNum),
+      .limit(limit)
+      .populate("userId", "displayName avatarColor"),
     PostModel.countDocuments(query)
   ])
 
-  const totalPages = Math.ceil(total / limitNum)
+  const currentUserId = req.user?.id?.toString()
 
   res.json({
     status: "success",
-    data: posts,
+    data: posts.map(post => ({
+      ...post.toJSON(),
+      isLiked: currentUserId
+        ? (post.likedBy ?? []).some(id => id.toString() === currentUserId)
+        : false
+    })),
     meta: {
-      page: pageNum,
-      limit: limitNum,
+      page,
+      limit,
       total,
-      totalPages
+      totalPages: Math.ceil(total / limit)
     }
   })
 }
 
 export const getPostById: Controller<PostParams> = async (req, res) => {
-  const id = req.params.id
-  const post = await PostModel.findById(id)
+  const { id } = postParamsSchema.parse(req.params)
+
+  if(!mongoose.Types.ObjectId.isValid(id)) {
+    throw createError(`Invalid ID format: ${id}`, 400, "INVALID_ID")
+  }
+
+  const post = await PostModel.findById(id).populate("userId", "displayName avatarColor")
 
   if(!post) {
     throw createError(`No posts with id ${id} found`, 404, "POST_NOT_FOUND")
   }
 
+  const currentUserId = req.user?.id?.toString()
+  const isOwner = (post.userId as any)?._id?.toString() === currentUserId
+
   res.status(200).json({
     status: "success",
-    data: post
+    data: {
+      ...post.toJSON(),
+      isLiked: currentUserId
+        ? (post.likedBy ?? []).some(id => id.toString() === currentUserId)
+        : false,
+      isOwner
+    }
   })
 }
 
-export const createPost: Controller<{}, CreatePostBody> = async (req, res) => {
-  const {isAnonymous, title, description, categories, triggerTags} = req.body
-  
-  if(!title || !description || !categories) {
-    throw createError("Missing title, description or categories", 400, "MISSING_REQUIRED_FIELDS")
-  }
-  
+export const createPost: Controller<{}, CreatePostRequest> = async (req, res) => {
+  const validatedData = createPostSchema.parse(req.body)  
   const userId = req.user.id
   
   if(!userId) {
@@ -91,11 +102,7 @@ export const createPost: Controller<{}, CreatePostBody> = async (req, res) => {
 
   const newPost = await PostModel.create({
     userId,
-    isAnonymous,
-    title,
-    description,
-    categories,
-    triggerTags: triggerTags || [],
+    ...validatedData,
     likedBy: [userId] //Make the writer like post by default
   })
 
@@ -105,13 +112,18 @@ export const createPost: Controller<{}, CreatePostBody> = async (req, res) => {
   })
 }
 
-export const updatePost: Controller<PostParams, UpdatePostBody> = async (req, res) => {
-  const id = req.params.id
-  const updateData = req.body
+export const updatePost: Controller<PostParams, UpdatePostRequest> = async (req, res) => {
+  const { id } = postParamsSchema.parse(req.params)
+
+  if(!mongoose.Types.ObjectId.isValid(id)) {
+    throw createError(`Invalid ID format: ${id}`, 400, "INVALID_ID")
+  }
+
+  const validatedData = updatePostSchema.parse(req.body)
 
   const updatedPost = await PostModel.findByIdAndUpdate(
     id,
-    {$set: updateData},
+    {$set: validatedData},
     {
       new: true,
       runValidators: true
@@ -129,20 +141,30 @@ export const updatePost: Controller<PostParams, UpdatePostBody> = async (req, re
 }
 
 export const toggleLike: Controller<PostParams> = async (req, res) => {
-  const id = req.params.id
+  const { id } = postParamsSchema.parse(req.params)
+
+  if(!mongoose.Types.ObjectId.isValid(id)) {
+    throw createError(`Invalid ID format: ${id}`, 400, "INVALID_ID")
+  }
+
   const userId = req.user.id
 
   if(!userId) {
     throw createError("Not authenticated", 401, "NOT_AUTHENTICATED")
   }
 
-  const post = await PostModel.findById(id).select("likedBy")
+  const post = await PostModel.findById(id)
 
   if(!post) {
     throw createError("Could not find post", 404, "POST_NOT_FOUND")
   }
 
-  const hasLiked = (post.likedBy || []).includes(userId)
+  const hasLiked = (post.likedBy || []).some(id => id.toString() === userId.toString())
+  const isOwner = post.userId?.toString() === userId.toString()
+
+  if(isOwner && hasLiked) {
+    throw createError("You cannot unlike your own post", 403, "CANNOT_UNLIKE_OWN_POST")
+  }
 
   const updatedPost = await PostModel.findByIdAndUpdate(
     id,
@@ -152,17 +174,30 @@ export const toggleLike: Controller<PostParams> = async (req, res) => {
     {new: true}
   )
 
+  if(!updatedPost) {
+    throw createError("Could not find post to update", 404, "POST_NOT_FOUND")
+  }
+
+
   res.json({
     status: "success",
-    data: updatedPost,
+    data: {
+      ...updatedPost.toJSON(), 
+      isLiked: !hasLiked, 
+      isOwner
+    },
     message: hasLiked ? "Like removed" : "Like added"
   })
 }
 
 export const deletePost: Controller<PostParams> = async (req, res) => {
-  const id = req.params.id
+  const { id } = postParamsSchema.parse(req.params)
 
-  await CommentModel.deleteMany({id})
+  if(!mongoose.Types.ObjectId.isValid(id)) {
+    throw createError(`Invalid ID format: ${id}`, 400, "INVALID_ID")
+  }
+
+  await CommentModel.deleteMany({postId: id})
   const deletedPost = await PostModel.findByIdAndDelete(id)
 
   if(!deletedPost) {

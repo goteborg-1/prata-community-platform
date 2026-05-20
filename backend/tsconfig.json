@@ -23,6 +23,6 @@
     "moduleDetection": "force",
     "skipLibCheck": true
   },
-  "include": ["src/**/*", "../shared/index.ts"],
+  "include": ["src/**/*", "scripts/**/*", "../shared/index.ts"],
   "exclude": ["node_modules", "dist"]
 }

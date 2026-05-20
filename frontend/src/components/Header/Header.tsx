@@ -1,13 +1,15 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import { NavLink, Link } from "react-router";
 import { useTheme } from "../../context/useTheme";
-import { IoClose, IoMenu } from "react-icons/io5";
+import { useAuth } from "../../context/useAuth";
+import { adminMenu, loggedInMenu, mainMenu } from "./menuItems";
 import Button from "../Button/Button"
+import AvatarMenu from "../Avatar/AvatarMenu";
 import s from "./Header.module.css"
-import { useState } from "react";
-import { mainMenu, secondaryMenu } from "./menuItems";
-import { NavLink } from "react-router";
+import b from "../Button/Button.module.css"
 
 export default function Header() {
+  const { user, isLoggedIn } = useAuth()
   const { resolvedTheme } = useTheme()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -29,59 +31,67 @@ export default function Header() {
   return(
     <>
       <header className={s.header}>
-        <div className={s.logoWrapper}>
+        <Link to="/" className={s.logoWrapper}>
           <img 
             src={resolvedTheme === "dark" ? "/logo-dark.svg" : "/logo.svg"} 
             className={s.logo} 
           />
           <p className={s.logoText}>Prata Ut</p>
-        </div>
+        </Link>
 
         <div className={s.buttonWrapper}>
-          <div className={s.hide}>
-            <Button
-              onClick={() => console.log("Klick")}
-              size="small"
-              variant="transparent"
-            >
-              Skapa konto
-            </Button>
-          </div>
-          <Button
-            onClick={() => console.log("Klick")}
-            size="small"
-          >
-            Logga in
-          </Button>
+          {user ? (
+            <AvatarMenu/>
+          ) : (
+            <>
+              <div className={s.hide}>
+                <Link to="/registrera" className={`${b.base} ${b.small} ${b.transparent}`}>
+                  Skapa konto
+                </Link>
+              </div>
+
+              <Link to="/logga-in" className={`${b.base} ${b.small} ${b.primary}`}>
+                Logga in
+              </Link>
+            </>
+          )}
+
           <Button
             variant="transparent"
             size="x-small"
             onClick={toggleMenu}
           >
-            {isMenuOpen ? <IoClose size={24} /> : <IoMenu size={24}/>}
+            <div className={`${s.hamburger} ${isMenuOpen ? s.open : ""}`}>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
           </Button>
         </div>
       </header>
 
-      {isMenuOpen &&
-        <nav className={s.navContainer}>
-          <ul className={s.navList}>
-            <div className={s.navWrapper}>
-              {mainMenu.map((link) => (
-                <li key={link.path}>
-                  <NavLink
-                    to={link.path}
-                    onClick={closeMenu}
-                    className={({isActive}) => (isActive ? s.active : "")}
-                  >
-                    {link.title}
-                  </NavLink>
-                </li>
-              ))}
-            </div>
+      {/* Menu */}
+      <div className={`${s.overlay} ${isMenuOpen ? s.overlayVisible : ""}`} onClick={closeMenu} />
+      
+      <nav className={`${s.navContainer} ${isMenuOpen ? s.navContainerOpen : ""}`}>
+        <ul className={s.navList}>
+          <div className={s.navWrapper}>
+            {mainMenu.map((link) => (
+              <li key={link.path}>
+                <NavLink
+                  to={link.path}
+                  onClick={closeMenu}
+                  className={({isActive}) => (isActive ? s.active : "")}
+                >
+                  {link.title}
+                </NavLink>
+              </li>
+            ))}
+          </div>
 
+          {isLoggedIn && 
             <div className={s.navWrapper}>
-              {secondaryMenu.map((link) => (
+              {loggedInMenu.map((link) => (
                 <li key={link.path}>
                   <NavLink
                     to={link.path}
@@ -93,9 +103,25 @@ export default function Header() {
                 </li>
               ))}
             </div>
-          </ul>
-        </nav>
-      }
+          }
+
+          {user?.role === "admin" && 
+            <div className={s.navWrapper}>
+              {adminMenu.map((link) => (
+                <li key={link.path}>
+                  <NavLink
+                    to={link.path}
+                    onClick={closeMenu}
+                    className={({isActive}) => (isActive ? s.isActive : "")}
+                  >
+                    {link.title}
+                  </NavLink>
+                </li>
+              ))}
+            </div>
+          }
+        </ul>
+      </nav>
     </>
   )
 }
