@@ -7,7 +7,8 @@
     "shared"
   ],
   "scripts": {
-    "dev": "concurrently \"npm run dev -w frontend\" \"npm run dev -w backend\""
+    "dev": "concurrently \"npm run dev -w frontend\" \"npm run dev -w backend\"",
+    "test": "cd backend && npm run test"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"
