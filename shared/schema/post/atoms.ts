@@ -16,12 +16,12 @@ export const userId = z.string()
 
 export const isAnonymous = z.boolean().default(false)
 
-export const title = z.string().trim().min(1, "Title is required").max(100, "Title cannot be longer than 100 character")
+export const title = z.string().trim().min(1, "Titel krävs").max(100, "Titeln får inte vara längre än 100 tecken")
 
-export const description = z.string().trim().min(1, "Description is required").max(1000, "Description cannot be longer than 1000 characters")
+export const description = z.string().trim().min(1, "Beskrivning krävs").max(1000, "Beskrivningen får inte vara längre än 1000 tecken")
 
 export const categories = toLowerCaseArray.pipe(
-  z.array(z.enum(CATEGORY_OPTIONS)).min(1, "At least one category is required")
+  z.array(z.enum(CATEGORY_OPTIONS)).min(1, "Minst en kategori krävs")
 )
 
 export const triggerTags = toLowerCaseArray.pipe(

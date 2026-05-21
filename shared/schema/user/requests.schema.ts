@@ -15,7 +15,7 @@ export const loginUserSchema = z.object({
 })
 
 export const googleLoginSchema = z.object({
-  idToken: z.string().min(1, "Google ID Token is required")
+  idToken: z.string().min(1, "Google ID Token krävs")
 })
 
 export const updateProfileSchema = z.object({

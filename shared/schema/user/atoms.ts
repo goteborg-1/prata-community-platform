@@ -7,9 +7,9 @@ export const googleId = z
 
 export const handle = z
   .string()
-  .min(3, "Handle must be at least 3 characters")
-  .max(30, "Handle cannot be longer than 30 characters")
-  .regex(/^[a-zA-Z0-9_]+$/, "Handle can only contain letters, numbers and underscores")
+  .min(3, "Användarnamnet måste vara minst 3 tecken")
+  .max(30, "Användarnamnet får inte vara längre än 30 tecken")
+  .regex(/^[a-zA-Z0-9_]+$/, "Användarnamnet får bara innehålla bokstäver, siffror och understreck")
   .transform((val) => val.toLowerCase().trim())
 
 export const displayName = z
@@ -19,13 +19,13 @@ export const displayName = z
   .optional()
 
 export const email = z
-  .email("Please enter a valid email address")
+  .email("Ange en giltig e-postadress")
   .transform((val) => val.toLowerCase().trim())
 
 export const password = z
   .string()
-  .min(8, "Password must be at least 8 characters")
-  .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^\s]+$/, "Password must include at least one capital, lowercase and number")
+  .min(8, "Lösenordet måste vara minst 8 tecken")
+  .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^\s]+$/, "Lösenordet måste innehålla minst en stor bokstav, en liten bokstav och en siffra")
 
 export const role = z
   .preprocess(
