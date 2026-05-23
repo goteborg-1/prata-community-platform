@@ -8,6 +8,15 @@ const options: swaggerJsdoc.Options = {
       title: "PrataUt API",
       version: "1.0.0",
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
   },
   apis: ["./src/routes/*.ts"] // "scan every ts file in /routes folder"
 }
