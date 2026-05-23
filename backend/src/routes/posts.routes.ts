@@ -5,7 +5,16 @@ import { getAllPosts, getPostById, createPost, updatePost, toggleLike, deletePos
 import { optionalAuth } from "../middleware/optionalAuth.js"
 
 const postsRouter = express.Router()
-
+/**
+ * @openapi
+ * /api/v1/posts:
+ *  get:
+ *    summary: Get all posts
+ *    tags: [Posts]
+ *    responses:
+ *      200:
+ *        description: List of posts returned successfully
+ */
 postsRouter.get("/", optionalAuth, getAllPosts)
 postsRouter.get("/:id", optionalAuth, getPostById)
 postsRouter.post("/", checkAuth, createPost)
