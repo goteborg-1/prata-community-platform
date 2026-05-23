@@ -9,12 +9,14 @@ import profileRouter from "./routes/profile.routes.js"
 import usersRouter from "./routes/users.routes.js"
 import postsRouter from "./routes/posts.routes.js"
 import commentRouter from "./routes/comments.routes.js"
+import { spec, swaggerUi } from "./config/swagger.js"
 
 const app = express()
 
 app.use(cors())
 app.use(express.json())
 app.use(morgan("dev"))
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(spec))
 
 const apiRouter = express.Router()
 app.use("/api/v1", apiRouter)
