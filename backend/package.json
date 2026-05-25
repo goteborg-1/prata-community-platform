@@ -53,6 +53,7 @@
     "mongoose": "^9.4.1",
     "morgan": "^1.10.1",
     "shared": "*",
+    "zod": "^4.4.3",
     "swagger-jsdoc": "^6.3.0",
     "swagger-ui-express": "^5.0.1"
   }
