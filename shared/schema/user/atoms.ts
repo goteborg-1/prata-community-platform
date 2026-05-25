@@ -1,5 +1,5 @@
 import z from "zod"
-import { AVATAR_COLORS } from "../../constants"
+import { AVATAR_COLORS } from "../../constants.js"
 
 export const googleId = z
   .string()
