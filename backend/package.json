@@ -5,7 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && tsc-alias",
     "start": "node dist/backend/src/server.js",
     "dev": "tsx watch src/server.ts",
     "typecheck": "tsc --noEmit",
@@ -38,6 +38,7 @@
     "mongodb-memory-server": "^11.0.1",
     "supertest": "^7.2.2",
     "ts-jest": "^29.4.9",
+    "tsc-alias": "^1.8.17",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2"
   },
