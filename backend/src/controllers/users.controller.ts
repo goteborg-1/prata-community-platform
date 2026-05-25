@@ -124,7 +124,7 @@ export const getUserByHandle: Controller<GetUserParams> = async (req, res) => {
   })
 }
 
-export const getAllUsers: Controller<{}, {}, GetUsersQuery> = async (req, res) => {
+export const getAllUsers: Controller = async (req, res) => {
   const { role, search, sort, page, limit } = getUsersQuerySchema.parse(req.query)
 
   const query: Record<string, unknown> = {}

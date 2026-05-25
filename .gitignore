@@ -142,3 +142,7 @@ vite.config.ts.timestamp-*
 
 # Claude Code local config
 .claude/
+
+# Antigravity CLI local config
+.antigravitycli/
+

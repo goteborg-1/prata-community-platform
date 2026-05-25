@@ -20,15 +20,10 @@ Ett community-forum där användare anonymt kan dela erfarenheter och bryta ensa
 1. Klona repot:
 ```bash
    git clone https://github.com/goteborg-1/prata-community-platform.git
-   cd prata-community-platform
 ```
 2. Installera beroenden:
 ```bash
    npm install
-   cd backend && npm install
-   cd ../frontend && npm install
-   cd ../shared && npm install
-   cd ..
 ```
 3. Skapa en .env-fil baserad på .env.example
 ```bash
