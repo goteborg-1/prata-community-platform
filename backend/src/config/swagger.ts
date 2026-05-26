@@ -20,7 +20,9 @@ const options: swaggerJsdoc.Options = {
       },
     },
   },
-  apis: isProd ? ["./dist/routes/*.js"] : ["./src/routes/*.ts"]
+  apis: isProd
+    ? ["dist/routes/*.js"] 
+    : ["src/routes/*.ts"]
 }
 
 const spec = swaggerJsdoc(options)
