@@ -36,12 +36,12 @@ export const getAllPosts: Controller = async (req, res) => {
   const skip = (page - 1) * limit
 
   const [posts, total] = await Promise.all([
-    PostModel.find(query)
+    PostModel.find({...query, deletedAt: null}) // added deletedAt to not return soft deleted results
       .sort(sortOptions)
       .skip(skip)
       .limit(limit)
       .populate("userId", "displayName avatarColor"),
-    PostModel.countDocuments(query)
+    PostModel.countDocuments({...query, deletedAt: null})
   ])
 
   const currentUserId = req.user?.id?.toString()
@@ -65,7 +65,7 @@ export const getAllPosts: Controller = async (req, res) => {
 
 export const getPostById: Controller<PostParams> = async (req, res) => {
   const { id } = postParamsSchema.parse(req.params)
-  const post = await PostModel.findById(id).populate("userId", "displayName avatarColor")
+  const post = await PostModel.findOne({ _id: id, deletedAt: null }).populate("userId", "displayName avatarColor")
 
   if(!post) throw new error.NotFoundError()
 
@@ -106,8 +106,8 @@ export const updatePost: Controller<PostParams, UpdatePostRequest> = async (req,
   const { id } = postParamsSchema.parse(req.params)
   const validatedData = updatePostSchema.parse(req.body)
 
-  const updatedPost = await PostModel.findByIdAndUpdate(
-    id,
+  const updatedPost = await PostModel.findOneAndUpdate(
+    { _id: id, deletedAt: null },
     {$set: validatedData},
     {
       new: true,
@@ -129,7 +129,7 @@ export const toggleLike: Controller<PostParams> = async (req, res) => {
   const userId = req.user.id
   if(!userId) throw new error.UnAuthorizedError()
 
-  const post = await PostModel.findById(id)
+  const post = await PostModel.findOne({ _id: id, deletedAt: null })
   if(!post) throw new error.NotFoundError()
 
   const hasLiked = (post.likedBy || []).some(id => id.toString() === userId.toString())
@@ -137,8 +137,8 @@ export const toggleLike: Controller<PostParams> = async (req, res) => {
 
   if(isOwner && hasLiked) throw new error.ForbiddenError("You cannot unlike your own post")
 
-  const updatedPost = await PostModel.findByIdAndUpdate(
-    id,
+  const updatedPost = await PostModel.findOneAndUpdate(
+    { _id: id, deletedAt: null },
     hasLiked
       ? {$pull: {likedBy: userId}} //Remove like if already liked
       : {$addToSet: {likedBy: userId}}, //Add if not already liked
@@ -161,8 +161,8 @@ export const toggleLike: Controller<PostParams> = async (req, res) => {
 export const deletePost: Controller<PostParams> = async (req, res) => {
   const { id } = postParamsSchema.parse(req.params)
 
-  await CommentModel.deleteMany({postId: id})
-  const deletedPost = await PostModel.findByIdAndDelete(id)
+  await CommentModel.updateMany({postId: id}, {deletedAt: new Date()})
+  const deletedPost = await PostModel.findByIdAndUpdate(id, { deletedAt: new Date() }, { new:true })
 
   if(!deletedPost) throw new error.NotFoundError()
 

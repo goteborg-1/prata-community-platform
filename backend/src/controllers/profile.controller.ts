@@ -30,8 +30,8 @@ export const updateProfile: Controller<{}, UpdateProfileRequest> = async (req, r
   if(validatedData.password) updateData.password = await hashPassword(validatedData.password)
 
 
-  const updatedUser = await UserModel.findByIdAndUpdate(
-    user.id,
+  const updatedUser = await UserModel.findOneAndUpdate(
+    { _id: user.id, deletedAt: null },
     updateData,
     {
       new: true,
@@ -53,13 +53,13 @@ export const deleteProfile: Controller = async (req, res) => {
 
   const id = user.id
 
-  await PostModel.deleteMany({userId: id})
-  await CommentModel.deleteMany({userId: id})
+  await PostModel.updateMany({userId: id}, {deletedAt: new Date()})
+  await CommentModel.updateMany({userId: id}, {deletedAt: new Date()})
   await PostModel.updateMany(
     {likedBy: id},
     {$pull: {likedBy: id}}
   )
-  await UserModel.findByIdAndDelete(id)
+  await UserModel.findByIdAndUpdate(id, {deletedAt: new Date()})
 
   res.status(204).send()
 }
@@ -69,7 +69,7 @@ export const getMyPosts: Controller = async (req, res) => {
   if(!user) throw new error.UnAuthorizedError()
   
   const id = user.id
-  const posts = await PostModel.find({ userId: id }).populate("userId", "displayName avatarColor")
+  const posts = await PostModel.find({ userId: id, deletedAt: null }).populate("userId", "displayName avatarColor")
 
   res.json({
     status: "success",
@@ -85,7 +85,7 @@ export const getMyLikedPosts: Controller = async (req, res) => {
   if(!user) throw new error.UnAuthorizedError()
 
   const id = user.id
-  const posts = await PostModel.find({ likedBy: id }).populate("userId", "displayName avatarColor")
+  const posts = await PostModel.find({ likedBy: id, deletedAt: null }).populate("userId", "displayName avatarColor")
 
   res.json({
     status: "success",
