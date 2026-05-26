@@ -1,5 +1,5 @@
 import { useState } from "react"
-import type { Comment } from "@shared"
+import type { Comment } from "@prata/shared"
 import Textarea from "../Input/Textarea"
 import Button from "../Button/Button"
 import s from "./CommentCard.module.css"

@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose"
-import type { Comment } from "@shared"
+import type { Comment } from "@prata/shared"
 
 interface IComment extends Omit<Comment, 'userId' | 'username'>, Document {
   userId: mongoose.Types.ObjectId

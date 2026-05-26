@@ -1,5 +1,5 @@
 import mongoose, {Schema, Document, Model} from "mongoose";
-import { AVATAR_COLORS, type User } from "@shared";
+import { AVATAR_COLORS, type User } from "@prata/shared";
 
 export interface IUser extends User, Document {}
 

@@ -7,7 +7,7 @@
     "types": ["vite/client"],
     "skipLibCheck": true,
     "paths": {
-      "@shared": ["../shared/index.ts"]
+      "@prata/shared": ["../shared/index.ts"]
     },
 
     /* Bundler mode */

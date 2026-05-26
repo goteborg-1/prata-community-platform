@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { IoClose, IoEyeOffOutline } from "react-icons/io5";
-import { CATEGORY_OPTIONS, CATEGORY_LABELS, createPostSchema, TRIGGER_OPTIONS, TRIGGER_LABELS, type CreatePostRequest, type Post } from "@shared";
+import { CATEGORY_OPTIONS, CATEGORY_LABELS, createPostSchema, TRIGGER_OPTIONS, TRIGGER_LABELS, type CreatePostRequest, type Post } from "@prata/shared";
 import { useForm } from "../../../hooks/useForm";
 import { useAuth } from "../../../context/useAuth";
 import Button from "../../Button/Button";

@@ -1,28 +1,24 @@
 import { useNavigate } from "react-router";
-import { type CreateUserRequest, createUserSchema, type User } from "@shared";
 import { useAuth } from "../../context/useAuth";
 import { useForm } from "../../hooks/useForm";
+import { type LoginUserRequest, loginUserSchema, type User } from "@prata/shared";
 import Button from "../Button/Button";
 import Input from "../Input/Input";
 import s from "./Auth.module.css"
 
-interface SignupResponse {
+interface LoginResponse {
   token: string,
   user: User
 }
 
-export default function SignupForm() {
+export default function LoginForm() {
   const navigate = useNavigate()
-  const {handleAuthSuccess} = useAuth()
+  const { handleAuthSuccess } = useAuth()
 
-  const { handleSubmit, handleChange, form, errors, isLoading} = useForm<CreateUserRequest, SignupResponse>({
-    schema: createUserSchema,
-    endpoint: "/users/register",
-    initialValues: {
-      handle: "",
-      email: "",
-      password: ""
-    },
+  const { form, errors, isLoading, handleChange, handleSubmit } = useForm<LoginUserRequest, LoginResponse>({
+    schema: loginUserSchema,
+    endpoint: "/users/login",
+    initialValues: {email: "", password: ""},
     onSuccess: (data) => {
       handleAuthSuccess(data.token, data.user)
       navigate("/")
@@ -30,7 +26,7 @@ export default function SignupForm() {
   })
 
   return(
-    <form action="submit" onSubmit={handleSubmit} className={s.form} noValidate>
+    <form onSubmit={handleSubmit} className={s.form} noValidate>
       <div className={s.inputWrapper}>
         <Input 
           name="email"
@@ -45,18 +41,6 @@ export default function SignupForm() {
 
       <div className={s.inputWrapper}>
         <Input 
-          name="handle"
-          type="text"
-          placeholder="Användarnamn"
-          value={form.handle}
-          onChange={(e) => handleChange("handle", e.target.value)}
-          required
-        />
-        {errors.handle && <p className={s.error}>{errors.handle[0]}</p>}
-      </div>
-
-      <div className={s.inputWrapper}>
-        <Input 
           name="password"
           type="password"
           placeholder="Lösenord"
@@ -65,10 +49,11 @@ export default function SignupForm() {
           required
         />
         {errors.password && <p className={s.error}>{errors.password[0]}</p>}
+        {errors.form && <p className={s.error}>{errors.form[0]}</p>}
       </div>
 
       <Button type="submit" disabled={isLoading}>
-        {isLoading ? "Skapar konto..." : "Gå med nu"}
+        {isLoading ? "Loggar in..." : "Logga in"}
       </Button>
     </form>
   )

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router"
 import { IoClose } from "react-icons/io5"
-import { CATEGORY_OPTIONS, CATEGORY_LABELS, TRIGGER_OPTIONS, TRIGGER_LABELS, type Post, type UpdatePostRequest, updatePostSchemaFrontEnd } from "@shared"
+import { CATEGORY_OPTIONS, CATEGORY_LABELS, TRIGGER_OPTIONS, TRIGGER_LABELS, type Post, type UpdatePostRequest, updatePostSchemaFrontEnd } from "@prata/shared"
 import { useForm } from "../../../hooks/useForm"
 import Button from "../../Button/Button"
 import Input from "../../Input/Input"

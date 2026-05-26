@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { useAuth } from "../../context/useAuth";
 import { useMyLikedPosts, useMyPosts } from "../../hooks/useMyPosts";
 import { useUpdateProfile } from "../../hooks/useUpdateProfile";
-import type { AvatarColor } from "@shared";
+import type { AvatarColor } from "@prata/shared";
 import Container from "../../components/Container/Container";
 import Card from "../../components/Card/Card";
 import PostCard from "../../components/Posts/PostCard/PostCard";

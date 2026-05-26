@@ -11,13 +11,25 @@ import postsRouter from "./routes/posts.routes.js"
 import commentRouter from "./routes/comments.routes.js"
 import { spec, swaggerUi } from "./config/swagger.js"
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://prata-community-platform-frontend.vercel.app"
+]
+
 const app = express()
 
-app.use(cors())
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}))
 app.use(express.json())
 app.use(morgan("dev"))
 app.get("/api-docs/json", (_req, res) => res.json(spec))
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(spec))
+
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" })
+})
 
 const apiRouter = express.Router()
 app.use("/api/v1", apiRouter)

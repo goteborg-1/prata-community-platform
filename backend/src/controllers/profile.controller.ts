@@ -3,7 +3,7 @@ import { Controller } from "../types/index.types.js"
 import { UserModel } from "../models/User.model.js"
 import { PostModel } from "../models/Post.model.js"
 import { CommentModel } from "../models/Comment.model.js"
-import { UpdateProfileRequest, updateProfileSchema } from "@shared"
+import { UpdateProfileRequest, updateProfileSchema } from "@prata/shared"
 import { hashPassword } from "../utils/password.js"
 
 export const getProfile: Controller = async (req, res) => {

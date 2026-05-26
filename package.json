@@ -7,10 +7,16 @@
     "shared"
   ],
   "scripts": {
+    "build": "npm run build -w backend",
+    "start": "npm run start -w backend",
     "dev": "concurrently \"npm run dev -w frontend\" \"npm run dev -w backend\"",
     "test": "cd backend && npm run test"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"
+  },
+  "optionalDependencies": {
+    "@rolldown/binding-linux-x64-gnu": "*",
+    "lightningcss-linux-x64-gnu": "*"
   }
 }

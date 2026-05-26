@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
-    "rootDir": "..",
+    "rootDir": "./src",
     "outDir": "./dist",
     "module": "nodenext",
     "target": "esnext",
     "types": ["node"],
     "paths": {
-      "@shared": ["../shared/index.ts"]
+      "@prata/shared": ["../shared/index.ts"]
     },
 
     "sourceMap": true,
@@ -23,6 +23,9 @@
     "moduleDetection": "force",
     "skipLibCheck": true
   },
-  "include": ["src/**/*", "scripts/**/*", "../shared/index.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"],
+  "references": [
+    { "path": "../shared/tsconfig.json" }
+  ]
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { IoClose, IoChevronBack } from "react-icons/io5"
-import { CATEGORY_OPTIONS, CATEGORY_LABELS, TRIGGER_OPTIONS, TRIGGER_LABELS } from "@shared"
+import { CATEGORY_OPTIONS, CATEGORY_LABELS, TRIGGER_OPTIONS, TRIGGER_LABELS } from "@prata/shared"
 import FilterOptionList from "./FilterOptionList"
 import Button from "../Button/Button"
 import s from "./FilterDrawer.module.css"
