@@ -29,4 +29,3 @@ const spec = swaggerJsdoc(options)
 
 export { spec, swaggerUi }
 
- 
