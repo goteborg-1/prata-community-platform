@@ -1,7 +1,9 @@
 import mongoose, {Schema, Document, Model} from "mongoose";
 import type { Post } from "@prata/shared";
 
-interface IPost extends Post, Document {}
+interface IPost extends Post, Document {
+  deletedAt: Date | null
+}
 
 const PostSchema = new Schema<IPost>(
   {
@@ -45,6 +47,10 @@ const PostSchema = new Schema<IPost>(
     commentCount: {
       type: Number,
       default: 0
+    },
+    deletedAt: {
+      type: Date,
+      default: null
     }
   },
   {
@@ -52,7 +58,7 @@ const PostSchema = new Schema<IPost>(
     toJSON: {
       virtuals: true, //So we can add likeCount after likedBy is updated
       transform: (doc, ret) => {
-        const { _id, __v, likedBy, ...rest} = ret
+        const { _id, __v, likedBy, deletedAt, ...rest} = ret // remove fields front end shall not see and only send whats left (...rest)
 
         return {
           ...rest,
