@@ -26,6 +26,10 @@ app.use(express.json())
 app.use(morgan("dev"))
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(spec))
 
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" })
+})
+
 const apiRouter = express.Router()
 app.use("/api/v1", apiRouter)
 
