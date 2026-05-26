@@ -7,9 +7,9 @@ export const isPostOwner: Middleware = async (req, res, next) => {
 
   // get the post object so we can get the user who posted
   const postId = req.params.id
-  const post = await PostModel.findById(postId)
+  const post = await PostModel.findById(postId) // 1. using findby id to auto convert string to ObjectID. Making filtering for deletedAt more pure
 
-  if (!post) throw new error.NotFoundError()
+  if (!post || post.deletedAt !== null) throw new error.NotFoundError() // 2. verify post exists (not deleted)
 
   const postOwner = post.userId!.toString()
   const userId = req.user.id.toString()
@@ -28,7 +28,7 @@ export const isCommentOwner: Middleware = async (req, res, next) => {
 
   const userId = req.user.id.toString()
 
-  if (!comment) throw new error.NotFoundError()
+  if (!comment || comment.deletedAt !== null) throw new error.NotFoundError()
   if (userId !== commentOwner) throw new error.ForbiddenError("You can only edit your own comments")
   
   next()

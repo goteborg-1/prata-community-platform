@@ -10,6 +10,7 @@ const options: swaggerJsdoc.Options = {
       title: "PrataUt API",
       version: "1.0.0",
     },
+    servers: [{ url: "http://localhost:3000" }],
     components: {
       securitySchemes: {
         bearerAuth: {
