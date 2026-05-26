@@ -20,6 +20,7 @@ export default function GoogleLoginWindow() {
       onError={() => console.log("Login failed")}
       shape="pill"
       text="continue_with"
+      width="100%"
     />
   )
 }
