@@ -5,8 +5,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "build": "tsc && tsc-alias",
-    "start": "node dist/backend/src/server.js",
+    "build": "tsc --build && tsc-alias",
+    "start": "node dist/server.js",
     "dev": "tsx watch src/server.ts",
     "typecheck": "tsc --noEmit",
     "seed:admin": "tsx scripts/seedAdmin.ts",
