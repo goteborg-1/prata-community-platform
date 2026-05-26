@@ -244,7 +244,7 @@ describe("DELETE /posts/:id", () => {
     const found = await PostModel.findById(postId) 
 
     expect(res.status).toBe(204)
-    expect(found).toBeNull()
+    expect(found?.deletedAt).not.toBeNull() // soft delete replaces null with a date, so checking for it to not be null anymore = deleted
     
   })
 })
