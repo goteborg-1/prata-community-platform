@@ -4,7 +4,7 @@ import connectToDatabase from "./config/database.js";
 
 dotenv.config()
 
-const PORT = process.env.PORT || process.env.HTTP_PORT || 3000
+const PORT = Number(process.env.PORT) || Number(process.env.HTTP_PORT) || 3000
 const MONGODB_URI = process.env.MONGODB_URI
 const JWT_SECRET = process.env.JWT_SECRET
 
@@ -20,7 +20,7 @@ if (!JWT_SECRET) {
 
 async function startServer() {
   await connectToDatabase()
-  app.listen(PORT, () => {
+  app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server is listening to port ${PORT}`)
   })
 }
