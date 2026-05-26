@@ -1,4 +1,4 @@
-import type { Post, UpdateProfileRequest } from "@shared"
+import type { Post, UpdateProfileRequest } from "@prata/shared"
 import { api } from "../utils/api"
 
 export const getProfile = async () => {

@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { createCommentSchema, type Comment, type CreateCommentRequest } from "@shared"
+import { createCommentSchema, type Comment, type CreateCommentRequest } from "@prata/shared"
 import { useForm } from "../../hooks/useForm"
 import Textarea from "../Input/Textarea"
 import Button from "../Button/Button"

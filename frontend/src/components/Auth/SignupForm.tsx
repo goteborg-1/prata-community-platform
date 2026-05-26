@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { type CreateUserRequest, createUserSchema, type User } from "@shared";
+import { type CreateUserRequest, createUserSchema, type User } from "@prata/shared";
 import { useAuth } from "../../context/useAuth";
 import { useForm } from "../../hooks/useForm";
 import Button from "../Button/Button";

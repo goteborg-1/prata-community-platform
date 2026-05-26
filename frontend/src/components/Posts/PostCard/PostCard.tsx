@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { IoWarningOutline } from "react-icons/io5";
 import { FaHeart, FaRegComment, FaRegHeart } from "react-icons/fa";
-import { CATEGORY_LABELS, TRIGGER_LABELS, type Post } from "@shared";
+import { CATEGORY_LABELS, TRIGGER_LABELS, type Post } from "@prata/shared";
 import { formatTime } from "../../../utils/formatTime";
 import Card from "../../Card/Card";
 import s from "./PostCard.module.css"

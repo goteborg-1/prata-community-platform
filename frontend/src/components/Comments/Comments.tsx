@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useAuth } from "../../context/useAuth"
 import { api } from "../../utils/api"
-import type { Comment } from "@shared"
+import type { Comment } from "@prata/shared"
 import CommentCard from "./CommentCard"
 import CommentForm from "./CommentForm"
 import s from "./Comments.module.css"

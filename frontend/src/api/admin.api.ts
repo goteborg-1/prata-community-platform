@@ -1,4 +1,4 @@
-import type { User, GetUsersQuery, UpdateUserRoleRequest } from "@shared"
+import type { User, GetUsersQuery, UpdateUserRoleRequest } from "@prata/shared"
 import { api } from "../utils/api"
 
 interface GetUsersResponse {

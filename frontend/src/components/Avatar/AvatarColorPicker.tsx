@@ -1,4 +1,4 @@
-import { AVATAR_COLORS, type AvatarColor } from "@shared"
+import { AVATAR_COLORS, type AvatarColor } from "@prata/shared"
 import s from "./AvatarColorPicker.module.css"
 
 interface Props {

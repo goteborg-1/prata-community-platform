@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { type ZodSchema } from "@shared";
+import { type ZodSchema } from "@prata/shared";
 import { api } from "../utils/api";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";

@@ -43,6 +43,7 @@
     "typescript": "^6.0.2"
   },
   "dependencies": {
+    "@prata/shared": "*",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
@@ -52,7 +53,6 @@
     "mongodb": "^7.1.1",
     "mongoose": "^9.4.1",
     "morgan": "^1.10.1",
-    "shared": "*",
     "zod": "^4.4.3",
     "swagger-jsdoc": "^6.3.0",
     "swagger-ui-express": "^5.0.1"

@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AuthContext } from "./useAuth";
 import { getToken, removeToken, setToken } from "../utils/auth";
 import { api } from "../utils/api";
-import type { User } from "@shared"
+import type { User } from "@prata/shared"
 
 export interface AuthContextValue {
   user: User | null,

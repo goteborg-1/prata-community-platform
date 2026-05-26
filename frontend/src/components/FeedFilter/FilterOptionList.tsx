@@ -1,4 +1,4 @@
-import type { Category, TriggerTag } from "@shared"
+import type { Category, TriggerTag } from "@prata/shared"
 import { useFeedFilter } from "../../context/useFeedFilter"
 import s from "./FilterOptionList.module.css"
 
