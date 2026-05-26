@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@shared": path.resolve(__dirname, "../shared/index.ts")
+      "@prata/shared": path.resolve(__dirname, "../shared/index.ts")
     }
   }
 })

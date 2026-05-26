@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { getUsers, deleteUser, updateUserRole } from "../api/admin.api"
-import type { GetUsersQuery } from "@shared"
+import type { GetUsersQuery } from "@prata/shared"
 
 export function useAdminUsers(params: GetUsersQuery) {
   return useQuery({

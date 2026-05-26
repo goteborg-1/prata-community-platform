@@ -1,5 +1,5 @@
 import mongoose, {Schema, Document, Model} from "mongoose";
-import type { Post } from "@shared";
+import type { Post } from "@prata/shared";
 
 interface IPost extends Post, Document {}
 

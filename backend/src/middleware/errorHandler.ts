@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ZodError } from "@shared"
+import { ZodError } from "@prata/shared"
 import type { ErrorMiddleWare } from "../types/index.types.js";
 import { AppError } from "../errors/AppError.js";
 

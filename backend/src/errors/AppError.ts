@@ -1,4 +1,4 @@
-import type { ZodError } from "@shared"
+import type { ZodError } from "@prata/shared"
 
 type ZodIssue = ZodError["issues"][number]
 

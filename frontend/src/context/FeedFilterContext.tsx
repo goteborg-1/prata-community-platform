@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import type { GetPostsQuery, Category, TriggerTag, Sort } from "@shared"
+import type { GetPostsQuery, Category, TriggerTag, Sort } from "@prata/shared"
 import { FeedFilterContext } from "./useFeedFilter"
 import { useSearchParams } from "react-router"
 

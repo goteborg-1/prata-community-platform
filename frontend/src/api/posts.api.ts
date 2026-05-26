@@ -1,5 +1,5 @@
 import { api } from "../utils/api"
-import type { Post, GetPostsQuery } from "@shared"
+import type { Post, GetPostsQuery } from "@prata/shared"
 
 interface GetPostsResponse {
   status: string;

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import type { User } from "@shared"
+import type { User } from "@prata/shared"
 import { useDeleteUser, useUpdateUserRole } from "../../hooks/useAdminUsers"
 import Avatar from "../Avatar/Avatar"
 import Card from "../Card/Card"

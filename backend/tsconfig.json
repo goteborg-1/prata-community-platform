@@ -6,7 +6,7 @@
     "target": "esnext",
     "types": ["node"],
     "paths": {
-      "@shared": ["../shared/index.ts"]
+      "@prata/shared": ["../shared/index.ts"]
     },
 
     "sourceMap": true,
