@@ -13,7 +13,7 @@ import { spec, swaggerUi } from "./config/swagger.js"
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://prata-community-platform-frontend.vercel.app/"
+  "https://prata-community-platform-frontend.vercel.app"
 ]
 
 const app = express()
