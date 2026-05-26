@@ -30,7 +30,7 @@ export default function CommentCard({
   const [isEditing, setIsEditing] = useState(false)
   const [editContent, setEditContent] = useState(comment.content)
 
-  const isOwner = !!currentUserId && comment.userId === currentUserId
+  const isOwner = comment.isOwnedByCurrentUser ?? (!!currentUserId && comment.userId === currentUserId)
   const isAuthor = !!postAuthorId && comment.userId === postAuthorId
   const isMentioned =
     !!currentUserDisplayName &&
@@ -115,15 +115,13 @@ export default function CommentCard({
         </button>
 
         <div className={s.actions}>
-          {!comment.isAnonymous && comment.username && (
-            <button
-              className={s.actionBtn}
-              type="button"
-              onClick={() => onReply(comment.username ?? "")}
-            >
-              Svara
-            </button>
-          )}
+          <button
+            className={s.actionBtn}
+            type="button"
+            onClick={() => onReply(comment.isAnonymous ? "Anonym" : (comment.username ?? ""))}
+          >
+            Svara
+          </button>
           {isOwner && !isEditing && (
             <>
               <button

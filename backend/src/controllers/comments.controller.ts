@@ -12,12 +12,18 @@ export const getAllComments: Controller<CommentParams> = async (req, res) => {
 
   res.status(200).json({
     status: "success",
-    data: comments.map(comment => ({
-      ...comment.toJSON(),
-      isLikedByCurrentUser: currentUserId
-        ? (comment.likedBy ?? []).includes(currentUserId)
-        : false
-    }))
+    data: comments.map(comment => {
+      const rawUserId = (comment.userId as any)?._id?.toString() ?? comment.userId?.toString()
+      return {
+        ...comment.toJSON(),
+        isLikedByCurrentUser: currentUserId
+          ? (comment.likedBy ?? []).includes(currentUserId)
+          : false,
+        isOwnedByCurrentUser: currentUserId
+          ? rawUserId === currentUserId
+          : false
+      }
+    })
   })
 }
 
