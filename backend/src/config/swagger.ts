@@ -1,6 +1,8 @@
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
+const isProd = process.env.NODE_ENV === "production"
+
 const options: swaggerJsdoc.Options = {
   definition: {
     openapi: "3.0.0",
@@ -18,7 +20,7 @@ const options: swaggerJsdoc.Options = {
       },
     },
   },
-  apis: ["./src/routes/*.ts"] // "scan every ts file in /routes folder"
+  apis: isProd ? ["./dist/routes/*.js"] : ["./src/routes/*.ts"]
 }
 
 const spec = swaggerJsdoc(options)
