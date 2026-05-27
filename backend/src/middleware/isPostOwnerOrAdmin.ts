@@ -15,7 +15,7 @@ export const isPostOwnerOrAdmin: Middleware = async (req, res, next) => {
   const postOwner = post.userId?.toString()
   const userId = user.id.toString()
 
-  if(postOwner !== userId || user.role !== "admin") {
+  if(postOwner !== userId && user.role !== "admin") {
     throw new error.ForbiddenError()
   }
 
@@ -34,7 +34,7 @@ export const isCommentOwnerOrAdmin: Middleware = async (req, res, next) => {
   const commentOwner = comment?.userId.toString()
   const userId = user.id.toString()
 
-  if(commentOwner !== userId || user.role !== "admin") {
+  if(commentOwner !== userId && user.role !== "admin") {
     throw new error.ForbiddenError()
   }
 

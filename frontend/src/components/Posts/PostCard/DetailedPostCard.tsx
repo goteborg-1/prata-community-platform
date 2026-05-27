@@ -10,6 +10,7 @@ import Button from "../../Button/Button"
 import s from "./DetailedPostCard.module.css"
 import p from "./PostCard.module.css"
 import Avatar from "../../Avatar/Avatar"
+import { useAuth } from "../../../context/useAuth"
 
 interface Props {
   post: Post,
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export default function DetailedPostCard({post, scrollTo}: Props) {
+  const { user } = useAuth()
   const [ menuOpen, setMenuOpen ] = useState(false)
   const { mutate: toggleLike, isPending } = useToggleLike()
   const { mutateAsync: deletePost } = useDeletePost()
@@ -55,17 +57,24 @@ export default function DetailedPostCard({post, scrollTo}: Props) {
             </span>
           </div>
 
-          {post.isOwner && (
+          {(post.isOwner || user?.role === "admin") && (
             <div className={s.menuWrap} ref={menuRef}>
               <Button variant="transparent" size="x-small" onClick={() => setMenuOpen(v => !v)} aria-label="Fler alternativ">
                 <span className={s.dots}>···</span>
               </Button>
               {menuOpen && (
                 <div className={s.dropdown}>
-                  <button className={s.menuItem} onClick={() => navigate(`/inlagg/${post.id}/redigera`)}>
-                    Redigera
+                  {/* TODO: Add logic for reporting post */}
+                  <button className={s.menuItem}>
+                    Rapportera
                   </button>
-                  <div className={s.menuSep} />
+
+                  {post.isOwner && 
+                    <button className={s.menuItem} onClick={() => navigate(`/inlagg/${post.id}/redigera`)}>
+                      Redigera
+                    </button>
+                  }
+
                   <button className={`${s.menuItem} ${s.menuDanger}`} onClick={handleDelete}>
                     Ta bort
                   </button>

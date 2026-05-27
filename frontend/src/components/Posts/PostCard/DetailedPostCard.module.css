@@ -87,7 +87,8 @@
 }
 .menuItem:hover { background: var(--bg-secondary); }
 
-.menuDanger { color: var(--color-error); }
+.menuDanger { 
+  color: var(--color-error); 
+  border-top: 1px solid var(--border);
+}
 .menuDanger:hover { background: var(--color-tag-warn-bg); }
-
-.menuSep { height: 1px; background: var(--border); margin: 2px 0; }
