@@ -1,7 +1,9 @@
 import mongoose, {Schema, Document, Model} from "mongoose";
 import { AVATAR_COLORS, type User } from "@prata/shared";
 
-export interface IUser extends User, Document {}
+export interface IUser extends User, Document {
+  deletedAt: Date | null
+}
 
 const UserSchema = new Schema<IUser>(
   {
@@ -55,12 +57,16 @@ const UserSchema = new Schema<IUser>(
       enum: AVATAR_COLORS,
       default: "#84A59D"
     },
+    deletedAt: {
+      type: Date,
+      default: null
+    }
   },
   {
     timestamps: true,
     toJSON: {
       transform: (doc, ret) => {
-        const { _id, __v, password, ...rest} = ret
+        const { _id, __v, password, deletedAt, ...rest} = ret // remove fields front end shall not see and only send whats left (...rest)
 
         return {
           ...rest,

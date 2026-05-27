@@ -28,7 +28,7 @@ export const googleLogin: Controller<{}, GoogleLoginRequest> = async (req, res) 
 
 
   // 3 -- avoid duplicate user
-  let user = await UserModel.findOne({ googleId })
+  let user = await UserModel.findOne({ googleId, deletedAt: null })
 
 
   if (!user) {
@@ -88,7 +88,7 @@ export const createUser: Controller<{}, CreateUserRequest> = async (req, res) =>
 export const loginUser: Controller<{}, LoginUserRequest> = async (req, res) => {
   const { email, password } = loginUserSchema.parse(req.body)
 
-  const user = await UserModel.findOne({email}).select("+password")
+  const user = await UserModel.findOne({ email, deletedAt: null }).select("+password")
 
   if(!user || !user.password) throw new error.UnAuthorizedError("Invalid credentials")
 
@@ -114,7 +114,7 @@ export const loginUser: Controller<{}, LoginUserRequest> = async (req, res) => {
 export const getUserByHandle: Controller<GetUserParams> = async (req, res) => {
   const { handle } = getUserParamsSchema.parse(req.params)
 
-  const user = await UserModel.findOne({handle}).select(["-likedPosts", "-email"])
+  const user = await UserModel.findOne({ handle, deletedAt: null }).select(["-likedPosts", "-email"])
 
   if(!user) throw new error.NotFoundError()
 
@@ -149,11 +149,11 @@ export const getAllUsers: Controller = async (req, res) => {
   const skip = (page - 1) * limit
 
   const [users, total] = await Promise.all([
-    UserModel.find(query)
+    UserModel.find({ ...query, deletedAt: null })
       .sort(sortOptions)
       .skip(skip)
       .limit(limit),
-    UserModel.countDocuments(query)
+    UserModel.countDocuments({ ...query, deletedAt: null })
   ])
 
   res.json({
@@ -172,8 +172,8 @@ export const updateUserRole: Controller<UserParams, UpdateUserRoleRequest> = asy
   const { id } = userParamsSchema.parse(req.params)
   const { role } = updateUserRoleSchema.parse(req.body)
 
-  const updatedUser = await UserModel.findByIdAndUpdate(
-    id,
+  const updatedUser = await UserModel.findOneAndUpdate(
+    { _id: id, deletedAt: null },
     {role},
     {
       new: true,
@@ -191,17 +191,17 @@ export const updateUserRole: Controller<UserParams, UpdateUserRoleRequest> = asy
 
 export const deleteUserById: Controller<UserParams> = async (req, res) => {
   const { id } = userParamsSchema.parse(req.params)
-  const user = await UserModel.findById(id)
+  const user = await UserModel.findOne({ _id: id, deletedAt: null })
 
   if(!user) throw new error.NotFoundError()
 
-  await PostModel.deleteMany({userId: id})
-  await CommentModel.deleteMany({userId: id})
+  await PostModel.updateMany({userId: id}, {deletedAt: new Date()})
+  await CommentModel.updateMany({userId: id}, {deletedAt: new Date()})
   await PostModel.updateMany(
     {likedBy: id},
     {$pull: {likedBy: id}}
   )
-  await UserModel.findByIdAndDelete(id)
+  await UserModel.findByIdAndUpdate(id, {deletedAt: new Date()})
   
   res.status(204).send()
 }

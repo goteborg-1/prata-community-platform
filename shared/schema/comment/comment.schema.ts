@@ -1,10 +1,10 @@
 import z from "zod"
-import { content, isAnonymous, isPsychologist } from "./atoms.js"
+import { content, isAnonymous, isPsychologist, populatedUserSchema } from "./atoms.js"
 
 export const commentSchema = z.object({
   id: z.string(),
   postId: z.string(),
-  userId: z.string().nullable(),
+  userId: z.union([z.string(), populatedUserSchema]).nullable(),
   isEdited: z.boolean().default(false),
   likedBy: z.array(z.string()).default([]),
   likeCount: z.number().nonnegative(),
@@ -13,8 +13,10 @@ export const commentSchema = z.object({
   content,
   isAnonymous,
   isPsychologist,
-  username: z.string().nullable().optional(),
-  isLikedByCurrentUser: z.boolean().optional()
+  isLikedByCurrentUser: z.boolean().optional(),
+  isOwnedByCurrentUser: z.boolean().optional(),
+  isOwner: z.boolean().optional(),
+  isOP: z.boolean().optional(),
 })
 
 

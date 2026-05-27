@@ -1,8 +1,11 @@
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import type { Comment } from "@prata/shared"
 import Textarea from "../Input/Textarea"
 import Button from "../Button/Button"
 import s from "./CommentCard.module.css"
+import AuthorHeader from "../AuthorHeader/AuthorHeader"
+import { getAuthor } from "../../utils/author"
+import { useAuth } from "../../context/useAuth"
 
 interface Props {
   comment: Comment
@@ -18,28 +21,38 @@ interface Props {
 
 export default function CommentCard({
   comment,
-  currentUserId,
   currentUserDisplayName,
-  postAuthorId,
   isLiked,
   onReply,
   onEdit,
   onDelete,
   onLike,
 }: Props) {
+  const { user, isLoggedIn } = useAuth()
+  const [menuOpen, setMenuOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [editContent, setEditContent] = useState(comment.content)
+  const menuRef = useRef<HTMLDivElement>(null)
 
-  const isOwner = !!currentUserId && comment.userId === currentUserId
-  const isAuthor = !!postAuthorId && comment.userId === postAuthorId
+  useEffect(() => {
+      const handler = (e: MouseEvent) => {
+        if(!menuRef.current?.contains(e.target as Node)) setMenuOpen(false)
+      }
+      document.addEventListener("mousedown", handler)
+      return() => document.removeEventListener("mousedown", handler)
+  })
+
   const isMentioned =
     !!currentUserDisplayName &&
     comment.content.includes(`@${currentUserDisplayName}`)
+  const author = getAuthor({data: comment})
 
-  const borderClass = comment.isPsychologist
-    ? s.borderPsychologist
-    : isAuthor
+  const borderClass = comment.isOP
     ? s.borderAuthor
+    : comment.isAnonymous
+    ? s.borderNormal
+    : comment.isPsychologist
+    ? s.borderPsychologist
     : s.borderNormal
 
   const handleStartEdit = () => {
@@ -54,26 +67,47 @@ export default function CommentCard({
 
   return (
     <div className={`${s.card} ${borderClass} ${isMentioned ? s.mentioned : ""}`}>
-      <div className={s.header}>
-        <div className={s.nameRow}>
-          <span className={s.name}>
-            {comment.isAnonymous ? "Anonym" : (comment.username ?? "Okänd")}
-          </span>
-          {comment.isPsychologist && !comment.isAnonymous && (
-            <span className={`${s.badge} ${s.badgePsyk}`}>
-              <LightbulbIcon />
-              Psykolog
-            </span>
-          )}
-          {isAuthor && !comment.isPsychologist && !comment.isAnonymous && (
-            <span className={`${s.badge} ${s.badgeAuthor}`}>
-              <PersonIcon />
-              OP
-            </span>
-          )}
-        </div>
-        <span className={s.time}>{formatTime(comment.createdAt)}</span>
-      </div>
+      <header className={s.header}>
+        <AuthorHeader 
+          data={comment}
+          badge={comment.isOP
+            ? "op"
+            : comment.isPsychologist && !comment.isAnonymous
+            ? "psychologist"
+            : undefined
+          }
+        />
+
+        {isLoggedIn &&
+            <div className={s.menuWrap} ref={menuRef}>
+              <Button variant="transparent" size="x-small" onClick={() => setMenuOpen(v => !v)} aria-label="Fler alternativ">
+                <span className={s.dots}>···</span>
+              </Button>
+              {menuOpen && !isEditing && (
+                <div className={s.dropdown}>
+                  {/* TODO: Add logic for reporting comment */}
+                  {!comment.isOwner &&
+                    <button className={s.menuItem}>
+                      Rapportera
+                    </button>
+                  }
+
+                  {comment.isOwner && 
+                    <button className={s.menuItem} onClick={handleStartEdit}>
+                      Redigera
+                    </button>
+                  }
+
+                  {(comment.isOwner || user?.role === "admin") &&
+                    <button className={`${s.menuItem} ${s.menuDanger}`} onClick={() => onDelete(comment.id)}>
+                      Ta bort
+                    </button>
+                  }
+                </div>
+              )}
+            </div>
+          }
+      </header>
 
       {isEditing ? (
         <div className={s.editWrapper}>
@@ -115,51 +149,17 @@ export default function CommentCard({
         </button>
 
         <div className={s.actions}>
-          {!comment.isAnonymous && comment.username && (
-            <button
-              className={s.actionBtn}
-              type="button"
-              onClick={() => onReply(comment.username ?? "")}
-            >
-              Svara
-            </button>
-          )}
-          {isOwner && !isEditing && (
-            <>
-              <button
-                className={s.actionBtn}
-                type="button"
-                onClick={handleStartEdit}
-              >
-                Redigera
-              </button>
-              <button
-                className={`${s.actionBtn} ${s.deleteBtn}`}
-                type="button"
-                onClick={() => onDelete(comment.id)}
-              >
-                Ta bort
-              </button>
-            </>
-          )}
+          <button
+            className={s.actionBtn}
+            type="button"
+            onClick={() => onReply(comment.isAnonymous ? "Anonym Medlem" : author)}
+          >
+            Svara
+          </button>
         </div>
       </div>
     </div>
   )
-}
-
-function formatTime(dateStr: string) {
-  const date = new Date(dateStr)
-  const diffMs = Date.now() - date.getTime()
-  const diffMins = Math.floor(diffMs / 60000)
-  const diffHours = Math.floor(diffMins / 60)
-  const diffDays = Math.floor(diffHours / 24)
-
-  if (diffMins < 1) return "just nu"
-  if (diffMins < 60) return `${diffMins} min sedan`
-  if (diffHours < 24) return `${diffHours} tim sedan`
-  if (diffDays < 7) return `${diffDays} dag${diffDays > 1 ? "ar" : ""} sedan`
-  return date.toLocaleDateString("sv-SE")
 }
 
 function HeartIcon({ filled }: { filled: boolean }) {
@@ -175,41 +175,6 @@ function HeartIcon({ filled }: { filled: boolean }) {
       strokeLinejoin="round"
     >
       <path d="M12 21C12 21 3 14 3 8.5C3 5.42 5.42 3 8.5 3C10.24 3 11.82 3.9 12 5C12.18 3.9 13.76 3 15.5 3C18.58 3 21 5.42 21 8.5C21 14 12 21 12 21Z" />
-    </svg>
-  )
-}
-
-function LightbulbIcon() {
-  return (
-    <svg
-      width="10"
-      height="10"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M9 21h6M12 3a6 6 0 016 6c0 2.22-1.21 4.16-3 5.2V17a1 1 0 01-1 1H10a1 1 0 01-1-1v-2.8C7.21 13.16 6 11.22 6 9a6 6 0 016-6z" />
-    </svg>
-  )
-}
-
-function PersonIcon() {
-  return (
-    <svg
-      width="10"
-      height="10"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="8" r="4" />
-      <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
     </svg>
   )
 }

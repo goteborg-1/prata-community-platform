@@ -3,6 +3,7 @@ import type { Comment } from "@prata/shared"
 
 interface IComment extends Omit<Comment, 'userId' | 'username'>, Document {
   userId: mongoose.Types.ObjectId
+  deletedAt: Date | null 
 }
 
 export const commentSchema = new mongoose.Schema<IComment>(
@@ -41,6 +42,11 @@ export const commentSchema = new mongoose.Schema<IComment>(
     isEdited: {
       type: Boolean,
       default: false
+    },
+
+    deletedAt: {
+      type: Date,
+      default: null
     }
   },
   {
@@ -48,15 +54,12 @@ export const commentSchema = new mongoose.Schema<IComment>(
     toJSON: {
       virtuals: true,
       transform: (doc, ret) => {
-        const { _id, __v, likedBy, ...rest } = ret
-        const populated = ret.userId
-        const isPopulated = populated && typeof populated === 'object' && 'displayName' in populated
+        const { _id, __v, likedBy, deletedAt, ...rest } = ret // remove fields front end shall not see and only send whats left (...rest)
 
         return {
           ...rest,
           id: _id.toString(),
-          userId: rest.isAnonymous ? null : (isPopulated ? populated.id : populated?.toString() ?? null),
-          username: rest.isAnonymous ? null : (isPopulated ? populated.displayName : null)
+          userId: rest.isAnonymous ? null : rest.userId
         }
       }
     }
