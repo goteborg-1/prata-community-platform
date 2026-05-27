@@ -18,7 +18,7 @@ interface Props {
 }
 
 export default function DetailedPostCard({post, scrollTo}: Props) {
-  const { user } = useAuth()
+  const { user, isLoggedIn } = useAuth()
   const [ menuOpen, setMenuOpen ] = useState(false)
   const { mutate: toggleLike, isPending } = useToggleLike()
   const { mutateAsync: deletePost } = useDeletePost()
@@ -57,7 +57,7 @@ export default function DetailedPostCard({post, scrollTo}: Props) {
             </span>
           </div>
 
-          {(post.isOwner || user?.role === "admin") && (
+          {isLoggedIn &&
             <div className={s.menuWrap} ref={menuRef}>
               <Button variant="transparent" size="x-small" onClick={() => setMenuOpen(v => !v)} aria-label="Fler alternativ">
                 <span className={s.dots}>···</span>
@@ -65,9 +65,11 @@ export default function DetailedPostCard({post, scrollTo}: Props) {
               {menuOpen && (
                 <div className={s.dropdown}>
                   {/* TODO: Add logic for reporting post */}
-                  <button className={s.menuItem}>
-                    Rapportera
-                  </button>
+                  {!post.isOwner &&
+                    <button className={s.menuItem}>
+                      Rapportera
+                    </button>
+                  }
 
                   {post.isOwner && 
                     <button className={s.menuItem} onClick={() => navigate(`/inlagg/${post.id}/redigera`)}>
@@ -75,13 +77,15 @@ export default function DetailedPostCard({post, scrollTo}: Props) {
                     </button>
                   }
 
-                  <button className={`${s.menuItem} ${s.menuDanger}`} onClick={handleDelete}>
-                    Ta bort
-                  </button>
+                  {(post.isOwner || user?.role === "admin") &&
+                    <button className={`${s.menuItem} ${s.menuDanger}`} onClick={handleDelete}>
+                      Ta bort
+                    </button>
+                  }
                 </div>
               )}
             </div>
-          )}
+          }
         </div>
         <h2 className={s.title}>{post.title}</h2>
       </header>
