@@ -6,6 +6,12 @@
   border-left: 3px solid var(--border);
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .borderNormal  { border-left-color: var(--border); }
 .borderAuthor  { border-left-color: var(--color-accent); }
 .borderPsychologist { border-left-color: var(--color-primary); }
@@ -13,20 +19,6 @@
 .mentioned {
   background-color: rgba(249, 210, 138, 0.12);
   border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-xs);
-}
-
-.nameRow {
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-  flex-wrap: wrap;
 }
 
 .name {
@@ -39,26 +31,6 @@
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
   white-space: nowrap;
-}
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: var(--font-size-xs);
-  font-weight: 700;
-  padding: 2px var(--space-xs);
-  border-radius: var(--radius-pill);
-}
-
-.badgeAuthor {
-  background-color: var(--color-accent);
-  color: white;
-}
-
-.badgePsyk {
-  background-color: var(--color-primary);
-  color: var(--color-text-on-colors);
 }
 
 .content {
@@ -139,3 +111,42 @@
   display: flex;
   gap: var(--space-xs);
 }
+
+.menuWrap { 
+  position: relative; 
+}
+
+.dots {
+  width: 16px; height: 16px;
+  border-radius: var(--radius-xs);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--color-text-muted);
+  font-size: 16px; font-weight: 700; letter-spacing: 1px;
+}
+
+.dropdown {
+  position: absolute; top: 34px; right: 0;
+  background: var(--bg-main);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  box-shadow: var(--shadow-card);
+  min-width: 150px;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.menuItem {
+  display: flex; align-items: center; gap: var(--space-xs);
+  padding: 10px 14px;
+  font-size: var(--font-size-sm); font-weight: 500;
+  color: var(--color-text-main);
+  background: none; border: none;
+  width: 100%; text-align: left; cursor: pointer;
+}
+.menuItem:hover { background: var(--bg-secondary); }
+
+.menuDanger { 
+  color: var(--color-error); 
+  border-top: 1px solid var(--border);
+}
+.menuDanger:hover { background: var(--color-tag-warn-bg); }

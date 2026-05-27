@@ -7,13 +7,20 @@ import { CreateCommentRequest, UpdateCommentRequest, CommentParams, updateCommen
 export const getAllComments: Controller<CommentParams> = async (req, res) => {
   const postId = req.params.postId;
 
-  const comments = await CommentModel.find({ postId, deletedAt: null }).populate("userId", "displayName")
+  const post = await PostModel.findById(postId)
+  const postAuthorId = post?.userId?.toString()
+
+  const comments = await CommentModel.find({ postId, deletedAt: null }).populate("userId", "displayName avatarColor")
+
   const currentUserId = req.user?.id?.toString()
 
   res.status(200).json({
     status: "success",
     data: comments.map(comment => {
       const rawUserId = (comment.userId as any)?._id?.toString() ?? comment.userId?.toString()
+      const isOwner = (comment.userId as any)?._id?.toString() === currentUserId
+      const isOriginalPoster = postAuthorId === rawUserId
+
       return {
         ...comment.toJSON(),
         isLikedByCurrentUser: currentUserId
@@ -21,7 +28,9 @@ export const getAllComments: Controller<CommentParams> = async (req, res) => {
           : false,
         isOwnedByCurrentUser: currentUserId
           ? rawUserId === currentUserId
-          : false
+          : false,
+        isOP: !!isOriginalPoster,
+        isOwner
       }
     })
   })
@@ -47,14 +56,20 @@ export const createComment: Controller<CommentParams, CreateCommentRequest, {}> 
     isPsychologist: req.user.role === 'psychologist'
   })
 
+  await newComment.populate("userId", "displayName avatarColor")
+
+  const isOwner = (newComment.userId as any)?._id?.toString() === userId
+  const isOriginalPoster = post.userId === newComment.userId.toString()
+
   //Add comment to counter in posts
-  await PostModel.findByIdAndUpdate(postId, { $inc: { commentCount: 1 } });
+  await PostModel.findByIdAndUpdate(postId, { $inc: { commentCount: 1 } })
 
   res.status(201).json({
     status: "success",
     data: {
       ...newComment.toJSON(),
-      username: validatedData.isAnonymous ? null : req.user.displayName
+      isOP: isOriginalPoster,
+      isOwner
     }
   })
 }

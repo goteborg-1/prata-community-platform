@@ -1,16 +1,15 @@
 import { useEffect, useState, useRef } from "react"
 import { useNavigate } from "react-router"
+import { useAuth } from "../../../context/useAuth"
 import { FaHeart, FaRegHeart, FaRegComment } from "react-icons/fa"
 import { useDeletePost } from "../../../hooks/useDeletePost"
 import { useToggleLike } from "../../../hooks/useToggleLike"
-import { formatTime } from "../../../utils/formatTime"
 import { CATEGORY_LABELS, TRIGGER_LABELS, type Post } from "@prata/shared"
 import Card from "../../Card/Card"
 import Button from "../../Button/Button"
+import AuthorHeader from "../../AuthorHeader/AuthorHeader"
 import s from "./DetailedPostCard.module.css"
 import p from "./PostCard.module.css"
-import Avatar from "../../Avatar/Avatar"
-import { useAuth } from "../../../context/useAuth"
 
 interface Props {
   post: Post,
@@ -24,6 +23,7 @@ export default function DetailedPostCard({post, scrollTo}: Props) {
   const { mutateAsync: deletePost } = useDeletePost()
   const navigate = useNavigate()
   const menuRef = useRef<HTMLDivElement>(null)
+  
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if(!menuRef.current?.contains(e.target as Node)) setMenuOpen(false)
@@ -39,23 +39,11 @@ export default function DetailedPostCard({post, scrollTo}: Props) {
     }
   }
 
-  const userData = post.userId && typeof post.userId === "object" ? post.userId : null;
-  const author = userData?.displayName || "Anonym Medlem"
-  const avatarColor = userData?.avatarColor || "#84A59D"
-
   return(
     <Card>
       <header className={s.header}>
         <div className={s.headerTop}>
-          <div className={s.authorWrapper}>
-            <Avatar displayName={author} color={avatarColor} size="small" />
-            <span>
-              <p className={p.author}>{author}</p>
-              <p className={p.date}>
-                {formatTime(post.createdAt)}
-              </p>
-            </span>
-          </div>
+          <AuthorHeader data={post} />
 
           {isLoggedIn &&
             <div className={s.menuWrap} ref={menuRef}>

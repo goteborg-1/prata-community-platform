@@ -2,27 +2,16 @@ import { useNavigate } from "react-router";
 import { IoWarningOutline } from "react-icons/io5";
 import { FaHeart, FaRegComment, FaRegHeart } from "react-icons/fa";
 import { CATEGORY_LABELS, TRIGGER_LABELS, type Post } from "@prata/shared";
-import { formatTime } from "../../../utils/formatTime";
+import AuthorHeader from "../../AuthorHeader/AuthorHeader";
 import Card from "../../Card/Card";
 import s from "./PostCard.module.css"
-import Avatar from "../../Avatar/Avatar";
 
 export default function PostCard({post}: {post: Post}) {
   const navigate = useNavigate()
 
-  const userData = post.userId && typeof post.userId === "object" ? post.userId : null;
-  const author = userData?.displayName || "Anonym Medlem"
-  const avatarColor = userData?.avatarColor || "#84A59D"
-
   return(
     <Card isClickable={true} onClick={() => navigate(`/inlagg/${post.id}`)}>
-      <header className={s.header}>
-        <Avatar displayName={author} color={avatarColor} size="small"/>
-        <span>
-          <p className={s.author}>{author}</p>
-          <p className={s.date}>{formatTime(post.createdAt)}</p>
-        </span>
-      </header>
+      <AuthorHeader data={post} />
 
       <h3 className={s.title}>{post.title}</h3>
 
