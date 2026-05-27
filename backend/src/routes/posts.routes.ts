@@ -3,6 +3,7 @@ import { checkAuth } from "../middleware/checkAuth.js"
 import { isPostOwner } from "../middleware/isOwner.js"
 import { getAllPosts, getPostById, createPost, updatePost, toggleLike, deletePost } from "../controllers/posts.controller.js"
 import { optionalAuth } from "../middleware/optionalAuth.js"
+import { isPostOwnerOrAdmin } from "../middleware/isPostOwnerOrAdmin.js"
 
 const postsRouter = express.Router()
 
@@ -153,6 +154,6 @@ postsRouter.patch("/:id/like", checkAuth, toggleLike)
  *       403:
  *         description: Not post owner
  */
-postsRouter.delete("/:id", checkAuth, isPostOwner, deletePost)
+postsRouter.delete("/:id", checkAuth, isPostOwnerOrAdmin, deletePost)
 
 export default postsRouter

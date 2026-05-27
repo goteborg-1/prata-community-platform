@@ -3,6 +3,7 @@ import { getAllComments, createComment, updateComment, deleteComment, toggleComm
 import { checkAuth } from "../middleware/checkAuth.js";
 import { optionalAuth } from "../middleware/optionalAuth.js";
 import { isCommentOwner } from "../middleware/isOwner.js";
+import { isCommentOwnerOrAdmin } from "../middleware/isPostOwnerOrAdmin.js";
 
 // mergeParams -> lets us merge route modules
 const commentRouter = express.Router({ mergeParams: true });
@@ -122,7 +123,7 @@ commentRouter.patch("/:commentId", checkAuth, isCommentOwner, updateComment);
  *       403:
  *         description: Not comment owner
  */
-commentRouter.delete("/:commentId", checkAuth, isCommentOwner, deleteComment);
+commentRouter.delete("/:commentId", checkAuth, isCommentOwnerOrAdmin, deleteComment);
 
 /**
  * @openapi
