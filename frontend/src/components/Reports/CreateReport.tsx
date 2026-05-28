@@ -86,7 +86,7 @@ export default function CreateReport() {
       <div className={o.overview}>
         <p className={o.author}>{commentId ? "Kommentar" : "Inlägg"} av {author}</p>
         <p className={o.content}>"{description}"</p>
-        <Link to={commentId ? `/inlagg/${postId}/${commentId}` : `/inlagg/${postId}`}>&rarr; Gå till inlägget</Link>
+        <Link to={`/inlagg/${postId}`}>&rarr; Gå till inlägget</Link>
       </div>
 
       <form className={`${s.form} ${o.form}`} onSubmit={handleSubmit}>
