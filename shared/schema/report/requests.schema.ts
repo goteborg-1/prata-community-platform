@@ -3,7 +3,6 @@ import { comment, postId, reason, reportedBy } from "./atoms.js"
 
 export const createReportSchema = z.object({
   postId,
-  reportedBy,
   reason,
   comment
 })

@@ -1,8 +1,9 @@
 import mongoose, {Schema, Document, Model} from "mongoose";
 import { REPORT_OPTIONS, STATUS_OPTIONS, type Report } from "@prata/shared";
 
-interface IReport extends Omit<Report, "postId">, Document {
-  postId: Schema.Types.ObjectId
+interface IReport extends Omit<Report, "postId" | "reportedBy">, Document {
+  postId: Schema.Types.ObjectId |string,
+  reportedBy: Schema.Types.ObjectId | string,
 }
 
 const ReportSchema = new Schema<IReport>(
@@ -10,6 +11,7 @@ const ReportSchema = new Schema<IReport>(
     postId: {
       type: Schema.Types.ObjectId,
       ref: "Post",
+      index: true,
       required: true
     },
     reportedBy: {
