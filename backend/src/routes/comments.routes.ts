@@ -1,5 +1,5 @@
 import express from "express"
-import { getAllComments, createComment, updateComment, deleteComment, toggleCommentLike } from "../controllers/comments.controller.js"
+import { getAllComments, createComment, updateComment, deleteComment, toggleCommentLike, getCommentById } from "../controllers/comments.controller.js"
 import { checkAuth } from "../middleware/checkAuth.js";
 import { optionalAuth } from "../middleware/optionalAuth.js";
 import { isCommentOwner } from "../middleware/isOwner.js";
@@ -25,6 +25,31 @@ const commentRouter = express.Router({ mergeParams: true });
  *         description: List of comments
  */
 commentRouter.get("/", optionalAuth, getAllComments);
+
+/**
+ * @openapi
+ * /api/v1/posts/{postId}/comments:
+ *   get:
+ *     summary: Get comment by ID
+ *     tags: [Comments]
+ *     parameters:
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: commentId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Post returned successfully
+ *       404:
+ *         description: Post not found
+ */
+commentRouter.get("/:commentId", optionalAuth, getCommentById);
 
 /**
  * @openapi

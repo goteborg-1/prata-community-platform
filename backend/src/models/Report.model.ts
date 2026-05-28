@@ -14,6 +14,10 @@ const ReportSchema = new Schema<IReport>(
       index: true,
       required: true
     },
+    commentId: {
+      type: Schema.Types.ObjectId,
+      ref: "User"
+    },
     reportedBy: {
       type: Schema.Types.ObjectId,
       ref: "User",

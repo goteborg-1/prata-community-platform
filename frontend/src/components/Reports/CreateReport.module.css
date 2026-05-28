@@ -1,0 +1,39 @@
+.optionsWrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
+}
+
+.innerWrapper, .innerWrapper > * {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.form {
+  width: 100%;
+}
+
+.overview {
+  margin-top: var(--space-base);
+  padding: var(--space-2xs) var(--space-sm);
+  border-left: 3px solid var(--border);
+  background-color: var(--bg-secondary);
+  width: 100%;
+}
+
+.overview > * {
+  line-height: 1.5;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+}
+
+.author {
+  color: var(--color-text-muted);
+}
+
+.content {
+  font-size: var(--font-size-sm);
+  font-weight: 400;
+  font-style: italic;
+}

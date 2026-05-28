@@ -1,10 +1,11 @@
 import z from "zod"
-import { comment, postId, reason, reportedBy, status } from "./atoms.js"
+import { comment, commentId, postId, reason, reportedBy, status } from "./atoms.js"
 import { populatedUserSchema } from "../baseAtoms.js"
 
 export const ReportSchema = z.object({
   id: z.string(),
   postId,
+  commentId,
   reportedBy: z.union([reportedBy, populatedUserSchema]),
   reason,
   comment,
