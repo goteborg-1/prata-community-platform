@@ -1,5 +1,5 @@
 import z from "zod";
-import { TRIGGER_OPTIONS, CATEGORY_OPTIONS, AVATAR_COLORS } from "../../constants.js"
+import { TRIGGER_OPTIONS, CATEGORY_OPTIONS } from "../../constants.js"
 
 // --- Helpers ---
 const toLowerCaseArray = z.array(z.string().toLowerCase().trim())
@@ -33,13 +33,6 @@ export const triggerTags = toLowerCaseArray.pipe(
 export const likedBy = z.array(z.string()).default([])
 
 export const commentCount = z.number().nonnegative().default(0)
-
-// --- Populated User ---
-export const populatedUserSchema = z.object({
-  id,
-  displayName: z.string(),
-  avatarColor: z.enum(AVATAR_COLORS)
-})
 
 // --- Query Atoms ---
 export const categoriesQuery = stringOrArray(z.array(z.enum(CATEGORY_OPTIONS)))

@@ -1,5 +1,5 @@
 import mongoose, {Schema, Document, Model} from "mongoose";
-import type { Post } from "@prata/shared";
+import { CATEGORY_OPTIONS, TRIGGER_OPTIONS, type Post } from "@prata/shared";
 
 interface IPost extends Post, Document {
   deletedAt: Date | null
@@ -32,11 +32,11 @@ const PostSchema = new Schema<IPost>(
     categories: {
       type: [String],
       required: [true, "Category is required"],
-      enum: ["relationships", "family", "parenting", "stress", "anxiety", "loneliness", "grief-and-loss", "depression", "other"],
+      enum: CATEGORY_OPTIONS,
     },
     triggerTags: {
       type: [String],
-      enum: ["self-harm", "suicidal-thoughts", "substance-abuse", "gambling", "eating-disorders", "body-image", "abuse", "domestic-violence", "trauma"],
+      enum: TRIGGER_OPTIONS,
       default: [],
     },
     likedBy: [{

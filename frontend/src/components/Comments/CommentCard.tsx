@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react"
+import { Link } from "react-router"
 import type { Comment } from "@prata/shared"
 import Textarea from "../Input/Textarea"
 import Button from "../Button/Button"
@@ -85,11 +86,10 @@ export default function CommentCard({
               </Button>
               {menuOpen && !isEditing && (
                 <div className={s.dropdown}>
-                  {/* TODO: Add logic for reporting comment */}
                   {!comment.isOwner &&
-                    <button className={s.menuItem}>
+                    <Link to={`${comment.id}/rapportera`} className={s.menuItem}>
                       Rapportera
-                    </button>
+                    </Link>
                   }
 
                   {comment.isOwner && 

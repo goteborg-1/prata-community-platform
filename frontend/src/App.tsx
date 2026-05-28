@@ -15,6 +15,7 @@ import Reports from './pages/Reports'
 import ProtectedRoute from './pages/ProtectedRoute'
 import AdminProtectedRoute from './pages/AdminProtectedRoute'
 import Settings from './pages/Profile/Settings'
+import NewReport from './pages/NewReport'
 
 function App() {
   return(
@@ -31,6 +32,8 @@ function App() {
           <Route path='profil' element={<Profile />} />
           <Route path='inlagg/:postId/redigera' element={<EditPost />} />
           <Route path='installningar' element={<Settings />} />
+          <Route path='inlagg/:postId/rapportera' element={<NewReport />} />
+          <Route path='inlagg/:postId/:commentId/rapportera' element={<NewReport />} />
         </Route>
 
         <Route element={<AdminProtectedRoute />}>

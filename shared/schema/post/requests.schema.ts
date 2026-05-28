@@ -1,16 +1,16 @@
 import z from "zod"
 import { categories, categoriesQuery, description, id, isAnonymous, title, triggerTags, triggerTagsQuery } from "./atoms.js"
-import { SORT_OPTIONS } from "../../constants.js"
+import { search, sort, page, limit } from "../baseAtoms.js"
 
 export const postParamsSchema = z.object({id})
 
 export const getPostsQuerySchema = z.object({
   categories: categoriesQuery.optional(),
   triggerTags: triggerTagsQuery.optional(),
-  search: z.string().optional(),
-  sort: z.enum(SORT_OPTIONS).default("newest"),
-  page: z.string().regex(/^\d+$/).default("1").transform(Number),
-  limit: z.string().regex(/^\d+$/).default("5").transform(Number)
+  search,
+  sort,
+  page,
+  limit
 })
 
 export const createPostSchema = z.object({
