@@ -1,5 +1,5 @@
 import z from "zod"
-import { comment, commentId, postId, reason, reportedBy } from "./atoms.js"
+import { comment, commentId, postId, reason } from "./atoms.js"
 
 export const createReportSchema = z.object({
   postId,
