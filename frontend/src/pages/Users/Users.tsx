@@ -5,7 +5,7 @@ import Input from "../../components/Input/Input"
 import UserCard from "../../components/Users/UserCard"
 import PaginationBase from "../../components/Pagination/PaginationBase"
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner"
-import s from "./Admin.module.css"
+import s from "./Users.module.css"
 import p from "../../components/Posts/CreatePost/CreatePost.module.css"
 
 const AVAILABLE_ROLES = [
@@ -16,7 +16,7 @@ const AVAILABLE_ROLES = [
 
 type RoleType = typeof AVAILABLE_ROLES[number]["value"]
 
-export default function Admin() {
+export default function Users() {
   const [search, setSearch] = useState("")
   const [debouncedSearch, setDebouncedSearch] = useState("")
   const [selectedRoles, setSelectedRoles] = useState<RoleType[]>(["user", "admin", "psychologist"])
