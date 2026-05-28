@@ -1,7 +1,5 @@
 export const CATEGORY_OPTIONS = ["relationships", "family", "parenting", "stress", "anxiety", "loneliness", "grief-and-loss", "depression", "other"] as const
 
-export const TRIGGER_OPTIONS =   ["self-harm", "suicidal-thoughts", "substance-abuse", "gambling", "eating-disorders", "body-image", "abuse", "domestic-violence", "trauma"] as const
-
 export const CATEGORY_LABELS: Record<string, string> = {
   "relationships": "Relationer",
   "family": "Familj",
@@ -14,6 +12,8 @@ export const CATEGORY_LABELS: Record<string, string> = {
   "other": "Övrigt"
 }
 
+export const TRIGGER_OPTIONS =   ["self-harm", "suicidal-thoughts", "substance-abuse", "gambling", "eating-disorders", "body-image", "abuse", "domestic-violence", "trauma"] as const
+
 export const TRIGGER_LABELS: Record<string, string> = {
   "self-harm": "Självskadebeteende",
   "suicidal-thoughts": "Självmordstankar",
@@ -24,6 +24,17 @@ export const TRIGGER_LABELS: Record<string, string> = {
   "abuse": "Övergrepp",
   "domestic-violence": "Våld i nära relationer",
   "trauma": "Trauma"
+}
+
+export const REPORT_OPTIONS = ["spam", "hateSpeech", "harassment", "inappropriate", "misinformation", "other"]
+
+export const REPORT_LABELS: Record<string, string> = {
+  spam: "Soam eller skräppost",
+  hateSpeech: "Hatspråk eller diskriminering",
+  harassment: "Trakasserier eller mobbning",
+  inappropriate: "Olämpligt eller känsligt innehåll",
+  misinformation: "Falsk eller missledande information",
+  other: "Annat"
 }
 
 export const AVATAR_COLORS = [
@@ -40,7 +51,16 @@ export const SORT_OPTIONS = [
   "popular"
 ]
 
+export const STATUS_OPTIONS = ["pending", "actionTaken", "dismissed"]
+
+export const STATUS_LABELS: Record<string, string> = {
+  pending: "Väntar",
+  actionTaken: "Åtgärdad",
+  dismissed: "Avvisad"
+}
+
 export type Sort = (typeof SORT_OPTIONS)[number]
 export type Category = (typeof CATEGORY_OPTIONS)[number]
+export type ReportReason = (typeof REPORT_OPTIONS)[number]
 export type TriggerTag = (typeof TRIGGER_OPTIONS)[number]
 export type AvatarColor = (typeof AVATAR_COLORS)[number]
