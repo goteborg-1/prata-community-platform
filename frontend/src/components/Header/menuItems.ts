@@ -15,5 +15,6 @@ export const loggedInMenu: MenuItem[] = [
 ]
 
 export const adminMenu: MenuItem[] = [
-  {title: "Administration", path: "/admin"}
+  {title: "Användare", path: "/anvandare"},
+  {title: "Rapporteringar", path: "/rapporteringar"}
 ]

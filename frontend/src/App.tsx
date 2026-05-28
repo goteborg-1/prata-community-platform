@@ -10,7 +10,8 @@ import Register from './pages/AuthPages/Register'
 import PostDetail from './pages/PostDetail'
 import EditPost from './pages/EditPost'
 import './App.css'
-import Admin from './pages/Admin/Admin'
+import Users from './pages/Users/Users'
+import Reports from './pages/Reports'
 import ProtectedRoute from './pages/ProtectedRoute'
 import AdminProtectedRoute from './pages/AdminProtectedRoute'
 import Settings from './pages/Profile/Settings'
@@ -33,7 +34,8 @@ function App() {
         </Route>
 
         <Route element={<AdminProtectedRoute />}>
-          <Route path='admin' element={<Admin />} />
+          <Route path='anvandare' element={<Users />} />
+          <Route path='rapporteringar' element={<Reports />} />
         </Route>
 
         <Route path='*' element={<NotFound />} />
