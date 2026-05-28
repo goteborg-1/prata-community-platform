@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react"
-import { useNavigate } from "react-router"
+import { useNavigate, Link } from "react-router"
 import { useAuth } from "../../../context/useAuth"
 import { FaHeart, FaRegHeart, FaRegComment } from "react-icons/fa"
 import { useDeletePost } from "../../../hooks/useDeletePost"
@@ -52,11 +52,10 @@ export default function DetailedPostCard({post, scrollTo}: Props) {
               </Button>
               {menuOpen && (
                 <div className={s.dropdown}>
-                  {/* TODO: Add logic for reporting post */}
                   {!post.isOwner &&
-                    <button className={s.menuItem}>
+                    <Link to={`rapportera`} className={s.menuItem}>
                       Rapportera
-                    </button>
+                    </Link>
                   }
 
                   {post.isOwner && 

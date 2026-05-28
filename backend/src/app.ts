@@ -10,6 +10,7 @@ import usersRouter from "./routes/users.routes.js"
 import postsRouter from "./routes/posts.routes.js"
 import commentRouter from "./routes/comments.routes.js"
 import { spec, swaggerUi } from "./config/swagger.js"
+import reportsRouter from "./routes/reports.routes.js"
 
 const allowedOrigins = [
   "http://localhost:5173",
@@ -38,6 +39,7 @@ apiRouter.use("/profile", checkAuth, profileRouter)
 apiRouter.use("/users", usersRouter)
 apiRouter.use("/posts", postsRouter)
 apiRouter.use("/posts/:postId/comments", commentRouter)
+apiRouter.use("/reports", checkAuth, reportsRouter)
 
 
 // ---- ERROR HANDLERS (MUST COME LAST) ----

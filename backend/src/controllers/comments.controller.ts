@@ -2,7 +2,7 @@ import * as error from "../errors/AppError.js"
 import { Controller } from "../types/index.types.js";
 import { CommentModel } from "../models/Comment.model.js";
 import { PostModel } from "../models/Post.model.js";
-import { CreateCommentRequest, UpdateCommentRequest, CommentParams, updateCommentSchema, createCommentSchema } from "@prata/shared";
+import { CreateCommentRequest, UpdateCommentRequest, CommentParams, updateCommentSchema, createCommentSchema, commentParamsSchema } from "@prata/shared";
 
 export const getAllComments: Controller<CommentParams> = async (req, res) => {
   const postId = req.params.postId;
@@ -33,6 +33,19 @@ export const getAllComments: Controller<CommentParams> = async (req, res) => {
         isOwner
       }
     })
+  })
+}
+
+export const getCommentById: Controller<CommentParams> = async (req, res) => {
+  const {commentId} = commentParamsSchema.parse(req.params)
+
+  const comment = await CommentModel.findById(commentId).populate("userId", "displayName avatarColor")
+
+  if(!comment) throw new error.NotFoundError()
+
+  res.status(200).json({
+    status: "success",
+    data: comment
   })
 }
 

@@ -1,5 +1,6 @@
 import z from "zod"
-import { content, isAnonymous, isPsychologist, populatedUserSchema } from "./atoms.js"
+import { content, isAnonymous, isPsychologist } from "./atoms.js"
+import { populatedUserSchema } from "../baseAtoms.js"
 
 export const commentSchema = z.object({
   id: z.string(),

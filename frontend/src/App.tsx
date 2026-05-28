@@ -10,10 +10,12 @@ import Register from './pages/AuthPages/Register'
 import PostDetail from './pages/PostDetail'
 import EditPost from './pages/EditPost'
 import './App.css'
-import Admin from './pages/Admin/Admin'
+import Users from './pages/Users/Users'
+import Reports from './pages/Reports'
 import ProtectedRoute from './pages/ProtectedRoute'
 import AdminProtectedRoute from './pages/AdminProtectedRoute'
 import Settings from './pages/Profile/Settings'
+import NewReport from './pages/NewReport'
 
 function App() {
   return(
@@ -30,10 +32,13 @@ function App() {
           <Route path='profil' element={<Profile />} />
           <Route path='inlagg/:postId/redigera' element={<EditPost />} />
           <Route path='installningar' element={<Settings />} />
+          <Route path='inlagg/:postId/rapportera' element={<NewReport />} />
+          <Route path='inlagg/:postId/:commentId/rapportera' element={<NewReport />} />
         </Route>
 
         <Route element={<AdminProtectedRoute />}>
-          <Route path='admin' element={<Admin />} />
+          <Route path='anvandare' element={<Users />} />
+          <Route path='rapporteringar' element={<Reports />} />
         </Route>
 
         <Route path='*' element={<NotFound />} />

@@ -3,6 +3,7 @@ import Container from "../components/Container/Container";
 import Hero from "../components/Hero/Hero";
 import PostCard from "../components/Posts/PostCard/PostCard";
 import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
+import { Link } from "react-router";
 
 export default function Home() {
   const { data, isLoading, error } = usePosts({ 
@@ -28,6 +29,8 @@ export default function Home() {
             </div>
           ))
         )}
+
+        {(!isLoading && (data?.meta.totalPages ?? 0) > 1) && <Link to="/flode">Visa alla inlägg &rarr;</Link>}
 
         {!isLoading && posts?.length === 0 && <p>Inga inlägg hittades.</p>}
       </Container>
