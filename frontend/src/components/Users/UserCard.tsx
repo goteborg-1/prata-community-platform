@@ -1,16 +1,10 @@
 import { useState } from "react"
-import type { User } from "@prata/shared"
+import { ROLE_LABELS, ROLE_OPTIONS, type Role, type User } from "@prata/shared"
 import { useDeleteUser, useUpdateUserRole } from "../../hooks/useAdminUsers"
 import Avatar from "../Avatar/Avatar"
 import Card from "../Card/Card"
 import s from "./UserCard.module.css"
 import Button from "../Button/Button"
-
-const ROLE_LABELS: Record<User["role"], string> = {
-  admin: "Admin",
-  psychologist: "Psykolog",
-  user: "Användare",
-}
 
 interface Props {
   user: User
@@ -21,7 +15,7 @@ export default function UserCard({ user }: Props) {
   const { mutate: deleteUser } = useDeleteUser()
   const { mutate: updateRole } = useUpdateUserRole()
 
-  const handleRoleChange = (role: User["role"]) => {
+  const handleRoleChange = (role: Role) => {
     updateRole({ id: user.id, role })
     setMenuOpen(false)
   }
@@ -67,7 +61,7 @@ export default function UserCard({ user }: Props) {
             <div className={s.backdrop} onClick={() => setMenuOpen(false)} />
             <div className={s.dropdown}>
               <span className={s.subLabel}>Byt roll</span>
-              {(["user", "psychologist", "admin"] as User["role"][]).map(role => (
+              {ROLE_OPTIONS.map(role => (
                 <button
                   key={role}
                   className={s.dropItem}

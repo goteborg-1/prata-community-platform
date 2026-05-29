@@ -93,7 +93,7 @@ export default function CreateReport() {
 
         <div className={s.field}>
           <p className={i.label}>Anledning</p>
-          <div className={`${s.pills} ${o.optionsWrapper}`}>
+          <div className={s.pills}>
             {REPORT_OPTIONS.map((option) => (
               <div key={option} className={o.innerWrapper}>
                 <button 
