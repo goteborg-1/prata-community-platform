@@ -6,7 +6,7 @@ import { comparePassword, hashPassword } from "../utils/password.js"
 import { UserModel } from "../models/User.model.js"
 import { PostModel } from "../models/Post.model.js"
 import { CommentModel } from "../models/Comment.model.js"
-import { CreateUserRequest, createUserSchema, GetUserParams, getUserParamsSchema, GetUsersQuery, getUsersQuerySchema, GoogleLoginRequest, googleLoginSchema, LoginUserRequest, loginUserSchema, UpdateUserRoleRequest, updateUserRoleSchema, UserParams, userParamsSchema } from "@prata/shared"
+import { CreateUserRequest, createUserSchema, GetUserParams, getUserParamsSchema, getUsersQuerySchema, GoogleLoginRequest, googleLoginSchema, LoginUserRequest, loginUserSchema, UpdateUserRoleRequest, updateUserRoleSchema, UserParams, userParamsSchema } from "@prata/shared"
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
