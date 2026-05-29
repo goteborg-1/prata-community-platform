@@ -1,7 +1,7 @@
 import * as error from "../errors/AppError.js"
 import { Controller } from "../types/index.types.js"
 import { PostModel } from "../models/Post.model.js"
-import { CreatePostRequest, createPostSchema, getPostsQuerySchema, PostParams, postParamsSchema, UpdatePostRequest, updatePostSchema, type GetPostsQuery } from "@prata/shared"
+import { CreatePostRequest, createPostSchema, getPostsQuerySchema, PostParams, postParamsSchema, UpdatePostRequest, updatePostSchema } from "@prata/shared"
 import { CommentModel } from "../models/Comment.model.js"
 
 export const getAllPosts: Controller = async (req, res) => {
