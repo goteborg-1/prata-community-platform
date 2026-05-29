@@ -1,5 +1,5 @@
 import mongoose, {Schema, Document, Model} from "mongoose";
-import { AVATAR_COLORS, type User } from "@prata/shared";
+import { AVATAR_COLORS, ROLE_OPTIONS, type User } from "@prata/shared";
 
 export interface IUser extends User, Document {
   deletedAt: Date | null
@@ -49,7 +49,7 @@ const UserSchema = new Schema<IUser>(
     },
     role: {
       type: String,
-      enum: ["user", "admin", "psychologist"],
+      enum: ROLE_OPTIONS,
       default: "user"
     },
     avatarColor: {

@@ -29,11 +29,11 @@ export const TRIGGER_LABELS: Record<string, string> = {
 export const REPORT_OPTIONS = ["spam", "hateSpeech", "harassment", "inappropriate", "misinformation", "other"]
 
 export const REPORT_LABELS: Record<string, string> = {
-  spam: "Spam eller skräppost",
-  hateSpeech: "Hatspråk eller diskriminering",
-  harassment: "Trakasserier eller mobbning",
-  inappropriate: "Olämpligt eller känsligt innehåll",
-  misinformation: "Falsk eller missledande information",
+  spam: "Spam",
+  hateSpeech: "Hatspråk",
+  harassment: "Trakasserier",
+  inappropriate: "Olämpligt",
+  misinformation: "Falsk info",
   other: "Annat"
 }
 
@@ -46,12 +46,7 @@ export const AVATAR_COLORS = [
   "#423E3B", // dark
 ] as const
 
-export const SORT_OPTIONS = [
-  "newest",
-  "popular"
-]
-
-export const STATUS_OPTIONS = ["pending", "actionTaken", "dismissed"]
+export const STATUS_OPTIONS = ["pending", "actionTaken", "dismissed"] as const
 
 export const STATUS_LABELS: Record<string, string> = {
   pending: "Väntar",
@@ -59,8 +54,19 @@ export const STATUS_LABELS: Record<string, string> = {
   dismissed: "Avvisad"
 }
 
+export const ROLE_OPTIONS = ["user", "psychologist", "admin"] as const
+
+export const ROLE_LABELS: Record<string, string> = {
+  user: "Användare",
+  psychologist: "Psykolog",
+  admin: "Administratör"
+}
+
+export const SORT_OPTIONS = ["newest", "popular"] as const
+
 export type Sort = (typeof SORT_OPTIONS)[number]
 export type Category = (typeof CATEGORY_OPTIONS)[number]
 export type ReportReason = (typeof REPORT_OPTIONS)[number]
 export type TriggerTag = (typeof TRIGGER_OPTIONS)[number]
 export type AvatarColor = (typeof AVATAR_COLORS)[number]
+export type Role = (typeof ROLE_OPTIONS)[number]

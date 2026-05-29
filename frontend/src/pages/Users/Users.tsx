@@ -7,19 +7,12 @@ import PaginationBase from "../../components/Pagination/PaginationBase"
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner"
 import s from "./Users.module.css"
 import p from "../../components/Posts/CreatePost/CreatePost.module.css"
-
-const AVAILABLE_ROLES = [
-  { value: "user", label: "Användare" },
-  { value: "psychologist", label: "Psykolog" },
-  { value: "admin", label: "Admin" },
-] as const
-
-type RoleType = typeof AVAILABLE_ROLES[number]["value"]
+import { ROLE_LABELS, ROLE_OPTIONS, type Role } from "@prata/shared"
 
 export default function Users() {
   const [search, setSearch] = useState("")
   const [debouncedSearch, setDebouncedSearch] = useState("")
-  const [selectedRoles, setSelectedRoles] = useState<RoleType[]>(["user", "admin", "psychologist"])
+  const [selectedRoles, setSelectedRoles] = useState<Role[]>(["user", "admin", "psychologist"])
   const [page, setPage] = useState(1)
   const limit = 10
 
@@ -38,7 +31,7 @@ export default function Users() {
   const users = data?.data
   const totalPages = data?.meta.totalPages ?? 0
 
-  const toggleRole = (role: RoleType) => {
+  const toggleRole = (role: Role) => {
     setPage(1)
     setSelectedRoles((prev) =>
       prev.includes(role)
@@ -68,13 +61,13 @@ export default function Users() {
         />
 
         <div className={s.buttonRow}>
-          {AVAILABLE_ROLES.map((role) => (
+          {ROLE_OPTIONS.map((role) => (
             <button
-              key={role.value}
-              onClick={() => toggleRole(role.value)}
-              className={`${p.pill} ${selectedRoles.includes(role.value) ? p.pillOn : ""}`}
+              key={role}
+              onClick={() => toggleRole(role)}
+              className={`${p.pill} ${selectedRoles.includes(role) ? p.pillOn : ""}`}
             >
-              {role.label}
+              {ROLE_LABELS[role]}
             </button>
           ))}
         </div>

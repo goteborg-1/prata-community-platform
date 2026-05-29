@@ -1,11 +1,12 @@
 import z from "zod"
-import { AVATAR_COLORS, SORT_OPTIONS } from "../constants.js"
+import { AVATAR_COLORS, SORT_OPTIONS, ROLE_OPTIONS } from "../constants.js"
 
 // --- Populated User ---
 export const populatedUserSchema = z.object({
   id: z.string(),
   displayName: z.string(),
-  avatarColor: z.enum(AVATAR_COLORS)
+  avatarColor: z.enum(AVATAR_COLORS),
+  role: z.enum(ROLE_OPTIONS).optional()
 })
 
 // --- Pagination ---

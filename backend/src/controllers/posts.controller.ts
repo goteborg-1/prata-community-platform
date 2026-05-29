@@ -65,7 +65,7 @@ export const getAllPosts: Controller = async (req, res) => {
 
 export const getPostById: Controller<PostParams> = async (req, res) => {
   const { id } = postParamsSchema.parse(req.params)
-  const post = await PostModel.findOne({ _id: id, deletedAt: null }).populate("userId", "displayName avatarColor")
+  const post = await PostModel.findOne({ _id: id, deletedAt: null }).populate("userId", "displayName avatarColor role")
 
   if(!post) throw new error.NotFoundError()
 

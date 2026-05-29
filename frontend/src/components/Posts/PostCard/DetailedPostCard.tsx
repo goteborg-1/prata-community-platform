@@ -39,11 +39,15 @@ export default function DetailedPostCard({post, scrollTo}: Props) {
     }
   }
 
+  const role = post?.userId && typeof post.userId === "object" && "role" in post.userId
+    ? post.userId.role
+    : "user"
+
   return(
     <Card>
       <header className={s.header}>
         <div className={s.headerTop}>
-          <AuthorHeader data={post} />
+          <AuthorHeader data={post} badge={(role === "psychologist") ? "psychologist" : null} />
 
           {isLoggedIn &&
             <div className={s.menuWrap} ref={menuRef}>
