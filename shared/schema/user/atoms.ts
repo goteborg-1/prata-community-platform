@@ -1,5 +1,5 @@
 import z from "zod"
-import { AVATAR_COLORS } from "../../constants.js"
+import { AVATAR_COLORS, ROLE_OPTIONS } from "../../constants.js"
 
 export const googleId = z
   .string()
@@ -30,7 +30,7 @@ export const password = z
 export const role = z
   .preprocess(
     (val) => (typeof val === "string" ? val.toLowerCase() : val), 
-    z.enum(["user", "admin", "psychologist"])
+    z.enum(ROLE_OPTIONS)
   )
   .default("user");
 

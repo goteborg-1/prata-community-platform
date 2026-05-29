@@ -1,6 +1,6 @@
 import z from "zod"
 import { handle, email, displayName, password, role } from "./atoms.js"
-import { AVATAR_COLORS } from "../../constants.js"
+import { AVATAR_COLORS, ROLE_OPTIONS } from "../../constants.js"
 
 export const createUserSchema = z.object({
   handle,
@@ -37,7 +37,7 @@ export const getUsersQuerySchema = z.object({
         return val.map(v => String(v).toLowerCase());
       }
       return [String(val).toLowerCase()];
-    }, z.array(z.enum(["user", "admin", "psychologist"])))
+    }, z.array(z.enum(ROLE_OPTIONS)))
     .optional(),
   search: z.string().optional(),
   sort: z.enum(["name", "newest"]).optional(),

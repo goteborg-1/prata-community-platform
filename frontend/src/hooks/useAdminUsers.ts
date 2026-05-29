@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { getUsers, deleteUser, updateUserRole } from "../api/admin.api"
-import type { GetUsersQuery } from "@prata/shared"
+import type { GetUsersQuery, Role } from "@prata/shared"
 
 export function useAdminUsers(params: GetUsersQuery) {
   return useQuery({
@@ -20,7 +20,7 @@ export function useDeleteUser() {
 export function useUpdateUserRole() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, role }: { id: string; role: "admin" | "user" | "psychologist" }) =>
+    mutationFn: ({ id, role }: { id: string; role: Role }) =>
       updateUserRole(id, {role}),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["admin", "users"] }),
   })
