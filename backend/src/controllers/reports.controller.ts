@@ -1,6 +1,5 @@
-import mongoose from "mongoose"
 import * as error from "../errors/AppError.js"
-import { createReportSchema } from "../../../shared/schema/report/requests.schema.js";
+import { createReportSchema } from "@prata/shared";
 import { Controller } from "../types/index.types.js";
 import { ReportModel } from "../models/Report.model.js";
 
