@@ -29,11 +29,11 @@ export const TRIGGER_LABELS: Record<string, string> = {
 export const REPORT_OPTIONS = ["spam", "hateSpeech", "harassment", "inappropriate", "misinformation", "other"]
 
 export const REPORT_LABELS: Record<string, string> = {
-  spam: "Spam eller skräppost",
-  hateSpeech: "Hatspråk eller diskriminering",
-  harassment: "Trakasserier eller mobbning",
-  inappropriate: "Olämpligt eller känsligt innehåll",
-  misinformation: "Falsk eller missledande information",
+  spam: "Spam",
+  hateSpeech: "Hatspråk",
+  harassment: "Trakasserier",
+  inappropriate: "Olämpligt",
+  misinformation: "Falsk info",
   other: "Annat"
 }
 
